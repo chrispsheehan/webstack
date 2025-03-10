@@ -1,4 +1,7 @@
 locals {
+  global_vars    = read_terragrunt_config(find_in_parent_folders("global_vars.hcl"))
+  default_branch = local.global_vars.inputs.default_branch
+
   # setup temporary branch with env var
   temp_branch = get_env("TEMP_DEPLOY_BRANCH", "")
 

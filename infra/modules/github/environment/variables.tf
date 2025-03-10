@@ -8,11 +8,6 @@ variable "aws_account_id" {
   type        = string
 }
 
-variable "lambda_code_bucket" {
-  description = "Versioned s3 bucket to pull lambda runtime code from"
-  type        = string
-}
-
 variable "deploy_role_name" {
   description = "AWS role used in ci deployments"
   type        = string
