@@ -11,6 +11,12 @@ get-git-token:
     echo $GITHUB_TOKEN
 
 
+get-git-repo:
+    #!/usr/bin/env bash
+    repo_basename=$(basename $(git remote get-url origin))
+    echo "${repo_basename%%.*}"
+
+
 branch name:
     #!/usr/bin/env bash
     git checkout main
@@ -55,7 +61,15 @@ init env:
     just tg {{env}} github/environment apply
 
 
-setup:
+import-repo:
+    #!/usr/bin/env bash
+    export TF_VAR_git_token=$(just get-git-token)   
+    repo_name=$(just get-git-repo)
+    just tg ci github/repo init
+    just tg ci github/repo "import github_repository.this $repo_name"
+
+
+setup-repo:
     #!/usr/bin/env bash
     export TF_VAR_git_token=$(just get-git-token)
     just tg ci github/repo apply
