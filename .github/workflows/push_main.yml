@@ -1,0 +1,16 @@
+on:
+    workflow_dispatch:
+    # Enable this for auto-ci
+    push:
+      branches:
+        - main
+    
+permissions:
+    id-token: write
+    contents: read
+    
+jobs:
+    dev:
+        uses: ./.github/workflows/deploy.yml
+        with:
+            environment: dev

@@ -1,0 +1,68 @@
+name: "Execute Terraform & Terragrunt with AWS OIDC"
+description: "Sets up Terraform, Terragrunt, configures AWS OIDC authentication and runs terragrunt action"
+
+inputs:
+  tf_version:
+    description: "Version of Terraform to install"
+    required: false
+    default: "1.4.6"
+  tg_version:
+    description: "Version of Terragrunt to install"
+    required: false
+    default: "0.45.10"
+  aws_region:
+    description: "AWS Region"
+    default: us-east-1
+  aws_account_id:
+    description: "AWS Account id"
+    required: true
+  tg_directory:
+    description: "Module directory to perform action upon"
+    required: true
+  tg_action:
+    description: "Terragrunt action to perform (`apply` or `destroy`)"
+    required: true
+    default: apply
+
+outputs:
+  tg_outputs:
+    description: "All Terraform outputs in JSON format"
+    value: ${{ steps.tg_outputs.outputs.terraform_json }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: ${{ inputs.tf_version }}
+        terraform_wrapper: false
+
+    - name: Install Terragrunt
+      uses: autero1/action-terragrunt@v1.3.2
+      with:
+        terragrunt_version: ${{ inputs.tg_version }}
+
+    - name: Configure AWS OIDC Authentication
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        role-to-assume: arn:aws:iam::${{ inputs.aws_account_id }}:role/github_actions_triple_cms_role
+        aws-region: ${{ inputs.aws_region }}
+
+    - name: Action Terragrunt
+      shell: bash
+      working-directory: ${{ inputs.tg_directory }}
+      run: |
+        terragrunt ${{ inputs.tg_action }} \
+          -auto-approve -compact-warnings
+
+    - name: Capture Terraform Outputs
+      if: inputs.tg_action != 'destroy'
+      id: tg_outputs
+      shell: bash
+      working-directory: ${{ inputs.tg_directory }}
+      run: |
+        echo "📤 Capturing all Terraform outputs..."
+        TERRAGRUNT_OUTPUTS=$(terragrunt output -json | jq -c)
+        echo "terraform_json=$TERRAGRUNT_OUTPUTS" >> $GITHUB_OUTPUT
+        echo "✅ Terraform outputs captured successfully."
