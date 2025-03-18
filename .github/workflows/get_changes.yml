@@ -1,0 +1,47 @@
+name: Check Changes
+
+on:
+  workflow_call:
+    inputs:
+        ref:
+            description: 'Git reference to checkout'
+            required: false
+            default: 'main'
+            type: string
+    outputs:
+        terragrunt:
+            description: "Whether terragrunt files changed"
+            value: ${{ jobs.changes.outputs.terragrunt == 'true' }}
+        github:
+            description: "Whether GitHub workflow files changed"
+            value: ${{ jobs.changes.outputs.github == 'true' }}
+
+    
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+        terragrunt: ${{ steps.filter.outputs.terragrunt == 'true' && 'true' || 'false' }}
+        github: ${{ steps.filter.outputs.github == 'true' && 'true' || 'false' }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+            ref: ${{ inputs.ref }}
+
+      - name: Detect changed files
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            terragrunt:
+              - 'terragrunt_modules/**'
+              - 'terragrunt/**'
+            github:
+              - '.github/**'
+
+      - shell: bash 
+        run: echo "terragrunt changes - ${{ steps.filter.outputs.terragrunt }}"
+
+      - shell: bash 
+        run: echo "github changes - ${{ steps.filter.outputs.github }}"
