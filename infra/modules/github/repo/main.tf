@@ -12,3 +12,13 @@ resource "github_branch_protection" "main" {
     dismiss_stale_reviews = true
   }
 }
+
+resource "github_actions_repository_permissions" "this" {
+  repository = github_repository.this.name
+
+  allowed_actions = "selected"
+  allowed_actions_config {
+    github_owned_allowed = true
+    verified_allowed     = true
+  }
+}
