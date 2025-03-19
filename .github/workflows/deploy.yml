@@ -17,10 +17,19 @@ concurrency: # only run one instance of workflow at any one time
 permissions:
   id-token: write
   contents: write
+  
   actions: write
-  repository-projects: write
+  checks: write
+  deployments: write
+  issues: write
+  discussions: write
+  packages: write
+  pages: write
   pull-requests: write
+  repository-projects: write
   security-events: write
+  statuses: write
+
 
 jobs:
   repo:
