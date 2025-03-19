@@ -56,7 +56,7 @@ tg-all op:
 
 init env:
     #!/usr/bin/env bash
-    export TF_VAR_git_token=$(just get-git-token)
+    export GITHUB_TOKEN=$(just get-git-token)
     just tg {{env}} aws/oidc apply
     just tg {{env}} github/environment apply
 
@@ -69,7 +69,7 @@ import-repo-warning:
 import-repo:
     #!/usr/bin/env bash
     just import-repo-warning || exit 1
-    export TF_VAR_git_token=$(just get-git-token)   
+    export GITHUB_TOKEN=$(just get-git-token)   
     repo_name=$(just get-git-repo)
     just tg ci github/repo init
     just tg ci github/repo "import github_repository.this $repo_name"
@@ -78,7 +78,7 @@ import-repo:
 
 setup-repo:
     #!/usr/bin/env bash
-    export TF_VAR_git_token=$(just get-git-token)
+    export GITHUB_TOKEN=$(just get-git-token)
     just tg ci github/repo apply
 
 
