@@ -15,6 +15,7 @@ concurrency: # only run one instance of workflow at any one time
   cancel-in-progress: false
 
 permissions:
+  id-token: write
   contents: write
   actions: write
   repository-projects: write
