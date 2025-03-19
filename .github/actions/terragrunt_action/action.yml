@@ -51,7 +51,7 @@ runs:
       shell: bash
 
     - name: Configure AWS OIDC Authentication
-      if: inputs.aws_oidc_role_arn != ''
+      if: ${{ inputs.aws_oidc_role_arn != '' }}
       uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: ${{ inputs.aws_oidc_role_arn }}
