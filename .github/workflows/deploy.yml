@@ -25,6 +25,8 @@ jobs:
   repo:
     environment: dev
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/terragrunt_action
