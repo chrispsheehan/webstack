@@ -5,11 +5,11 @@ inputs:
   tf_version:
     description: "Version of Terraform to install"
     required: false
-    default: "1.4.6"
+    default: "1.10.5"
   tg_version:
     description: "Version of Terragrunt to install"
     required: false
-    default: "0.45.10"
+    default: "0.72.6"
   aws_region:
     description: "AWS Region"
     default: eu-west-2
