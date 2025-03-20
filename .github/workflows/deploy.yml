@@ -1,14 +1,9 @@
-# on:
-#   workflow_call:
-#     inputs:
-#       environment:
-#         required: true
-#         type: string
-
 on:
-  push:
-    branches:
-      - init-gha
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
 
 concurrency: # only run one instance of workflow at any one time
   group: ${{ github.workflow }}-${{inputs.environment}}
@@ -28,17 +23,15 @@ jobs:
       - uses: ./.github/actions/terragrunt_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
-          aws_region: ${{ vars.AWS_REGION }} # taken from /settings/environments/ 'Environment variables'
           tg_directory: infra/live/${{inputs.environment}}/aws/oidc
 
   bucket:
     environment:
-      name: ${{inputs.environment}} # specify environment - seen at /settings/environments/ in UI
+      name: ${{inputs.environment}}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/terragrunt_action
         with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
-          aws_region: ${{ vars.AWS_REGION }} # taken from /settings/environments/ 'Environment variables'
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/bucket
