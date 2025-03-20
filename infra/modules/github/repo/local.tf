@@ -1,5 +1,5 @@
 locals {
-  repo_name          = split("/", var.github_repo)[1]
+  repo_name        = split("/", var.github_repo)[1]
   visibility       = var.is_public ? "public" : "private"
   allowed_actions  = var.is_public ? "selected" : "all"
   patterns_allowed = var.is_public ? local.selected_actions : ["*"] # selected actions only allows on public repos
