@@ -16,6 +16,9 @@ on:
             description: "Whether GitHub workflow files changed"
             value: ${{ jobs.changes.outputs.github == 'true' }}
 
+permissions:
+  pull-requests: read
+  contents: read
     
 jobs:
   changes:
@@ -40,6 +43,9 @@ jobs:
               - 'terragrunt/**'
             github:
               - '.github/**'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          list-files: none
+          initial-fetch-depth: 100    
 
       - shell: bash 
         run: echo "terragrunt changes - ${{ steps.filter.outputs.terragrunt }}"
