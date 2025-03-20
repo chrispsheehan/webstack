@@ -4,6 +4,10 @@ on:
       branches:
         - main
         - init-gha
+
+permissions:
+  id-token: write
+  contents: write
     
 jobs:
     dev:
