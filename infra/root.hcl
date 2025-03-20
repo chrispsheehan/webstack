@@ -1,4 +1,6 @@
 locals {
+  github_token = get_env("GITHUB_TOKEN", "not_set")
+
   git_remote     = run_cmd("--terragrunt-quiet", "git", "remote", "get-url", "origin")
   github_repo    = regex("[/:]([-0-9_A-Za-z]*/[-0-9_A-Za-z]*)[^/]*$", local.git_remote)[0]
   repo_owner     = split("/", local.github_repo)[0]
@@ -71,10 +73,10 @@ EOF
 
 generate "github_provider" {
   path      = "provider_github.tf"
-  if_exists = "overwrite_terragrunt"
+  if_exists = "overwrite" # Ensures GitHub token is refreshed
   contents  = <<EOF
 provider "github" {
-  token = var.git_token
+  token = "${local.github_token}"
   owner = "${local.repo_owner}"
 }
 EOF
@@ -85,13 +87,13 @@ inputs = merge(
   local.global_vars.inputs,
   local.environment_vars.inputs,
   {
-    aws_account_id       = local.aws_account_id
-    project_name         = local.project_name
-    environment          = local.environment
-    deploy_environments  = [local.environment]
-    github_repo          = local.github_repo
-    deploy_role_name     = local.deploy_role_name
-    state_bucket         = local.state_bucket
-    state_lock_table     = local.state_lock_table
+    aws_account_id      = local.aws_account_id
+    project_name        = local.project_name
+    environment         = local.environment
+    deploy_environments = [local.environment]
+    github_repo         = local.github_repo
+    deploy_role_name    = local.deploy_role_name
+    state_bucket        = local.state_bucket
+    state_lock_table    = local.state_lock_table
   }
 )

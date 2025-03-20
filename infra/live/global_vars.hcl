@@ -8,7 +8,7 @@ locals {
 }
 
 inputs = {
-  aws_region          = local.aws_region
-  default_branch      = local.default_branch
+  aws_region           = local.aws_region
+  default_branch       = local.default_branch
   allowed_role_actions = local.allowed_role_actions
 }

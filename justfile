@@ -56,22 +56,36 @@ tg-all op:
 
 init env:
     #!/usr/bin/env bash
-    export TF_VAR_git_token=$(just get-git-token)
+    export GITHUB_TOKEN=$(just get-git-token)
     just tg {{env}} aws/oidc apply
     just tg {{env}} github/environment apply
 
 
+temp-init env:
+    #!/usr/bin/env bash
+    export GITHUB_TOKEN=$(just get-git-token)
+    export TEMP_DEPLOY_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+    just tg {{env}} github/environment apply
+
+
+import-repo-warning:
+    @echo -e "\033[1;33mWARNING: Setting up github repo - this is a one time action - sure?\033[0m\n" >&2
+    @printf "\033[1;32mPress any key to proceed or Ctrl+C to abort: \033[0m"
+    @read -n 1 -s response || exit 1
+
 import-repo:
     #!/usr/bin/env bash
-    export TF_VAR_git_token=$(just get-git-token)   
+    just import-repo-warning || exit 1
+    export GITHUB_TOKEN=$(just get-git-token)   
     repo_name=$(just get-git-repo)
     just tg ci github/repo init
     just tg ci github/repo "import github_repository.this $repo_name"
+    just tg ci github/repo "import github_actions_repository_permissions.this $repo_name"
 
 
 setup-repo:
     #!/usr/bin/env bash
-    export TF_VAR_git_token=$(just get-git-token)
+    export GITHUB_TOKEN=$(just get-git-token)
     just tg ci github/repo apply
 
 

@@ -13,11 +13,6 @@ variable "deploy_role_name" {
   type        = string
 }
 
-variable "git_token" {
-  description = "Git token used in authentication of github provider"
-  type        = string
-}
-
 variable "github_repo" {
   description = "Name of a the github repo"
   type        = string
