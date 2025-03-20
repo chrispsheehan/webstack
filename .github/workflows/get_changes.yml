@@ -21,13 +21,14 @@ jobs:
   changes:
     runs-on: ubuntu-latest
     outputs:
-        terragrunt: ${{ steps.filter.outputs.terragrunt == 'true' && 'true' || 'false' }}
-        github: ${{ steps.filter.outputs.github == 'true' && 'true' || 'false' }}
+        terragrunt: ${{ steps.filter.outputs.terragrunt }}
+        github: ${{ steps.filter.outputs.github }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
             ref: ${{ inputs.ref }}
+            fetch-depth: 0
 
       - name: Detect changed files
         id: filter
