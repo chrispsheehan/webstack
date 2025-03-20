@@ -7,7 +7,7 @@ locals {
 
   # define allowed branches for envirionment
   environment_branches = concat(
-    ["feature/temp-debug-branch", local.default_branch],
+    [local.default_branch],
     length(local.temp_branch) > 0 ? [local.temp_branch] : []
   )
 }
