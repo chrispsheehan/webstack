@@ -1,16 +1,13 @@
 on:
     workflow_dispatch:
-    # Enable this for auto-ci
-    # push:
-    #   branches:
-    #     - main
-    
-permissions:
-    id-token: write
-    contents: read
+    push:
+      branches:
+        - main
+        - init-gha
     
 jobs:
     dev:
         uses: ./.github/workflows/deploy.yml
+        secrets: inherit
         with:
             environment: dev
