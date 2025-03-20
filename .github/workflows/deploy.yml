@@ -17,53 +17,28 @@ concurrency: # only run one instance of workflow at any one time
 permissions:
   id-token: write
   contents: write
-  
-  actions: write
-  checks: write
-  deployments: write
-  issues: write
-  discussions: write
-  packages: write
-  pages: write
-  pull-requests: write
-  repository-projects: write
-  security-events: write
-  statuses: write
-
 
 jobs:
-  repo:
-    environment: dev
+  oidc:
+    environment:
+      name: ${{inputs.environment}} # specify environment - seen at /settings/environments/ in UI
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/terragrunt_action
         with:
-          tg_directory: infra/live/ci/github/repo
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
+          aws_region: ${{ vars.AWS_REGION }} # taken from /settings/environments/ 'Environment variables'
+          tg_directory: infra/live/${{inputs.environment}}/aws/oidc
 
-  # oidc:
-  #   environment:
-  #     name: ${{inputs.environment}} # specify environment - seen at /settings/environments/ in UI
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: ./.github/actions/terragrunt_action
-  #       with:
-  #         aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
-  #         aws_region: ${{ vars.AWS_REGION }} # taken from /settings/environments/ 'Environment variables'
-  #         tg_directory: infra/live/${{inputs.environment}}/aws/oidc
-
-  # bucket:
-  #   environment:
-  #     name: ${{inputs.environment}} # specify environment - seen at /settings/environments/ in UI
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v4
-  #     - uses: ./.github/actions/terragrunt_action
-  #       with:
-  #         aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
-  #         aws_region: ${{ vars.AWS_REGION }} # taken from /settings/environments/ 'Environment variables'
-  #         tg_directory: infra/live/${{inputs.environment}}/aws/bucket
+  bucket:
+    environment:
+      name: ${{inputs.environment}} # specify environment - seen at /settings/environments/ in UI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/terragrunt_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
+          aws_region: ${{ vars.AWS_REGION }} # taken from /settings/environments/ 'Environment variables'
+          tg_directory: infra/live/${{inputs.environment}}/aws/bucket

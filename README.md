@@ -21,7 +21,7 @@ Terragrunt will create the s3 state bucket the first time this is done - this sh
 Remote state S3 bucket your-state-bucket-name-tfstate does not exist or you dont have permissions to access it. Would you like Terragrunt to create it? (y/n) y
 ```
 
-### required installs
+#### required installs
 
 ```sh
 brew install terragrunt
@@ -30,3 +30,9 @@ brew install just
 brew install awscli
 brew install gh
 ```
+
+## deploy from temp branch
+
+- run `just temp-init dev` to allow deploys from branch
+- trigger workflow from your branch in `.github/workflows`
+
