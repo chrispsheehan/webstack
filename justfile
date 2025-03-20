@@ -61,11 +61,11 @@ init env:
     just tg {{env}} github/environment apply
 
 
-temp-init env:
+temp-init:
     #!/usr/bin/env bash
     export GITHUB_TOKEN=$(just get-git-token)
     export TEMP_DEPLOY_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    just tg {{env}} github/environment apply
+    just tg dev github/environment apply
 
 
 import-repo-warning:
