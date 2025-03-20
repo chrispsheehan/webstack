@@ -88,6 +88,7 @@ inputs = merge(
   local.environment_vars.inputs,
   {
     aws_account_id      = local.aws_account_id
+    aws_region          = local.aws_region
     project_name        = local.project_name
     environment         = local.environment
     deploy_environments = [local.environment]

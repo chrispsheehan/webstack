@@ -3,6 +3,7 @@ locals {
   domain_records = [
     local.domain
   ]
-  reference = replace(local.domain, ".", "-")
-  root_file = "index.html"
+  reference   = replace(local.domain, ".", "-")
+  bucket_name = "${var.aws_account_id}-${var.aws_region}-${var.environment}-${local.reference}"
+  root_file   = "index.html"
 }

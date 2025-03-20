@@ -160,9 +160,15 @@ resource "aws_s3_bucket" "website_logs" {
 resource "aws_s3_bucket_lifecycle_configuration" "website_logs" {
   depends_on = [aws_s3_bucket.website_logs]
   bucket     = aws_s3_bucket.website_logs.id
+
   rule {
-    status = "Enabled"
     id     = "expire_all_files"
+    status = "Enabled"
+
+    filter {
+      prefix = ""
+    }
+
     expiration {
       days = 14
     }
