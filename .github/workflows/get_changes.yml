@@ -15,10 +15,6 @@ on:
         github:
             description: "Whether GitHub workflow files changed"
             value: ${{ jobs.changes.outputs.github == 'true' }}
-
-permissions:
-  pull-requests: read
-  contents: read
     
 jobs:
   changes:

@@ -6,9 +6,13 @@ on:
 
 jobs:
   check:
+    permissions:
+      pull-requests: read
+      contents: read
     uses: ./.github/workflows/get_changes.yml
     with:
       ref: ${{ github.sha }}
+    secrets: inherit
 
   github:
     needs: check
