@@ -35,8 +35,7 @@ jobs:
         with:
           filters: |
             terragrunt:
-              - 'terragrunt_modules/**'
-              - 'terragrunt/**'
+              - 'infra/**'
             github:
               - '.github/**'
           token: ${{ secrets.GITHUB_TOKEN }}
