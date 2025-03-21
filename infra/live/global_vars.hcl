@@ -4,7 +4,11 @@ locals {
   default_branch    = "main"
   allowed_role_actions = [
     "s3:*",
-    "iam:*"
+    "iam:*",
+    "cloudfront:*", 
+    "wafv2:*", 
+    "acm:*", 
+    "route53:*"
   ]
   root_domain = "chrispsheehan.com"
 }
