@@ -10,8 +10,11 @@ locals {
     [local.default_branch],
     length(local.temp_branch) > 0 ? [local.temp_branch] : []
   )
+
+  log_retention_days = 2
 }
 
 inputs = {
   environment_branches = local.environment_branches
+  log_retention_days   = local.log_retention_days
 }

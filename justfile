@@ -100,3 +100,8 @@ clean-terragrunt-cache:
     find {{PROJECT_DIR}} -type d -name ".terragrunt-cache" -exec rm -rf {} +
     @echo "Cleaning up terragrunt-debug.tfvars.json files in {{PROJECT_DIR}}..."
     find {{PROJECT_DIR}} -type f -name "terragrunt-debug.tfvars.json" -exec rm -f {} +
+
+
+web-upload bucket:
+    #!/usr/bin/env bash
+    aws s3 sync ./src "s3://{{bucket}}/" --storage-class STANDARD

@@ -1,15 +1,25 @@
 variable "aws_account_id" {
-  type = string
+  description = "AWS account id resources are deployed to"
+  type        = string
 }
 
 variable "aws_region" {
-  type = string
+  description = "AWS region resources are deployed to"
+  type        = string
 }
 
 variable "environment" {
-  type = string
+  description = "Name of environment i.e. dev, prod etc"
+  type        = string
 }
 
 variable "root_domain" {
-  type = string
+  description = "Root domain matching the AWS hosted zone name"
+  type        = string
+}
+
+variable "log_retention_days" {
+  description = "How long to keep cloudfront s3 logs before deletion"
+  type        = number
+  default     = 1
 }

@@ -1,5 +1,5 @@
 locals {
-  domain = "wip.${var.root_domain}"
+  domain = var.environment == "prod" ? "wip.${var.root_domain}" : "wip.${var.environment}.${var.root_domain}"
   domain_records = [
     local.domain
   ]

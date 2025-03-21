@@ -162,15 +162,14 @@ resource "aws_s3_bucket_lifecycle_configuration" "website_logs" {
   bucket     = aws_s3_bucket.website_logs.id
 
   rule {
-    id     = "expire_all_files"
+    id     = "log"
     status = "Enabled"
-
     filter {
       prefix = ""
     }
 
     expiration {
-      days = 14
+      days = var.log_retention_days
     }
   }
 }
