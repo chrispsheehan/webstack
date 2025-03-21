@@ -69,6 +69,7 @@ provider "aws" {
 }
 provider "aws" {
   alias = "domain_aws_region"
+  allowed_account_ids = ["${local.aws_account_id}"]
   # needs to be us-east-1
   region = "us-east-1"
 }
