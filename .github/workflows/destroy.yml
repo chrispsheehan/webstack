@@ -1,5 +1,7 @@
+name: Kill Environment
+
 on:
-  workflow_call:
+  workflow_dispatch:
     inputs:
       environment:
         required: true
@@ -14,21 +16,9 @@ permissions:
   contents: write
 
 jobs:
-  oidc:
-    environment:
-      name: ${{inputs.environment}} # specify environment - seen at /settings/environments/ in UI
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./.github/actions/terragrunt_action
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
-          tg_directory: infra/live/${{inputs.environment}}/aws/oidc
-
   website:
     environment:
       name: ${{inputs.environment}}
-    needs: oidc
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,3 +26,4 @@ jobs:
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website
+          tg_action: destroy

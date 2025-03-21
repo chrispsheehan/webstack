@@ -5,15 +5,15 @@ on:
     push:
       branches:
         - main
-        # - init-web
+        - init-web
 
 permissions:
   id-token: write
   contents: write
     
 jobs:
-    dev:
-        uses: ./.github/workflows/deploy.yml
-        secrets: inherit
-        with:
-            environment: dev
+  dev:
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      environment: dev
