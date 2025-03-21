@@ -5,9 +5,9 @@ locals {
   allowed_role_actions = [
     "s3:*",
     "iam:*",
-    "cloudfront:*", 
-    "wafv2:*", 
-    "acm:*", 
+    "cloudfront:*",
+    "wafv2:*",
+    "acm:*",
     "route53:*"
   ]
   root_domain = "chrispsheehan.com"
