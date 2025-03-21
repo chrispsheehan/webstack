@@ -67,6 +67,11 @@ provider "aws" {
   region              = "${local.aws_region}"
   allowed_account_ids = ["${local.aws_account_id}"]
 }
+provider "aws" {
+  alias = "domain_aws_region"
+  # needs to be us-east-1
+  region = "us-east-1"
+}
 EOF
   disable   = local.provider != "aws"
 }
