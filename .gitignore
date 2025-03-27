@@ -6,3 +6,5 @@
 
 # ignore generated files
 infra/live/*.tf
+
+dist

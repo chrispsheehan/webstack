@@ -105,3 +105,7 @@ clean-terragrunt-cache:
 web-upload bucket:
     #!/usr/bin/env bash
     aws s3 sync ./src "s3://{{bucket}}/" --storage-class STANDARD
+
+web-build:
+    #!/usr/bin/env bash
+    cp src/index.html dist/index.html
