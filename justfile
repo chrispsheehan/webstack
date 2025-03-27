@@ -102,10 +102,16 @@ clean-terragrunt-cache:
     find {{PROJECT_DIR}} -type f -name "terragrunt-debug.tfvars.json" -exec rm -f {} +
 
 
-web-upload bucket:
+web-upload:
     #!/usr/bin/env bash
-    aws s3 sync ./src "s3://{{bucket}}/" --storage-class STANDARD
+    set -euo pipefail
+    if [[ -z "$BUCKET_NAME" ]]; then
+        echo "Error: BUCKET_NAME environment variable is not set."
+        exit 1
+    fi
+    aws s3 sync ./dist "s3://$BUCKET_NAME/" --storage-class STANDARD
 
 web-build:
     #!/usr/bin/env bash
+    set -euo pipefail
     cp src/index.html dist/index.html
