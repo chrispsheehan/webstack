@@ -30,9 +30,18 @@ jobs:
       name: ${{inputs.environment}}
     needs: oidc
     runs-on: ubuntu-latest
+    outputs:
+      bucket_name: ${{ steps.get_bucket.outputs.bucket_name }}
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/terragrunt_action
+        id: terragrunt_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website
+      - name: Get Bucket
+        id: get_bucket
+        env:
+          TG_OUTPUTS: ${{ steps.terragrunt_action.outputs.tg_outputs  }}
+        run: |
+          echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.s3_bucket_name.value')" >> $GITHUB_OUTPUT
