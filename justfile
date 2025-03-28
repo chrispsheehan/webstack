@@ -114,7 +114,6 @@ web-upload:
 web-build:
     #!/usr/bin/env bash
     set -euo pipefail
-    DIST_DIR="dist"
-    rm -rf "$DIST_DIR"
-    mkdir "$DIST_DIR"
-    cp -r src/. "$DIST_DIR/"
+    rm -rf dist
+    npm install
+    npm run dev
