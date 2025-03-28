@@ -109,9 +109,12 @@ web-upload:
         echo "Error: BUCKET_NAME environment variable is not set."
         exit 1
     fi
-    aws s3 sync ./dist "s3://$BUCKET_NAME/" --storage-class STANDARD
+    aws s3 sync {{justfile_directory()}}/dist "s3://$BUCKET_NAME/" --storage-class STANDARD
 
 web-build:
     #!/usr/bin/env bash
     set -euo pipefail
-    cp src/index.html dist/index.html
+    DIST_DIR="dist"
+    rm -rf "$DIST_DIR"
+    mkdir "$DIST_DIR"
+    cp -r src/. "$DIST_DIR/"
