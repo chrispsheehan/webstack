@@ -15,6 +15,9 @@ on:
       github:
         description: "Whether GitHub workflow files changed"
         value: ${{ jobs.changes.outputs.github == 'true' }}
+      frontend:
+        description: "Whether frontend files changed"
+        value: ${{ jobs.changes.outputs.frontend == 'true' }}
 
 jobs:
   changes:
