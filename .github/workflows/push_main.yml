@@ -1,15 +1,15 @@
 name: Push on main
 
 on:
-    workflow_dispatch:
-    push:
-      branches:
-        - main
+  workflow_dispatch:
+  push:
+    branches:
+      - main
 
 permissions:
   id-token: write
   contents: write
-    
+
 jobs:
   dev:
     uses: ./.github/workflows/deploy.yml

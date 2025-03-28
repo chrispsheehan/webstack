@@ -3,31 +3,35 @@ name: Check Changes
 on:
   workflow_call:
     inputs:
-        ref:
-            description: 'Git reference to checkout'
-            required: false
-            default: 'main'
-            type: string
+      ref:
+        description: "Git reference to checkout"
+        required: false
+        default: "main"
+        type: string
     outputs:
-        terragrunt:
-            description: "Whether terragrunt files changed"
-            value: ${{ jobs.changes.outputs.terragrunt == 'true' }}
-        github:
-            description: "Whether GitHub workflow files changed"
-            value: ${{ jobs.changes.outputs.github == 'true' }}
-    
+      terragrunt:
+        description: "Whether terragrunt files changed"
+        value: ${{ jobs.changes.outputs.terragrunt == 'true' }}
+      github:
+        description: "Whether GitHub workflow files changed"
+        value: ${{ jobs.changes.outputs.github == 'true' }}
+      frontend:
+        description: "Whether frontend files changed"
+        value: ${{ jobs.changes.outputs.frontend == 'true' }}
+
 jobs:
   changes:
     runs-on: ubuntu-latest
     outputs:
-        terragrunt: ${{ steps.filter.outputs.terragrunt }}
-        github: ${{ steps.filter.outputs.github }}
+      terragrunt: ${{ steps.filter.outputs.terragrunt }}
+      github: ${{ steps.filter.outputs.github }}
+      frontend: ${{ steps.filter.outputs.frontend }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-            ref: ${{ inputs.ref }}
-            fetch-depth: 0
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
 
       - name: Detect changed files
         id: filter
@@ -38,12 +42,17 @@ jobs:
               - 'infra/**'
             github:
               - '.github/**'
+            frontend:
+              - 'src/**'
           token: ${{ secrets.GITHUB_TOKEN }}
           list-files: none
-          initial-fetch-depth: 100    
+          initial-fetch-depth: 100
 
-      - shell: bash 
+      - shell: bash
         run: echo "terragrunt changes - ${{ steps.filter.outputs.terragrunt }}"
 
-      - shell: bash 
+      - shell: bash
         run: echo "github changes - ${{ steps.filter.outputs.github }}"
+
+      - shell: bash
+        run: echo "frontend changes - ${{ steps.filter.outputs.frontend }}"
