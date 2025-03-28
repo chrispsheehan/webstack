@@ -28,6 +28,7 @@ format:
     #!/usr/bin/env bash
     terraform fmt -recursive
     terragrunt hclfmt
+    npm run format
 
 
 validate:

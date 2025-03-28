@@ -14,8 +14,8 @@ just init dev
 just init prod
 ```
 
-***WARNING***
-Terragrunt will create the s3 state bucket the first time this is done - this should only happen *ONCE*.
+**_WARNING_**
+Terragrunt will create the s3 state bucket the first time this is done - this should only happen _ONCE_.
 
 ```sh
 Remote state S3 bucket your-state-bucket-name-tfstate does not exist or you dont have permissions to access it. Would you like Terragrunt to create it? (y/n) y
