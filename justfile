@@ -116,4 +116,4 @@ web-build:
     set -euo pipefail
     rm -rf dist
     npm install
-    npm run dev
+    npm run build
