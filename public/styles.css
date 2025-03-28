@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  
+  nav {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+    background: #333;
+  }
+  
+  .logo {
+    height: 40px;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    color: white;
+    background: #0073ff;
+    text-decoration: none;
+    border-radius: 5px;
+  }
+  
+  #hero {
+    padding: 50px;
+    background: #f4f4f4;
+  }
+  
+  #about {
+    padding: 50px;
+  }
+  
+  footer {
+    padding: 16px;
+    background: #222;
+    color: white;
+  }
+  
