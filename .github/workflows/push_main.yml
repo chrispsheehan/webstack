@@ -5,6 +5,7 @@ on:
     push:
       branches:
         - main
+        - init-astro
 
 permissions:
   id-token: write
