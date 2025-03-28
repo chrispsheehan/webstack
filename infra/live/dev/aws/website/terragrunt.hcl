@@ -3,5 +3,5 @@ include {
 }
 
 terraform {
-  source = "../../../../modules/aws/bucket"
+  source = "../../../../modules/aws/website"
 }

@@ -11,8 +11,8 @@ permissions:
   contents: write
     
 jobs:
-    dev:
-        uses: ./.github/workflows/deploy.yml
-        secrets: inherit
-        with:
-            environment: dev
+  dev:
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      environment: dev

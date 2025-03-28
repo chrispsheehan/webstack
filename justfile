@@ -61,11 +61,11 @@ init env:
     just tg {{env}} github/environment apply
 
 
-temp-init env:
+temp-init:
     #!/usr/bin/env bash
     export GITHUB_TOKEN=$(just get-git-token)
     export TEMP_DEPLOY_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    just tg {{env}} github/environment apply
+    just tg dev github/environment apply
 
 
 import-repo-warning:
@@ -100,3 +100,21 @@ clean-terragrunt-cache:
     find {{PROJECT_DIR}} -type d -name ".terragrunt-cache" -exec rm -rf {} +
     @echo "Cleaning up terragrunt-debug.tfvars.json files in {{PROJECT_DIR}}..."
     find {{PROJECT_DIR}} -type f -name "terragrunt-debug.tfvars.json" -exec rm -f {} +
+
+
+web-upload:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [[ -z "$BUCKET_NAME" ]]; then
+        echo "Error: BUCKET_NAME environment variable is not set."
+        exit 1
+    fi
+    aws s3 sync {{justfile_directory()}}/dist "s3://$BUCKET_NAME/" --storage-class STANDARD
+
+web-build:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    DIST_DIR="dist"
+    rm -rf "$DIST_DIR"
+    mkdir "$DIST_DIR"
+    cp -r src/. "$DIST_DIR/"

@@ -33,6 +33,6 @@ brew install gh
 
 ## deploy from temp branch
 
-- run `just temp-init dev` to allow deploys from branch
+- run `just temp-init` to allow deploys from branch
 - trigger workflow from your branch in `.github/workflows`
 

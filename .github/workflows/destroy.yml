@@ -1,0 +1,29 @@
+name: Kill Environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+concurrency: # only run one instance of workflow at any one time
+  group: ${{ github.workflow }}-${{inputs.environment}}
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  website:
+    environment:
+      name: ${{inputs.environment}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/terragrunt_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{inputs.environment}}/aws/website
+          tg_action: destroy

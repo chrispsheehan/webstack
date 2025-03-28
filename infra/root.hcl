@@ -67,6 +67,12 @@ provider "aws" {
   region              = "${local.aws_region}"
   allowed_account_ids = ["${local.aws_account_id}"]
 }
+provider "aws" {
+  alias = "domain_aws_region"
+  allowed_account_ids = ["${local.aws_account_id}"]
+  # needs to be us-east-1
+  region = "us-east-1"
+}
 EOF
   disable   = local.provider != "aws"
 }
@@ -88,6 +94,7 @@ inputs = merge(
   local.environment_vars.inputs,
   {
     aws_account_id      = local.aws_account_id
+    aws_region          = local.aws_region
     project_name        = local.project_name
     environment         = local.environment
     deploy_environments = [local.environment]

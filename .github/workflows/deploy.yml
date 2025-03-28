@@ -25,13 +25,44 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
           tg_directory: infra/live/${{inputs.environment}}/aws/oidc
 
-  bucket:
+  web-infra:
     environment:
       name: ${{inputs.environment}}
+    needs: oidc
+    runs-on: ubuntu-latest
+    outputs:
+      bucket_name: ${{ steps.get_bucket.outputs.bucket_name }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Deploy web infrastructure
+        uses: ./.github/actions/terragrunt_action
+        id: terragrunt_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{inputs.environment}}/aws/website
+      - name: Get web bucket name
+        id: get_bucket
+        env:
+          TG_OUTPUTS: ${{ steps.terragrunt_action.outputs.tg_outputs  }}
+        run: |
+          echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.s3_bucket_name.value')" >> $GITHUB_OUTPUT
+
+  web-sync:
+    environment:
+      name: ${{inputs.environment}}
+    needs: web-infra
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/terragrunt_action
+      - name: Build web files
+        uses: ./.github/actions/just_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{inputs.environment}}/aws/bucket
+          just_action: web-build
+      - name: Sync web files to s3
+        env:
+          BUCKET_NAME: ${{ needs.web-infra.outputs.bucket_name }}
+        uses: ./.github/actions/just_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: web-upload

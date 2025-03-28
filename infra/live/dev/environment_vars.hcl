@@ -7,11 +7,14 @@ locals {
 
   # define allowed branches for envirionment
   environment_branches = concat(
-    ["feature/temp-debug-branch", local.default_branch],
+    [local.default_branch],
     length(local.temp_branch) > 0 ? [local.temp_branch] : []
   )
+
+  log_retention_days = 2
 }
 
 inputs = {
   environment_branches = local.environment_branches
+  log_retention_days   = local.log_retention_days
 }
