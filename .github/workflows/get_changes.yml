@@ -43,7 +43,7 @@ jobs:
             github:
               - '.github/**'
             frontend:
-              - '.src/**'
+              - 'src/**'
           token: ${{ secrets.GITHUB_TOKEN }}
           list-files: none
           initial-fetch-depth: 100
