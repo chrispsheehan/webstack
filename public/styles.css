@@ -1,10 +1,22 @@
-body {
-  font-family: Arial, sans-serif;
+/* Ensure the html and body elements take up the full height of the viewport */
+html, body {
+  height: 100%;
   margin: 0;
   padding: 0;
-  text-align: center;
 }
 
+/* Set the body to be a flex container with a column direction */
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Allow the main content to grow and take up available space */
+main {
+  flex: 1;
+}
+
+/* Existing styles */
 nav {
   display: flex;
   justify-content: space-between;
