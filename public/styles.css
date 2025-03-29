@@ -45,8 +45,29 @@ nav {
   padding: 50px;
 }
 
+/* Footer styling */
 footer {
   padding: 16px;
   background: #222;
   color: white;
 }
+
+/* Flex container for footer content */
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Styling for social links */
+.social-links {
+  display: flex;
+  gap: 10px; /* Adjusts spacing between icons */
+}
+
+/* Styling for social media icons */
+.social-icon {
+  width: 24px;
+  height: 24px;
+}
+
