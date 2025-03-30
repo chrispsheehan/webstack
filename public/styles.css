@@ -1,0 +1,75 @@
+/* Ensure the html and body elements take up the full height of the viewport */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Set the body to be a flex container with a column direction */
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Allow the main content to grow and take up available space */
+main {
+  flex: 1;
+}
+
+/* Existing styles */
+nav {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  background: #333;
+}
+
+.button {
+  padding: 10px 20px;
+  color: white;
+  background: #0073ff;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+#hero {
+  padding: 50px;
+  background: #f4f4f4;
+}
+
+#about {
+  padding: 50px;
+  background: #cdcbcb;
+}
+
+#this-site {
+  padding: 50px;
+  background: #9a9999;
+}
+
+/* Footer styling */
+footer {
+  padding: 16px;
+  background: #222;
+  color: white;
+}
+
+/* Flex container for footer content */
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Styling for social links */
+.social-links {
+  display: flex;
+  gap: 10px; /* Adjusts spacing between icons */
+}
+
+/* Styling for social media icons */
+.social-icon {
+  width: 24px;
+  height: 24px;
+}
