@@ -1,0 +1,33 @@
+---
+const siteOwner = import.meta.env.ASTRO_PUBLIC_SITE_OWNER_NAME ?? 'Your Name'
+const year = new Date().getFullYear()
+---
+
+<footer>
+  <div class="footer-container">
+    <p>&copy; {year} {siteOwner}</p>
+    <div class="social-links">
+      <a
+        href="https://github.com/chrispsheehan"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img src="/assets/github.png" alt="GitHub" class="social-icon" />
+      </a>
+      <a
+        href="https://www.linkedin.com/in/chrispsheehan"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img src="/assets/in.png" alt="LinkedIn" class="social-icon" />
+      </a>
+      <a
+        href="https://registry.terraform.io/namespaces/chrispsheehan"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img src="/assets/terraform.png" alt="Terraform" class="social-icon" />
+      </a>
+    </div>
+  </div>
+</footer>
