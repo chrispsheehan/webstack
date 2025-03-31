@@ -1,5 +1,5 @@
 ---
-const siteOwner = import.meta.env.ASTRO_PUBLIC_SITE_OWNER_NAME ?? 'Your Name'
+const { siteOwner } = Astro.props
 const year = new Date().getFullYear()
 ---
 

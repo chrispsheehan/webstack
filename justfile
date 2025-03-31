@@ -112,9 +112,16 @@ web-upload:
     fi
     aws s3 sync {{justfile_directory()}}/dist "s3://$BUCKET_NAME/" --storage-class STANDARD
 
+
 web-build:
     #!/usr/bin/env bash
     set -euo pipefail
     rm -rf dist
     npm install
     npm run build
+
+
+start:
+    #!/usr/bin/env bash
+    npm i
+    npm run dev

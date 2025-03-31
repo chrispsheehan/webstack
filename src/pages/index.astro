@@ -1,5 +1,7 @@
 ---
 import Footer from '../components/Footer.astro'
+
+const siteOwner = import.meta.env.ASTRO_PUBLIC_SITE_OWNER ?? 'webstack.local.com'
 ---
 
 <!doctype html>
@@ -7,7 +9,7 @@ import Footer from '../components/Footer.astro'
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>chrispsheehan.com</title>
+    <title>{siteOwner}</title>
     <link rel="stylesheet" href="/styles.css" />
     <link rel="icon" type="image/png" href="/face.png" />
   </head>
@@ -35,6 +37,6 @@ import Footer from '../components/Footer.astro'
       </section>
     </main>
 
-    <Footer />
+    <Footer siteOwner={siteOwner}/>
   </body>
 </html>
