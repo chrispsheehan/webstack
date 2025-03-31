@@ -13,3 +13,7 @@ output "s3_logs_bucket_arn" {
 output "distribution_id" {
   value = aws_cloudfront_distribution.distribution.id
 }
+
+output "domain" {
+  value = data.aws_route53_zone.this.name
+}
