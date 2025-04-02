@@ -1,9 +1,10 @@
 ---
-import Footer from '../components/Footer.astro'
-import ThisSite from '../components/ThisSite.astro';
-import AboutMe from '../components/AboutMe.astro';
+import Footer from "../components/Footer.astro";
+import ThisSite from "../components/ThisSite.astro";
+import AboutMe from "../components/AboutMe.astro";
 
-const siteOwner = import.meta.env.ASTRO_PUBLIC_SITE_OWNER ?? 'webstack-local.com'
+const siteOwner =
+  import.meta.env.ASTRO_PUBLIC_SITE_OWNER ?? "webstack-local.com";
 ---
 
 <!doctype html>
@@ -33,6 +34,6 @@ const siteOwner = import.meta.env.ASTRO_PUBLIC_SITE_OWNER ?? 'webstack-local.com
       <ThisSite />
     </main>
 
-    <Footer siteOwner={siteOwner}/>
+    <Footer siteOwner={siteOwner} />
   </body>
 </html>

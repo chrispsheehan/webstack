@@ -1,13 +1,18 @@
 ---
-const githubRepo = import.meta.env.ASTRO_GITHUB_REPO ?? 'chrispsheehan/lambda-express-api'
+const githubRepo =
+  import.meta.env.ASTRO_GITHUB_REPO ?? "chrispsheehan/lambda-express-api";
 ---
 
 <section id="this-site">
   <h2>This Site</h2>
   <p>How this site is developed, built, and deployed.</p>
-  <a href={`https://github.com/${githubRepo}/actions/workflows/deploy.yml`} target="_blank" rel="noopener noreferrer">
-    <img 
-      src={`https://github.com/${githubRepo}/actions/workflows/deploy.yml/badge.svg`} 
+  <a
+    href={`https://github.com/${githubRepo}/actions/workflows/deploy.yml`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <img
+      src={`https://github.com/${githubRepo}/actions/workflows/deploy.yml/badge.svg`}
       alt="Webstack Workflow Status"
     />
   </a>

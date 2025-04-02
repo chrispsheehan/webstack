@@ -2,29 +2,29 @@
 // Define an array of certification objects
 const certifications = [
   {
-    href: 'https://www.credly.com/badges/b12a2630-eee0-44b0-9b15-a4006b1c36f8/public_url',
-    src: '/assets/certs/aws-certified-developer-associate.png',
-    alt: 'AWS Certified Developer Associate',
+    href: "https://www.credly.com/badges/b12a2630-eee0-44b0-9b15-a4006b1c36f8/public_url",
+    src: "/assets/certs/aws-certified-developer-associate.png",
+    alt: "AWS Certified Developer Associate",
   },
   {
-    href: 'https://www.credly.com/badges/6079e7e6-a810-420e-ac57-5ad8eefb1c27/public_url',
-    src: '/assets/certs/ckad-certified-kubernetes-application-developer.png',
-    alt: 'CKAD Certified Kubernetes Application Developer',
+    href: "https://www.credly.com/badges/6079e7e6-a810-420e-ac57-5ad8eefb1c27/public_url",
+    src: "/assets/certs/ckad-certified-kubernetes-application-developer.png",
+    alt: "CKAD Certified Kubernetes Application Developer",
   },
   {
-    href: 'https://www.credly.com/badges/1a613823-2c00-406d-8ce6-be87ac840106/public_url',
-    src: '/assets/certs/hashicorp-certified-terraform-associate-003.png',
-    alt: 'HashiCorp Certified: Terraform Associate',
+    href: "https://www.credly.com/badges/1a613823-2c00-406d-8ce6-be87ac840106/public_url",
+    src: "/assets/certs/hashicorp-certified-terraform-associate-003.png",
+    alt: "HashiCorp Certified: Terraform Associate",
   },
   {
-    href: 'https://www.credly.com/badges/3e27ad47-17d2-4706-aba5-9b222aa749b6/public_url',
-    src: '/assets/certs/aws-certified-cloud-practitioner.png',
-    alt: 'AWS Certified Cloud Practitioner',
+    href: "https://www.credly.com/badges/3e27ad47-17d2-4706-aba5-9b222aa749b6/public_url",
+    src: "/assets/certs/aws-certified-cloud-practitioner.png",
+    alt: "AWS Certified Cloud Practitioner",
   },
   {
-    href: 'https://www.credly.com/badges/10fbcc79-6211-4cca-9bbb-7e240fc1c4c8/public_url',
-    src: '/assets/certs/github-actions-certification-program.png',
-    alt: 'GitHub Actions Certification Program',
+    href: "https://www.credly.com/badges/10fbcc79-6211-4cca-9bbb-7e240fc1c4c8/public_url",
+    src: "/assets/certs/github-actions-certification-program.png",
+    alt: "GitHub Actions Certification Program",
   },
 ];
 ---
@@ -33,11 +33,13 @@ const certifications = [
   <h2>About Me</h2>
   <p>This is a basic Astro-powered site.</p>
   <div class="cert">
-    {certifications.map((cert) => (
-      <a href={cert.href} target="_blank" rel="noopener noreferrer">
-        <img src={cert.src} alt={cert.alt} class="b" />
-      </a>
-    ))}
+    {
+      certifications.map((cert) => (
+        <a href={cert.href} target="_blank" rel="noopener noreferrer">
+          <img src={cert.src} alt={cert.alt} class="b" />
+        </a>
+      ))
+    }
   </div>
 </section>
 
