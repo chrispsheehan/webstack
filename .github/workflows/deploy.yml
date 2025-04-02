@@ -60,6 +60,7 @@ jobs:
         uses: ./.github/actions/just_action
         env:
           ASTRO_PUBLIC_BUILD_OWNER: ${{ needs.web-infra.outputs.domain }}
+          ASTRO_GITHUB_REPO: ${{ github.action_repository }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: web-build
