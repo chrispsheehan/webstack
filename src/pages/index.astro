@@ -1,8 +1,9 @@
 ---
 import Footer from '../components/Footer.astro'
+import ThisSite from '../components/ThisSite.astro';
+import AboutMe from '../components/AboutMe.astro';
 
 const siteOwner = import.meta.env.ASTRO_PUBLIC_SITE_OWNER ?? 'webstack-local.com'
-const githubRepo = import.meta.env.ASTRO_GITHUB_REPO ?? 'chrispsheehan/lambda-express-api'
 ---
 
 <!doctype html>
@@ -17,7 +18,7 @@ const githubRepo = import.meta.env.ASTRO_GITHUB_REPO ?? 'chrispsheehan/lambda-ex
   <body>
     <header>
       <nav>
-        <a href="#about" class="button">About</a>
+        <a href="#about-me" class="button">About Me</a>
         <a href="#this-site" class="button">This Site</a>
       </nav>
     </header>
@@ -27,21 +28,9 @@ const githubRepo = import.meta.env.ASTRO_GITHUB_REPO ?? 'chrispsheehan/lambda-ex
         <h1>Welcome to {siteOwner}</h1>
       </section>
 
-      <section id="about">
-        <h2>About</h2>
-        <p>This is a basic Astro-powered site.</p>
-      </section>
+      <AboutMe />
 
-      <section id="this-site">
-        <h2>This Site</h2>
-        <p>How this site is developed, built and deployed.</p>
-        <a href=`https://github.com/${githubRepo}/actions/workflows/deploy.yml` target="_blank" rel="noopener noreferrer">
-          <img 
-            src=`https://github.com/${githubRepo}/actions/workflows/deploy.yml/badge.svg` 
-            alt="Webstack Workflow Status"
-          >
-        </a>
-      </section>
+      <ThisSite />
     </main>
 
     <Footer siteOwner={siteOwner}/>
