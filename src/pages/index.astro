@@ -2,6 +2,7 @@
 import Footer from '../components/Footer.astro'
 
 const siteOwner = import.meta.env.ASTRO_PUBLIC_SITE_OWNER ?? 'webstack-local.com'
+const githubRepo = import.meta.env.ASTRO_GITHUB_REPO ?? 'chrispsheehan/lambda-express-api'
 ---
 
 <!doctype html>
@@ -34,9 +35,9 @@ const siteOwner = import.meta.env.ASTRO_PUBLIC_SITE_OWNER ?? 'webstack-local.com
       <section id="this-site">
         <h2>This Site</h2>
         <p>How this site is developed, built and deployed.</p>
-        <a href="https://github.com/chrispsheehan/webstack/actions/workflows/deploy.yml" target="_blank" rel="noopener noreferrer">
+        <a href=`https://github.com/${githubRepo}/actions/workflows/deploy.yml` target="_blank" rel="noopener noreferrer">
           <img 
-            src="https://github.com/chrispsheehan/webstack/actions/workflows/deploy.yml/badge.svg" 
+            src=`https://github.com/${githubRepo}/actions/workflows/deploy.yml/badge.svg` 
             alt="Webstack Workflow Status"
           >
         </a>
