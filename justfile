@@ -22,6 +22,7 @@ branch name:
     git checkout main
     git fetch && git pull
     git branch {{ name }} && git checkout {{ name }}
+    just temp-init
 
 
 format:    
