@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - local-xp
 
 permissions:
   id-token: write
