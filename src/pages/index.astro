@@ -4,7 +4,7 @@ import ThisSite from "../components/ThisSite.astro";
 import AboutMe from "../components/AboutMe.astro";
 
 const siteOwner =
-  import.meta.env.ASTRO_PUBLIC_SITE_OWNER ?? "webstack-local.com";
+  import.meta.env.PUBLIC_BUILD_OWNER ?? "webstack-local.com";
 ---
 
 <!doctype html>

@@ -1,6 +1,6 @@
 ---
 const githubRepo =
-  import.meta.env.ASTRO_GITHUB_REPO ?? "chrispsheehan/lambda-express-api";
+  import.meta.env.PUBLIC_GITHUB_REPO ?? "chrispsheehan/webstack";
 ---
 
 <section id="this-site">
@@ -12,7 +12,7 @@ const githubRepo =
     rel="noopener noreferrer"
   >
     <img
-      src={`https://github.com/${githubRepo}/actions/workflows/push_main.yml/badge.svg`}
+      src={`https://github.com/${githubRepo}/actions/workflows/push_main.yml/badge.svg?`}
       alt="Webstack Workflow Status"
     />
   </a>
