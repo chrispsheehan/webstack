@@ -1,0 +1,19 @@
+---
+const githubRepo =
+  import.meta.env.PUBLIC_GITHUB_REPO ?? "chrispsheehan/webstack";
+---
+
+<section id="this-site">
+  <h2>This Site</h2>
+  <p>How this site is developed, built, and deployed.</p>
+  <a
+    href={`https://github.com/${githubRepo}/actions/workflows/push_main.yml`}
+    target="_blank"
+    rel="noopener noreferrer"
+  >
+    <img
+      src={`https://github.com/${githubRepo}/actions/workflows/push_main.yml/badge.svg?`}
+      alt="Webstack Workflow Status"
+    />
+  </a>
+</section>

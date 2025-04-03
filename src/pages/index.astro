@@ -1,67 +1,38 @@
+---
+import Footer from "../components/Footer.astro";
+import ThisSite from "../components/ThisSite.astro";
+import AboutMe from "../components/AboutMe.astro";
+
+const siteOwner = import.meta.env.PUBLIC_BUILD_OWNER ?? "webstack-local.com";
+---
+
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>chrispsheehan.com</title>
+    <title>{siteOwner}</title>
     <link rel="stylesheet" href="/styles.css" />
     <link rel="icon" type="image/png" href="/face.png" />
   </head>
   <body>
     <header>
       <nav>
-        <a href="#about" class="button">About</a>
+        <a href="#about-me" class="button">About Me</a>
         <a href="#this-site" class="button">This Site</a>
       </nav>
     </header>
 
     <main>
       <section id="hero">
-        <h1>Welcome to chrispsheehan.com</h1>
+        <h1>Welcome to {siteOwner}</h1>
       </section>
 
-      <section id="about">
-        <h2>About</h2>
-        <p>This is a basic Astro-powered site.</p>
-      </section>
+      <AboutMe />
 
-      <section id="this-site">
-        <h2>This Site</h2>
-        <p>How this site is developed, built and deployed.</p>
-      </section>
+      <ThisSite />
     </main>
 
-    <footer>
-      <div class="footer-container">
-        <p>&copy; 2025 chrispsheehan.com</p>
-        <div class="social-links">
-          <a
-            href="https://github.com/chrispsheehan"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src="assets/github.png" alt="GitHub" class="social-icon" />
-          </a>
-          <a
-            href="https://www.linkedin.com/in/chrispsheehan"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img src="assets/in.png" alt="LinkedIn" class="social-icon" />
-          </a>
-          <a
-            href="https://registry.terraform.io/namespaces/chrispsheehan"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              src="assets/terraform.png"
-              alt="LinkedIn"
-              class="social-icon"
-            />
-          </a>
-        </div>
-      </div>
-    </footer>
+    <Footer siteOwner={siteOwner} />
   </body>
 </html>

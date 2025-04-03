@@ -3,6 +3,7 @@
 *.terraform
 *-debug.tfvars.json
 *.zip
+*.DS_Store
 
 # ignore generated files
 infra/live/*.tf

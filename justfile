@@ -111,6 +111,8 @@ web-upload:
         exit 1
     fi
     aws s3 sync {{justfile_directory()}}/dist "s3://$BUCKET_NAME/" --storage-class STANDARD
+    aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
+
 
 web-build:
     #!/usr/bin/env bash
@@ -118,3 +120,9 @@ web-build:
     rm -rf dist
     npm install
     npm run build
+
+
+start:
+    #!/usr/bin/env bash
+    npm i
+    npm run dev
