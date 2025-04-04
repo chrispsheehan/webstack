@@ -36,6 +36,7 @@ jobs:
     outputs:
       bucket_name: ${{ steps.get_vars.outputs.bucket_name }}
       domain: ${{ steps.get_vars.outputs.domain }}
+      distribution_id: ${{ steps.get_vars.outputs.distribution_id }}
     steps:
       - uses: actions/checkout@v4
 
@@ -53,6 +54,7 @@ jobs:
         run: |
           echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.s3_bucket_name.value')" >> $GITHUB_OUTPUT
           echo "domain=$(echo $TG_OUTPUTS | jq -r '.domain.value')" >> $GITHUB_OUTPUT
+          echo "distribution_id=$(echo $TG_OUTPUTS | jq -r '.distribution_id.value')" >> $GITHUB_OUTPUT
 
 
   frontend-sync:
@@ -66,8 +68,8 @@ jobs:
       - name: Build web files
         uses: ./.github/actions/just_action
         env:
-          ASTRO_PUBLIC_BUILD_OWNER: ${{ needs.frontend-infra.outputs.domain }}
-          ASTRO_GITHUB_REPO: ${{ github.action_repository }}
+          PUBLIC_BUILD_OWNER: ${{ needs.web-infra.outputs.domain }}
+          PUBLIC_GITHUB_REPO: ${{ github.repository }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: frontend-build
@@ -75,6 +77,7 @@ jobs:
       - name: Sync web files to s3
         env:
           BUCKET_NAME: ${{ needs.frontend-infra.outputs.bucket_name }}
+          DISTRIBUTION_ID: ${{ needs.frontend-infra.outputs.distribution_id }}
         uses: ./.github/actions/just_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
