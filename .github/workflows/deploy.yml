@@ -28,7 +28,7 @@ jobs:
           tg_directory: infra/live/${{inputs.environment}}/aws/oidc
 
 
-  web-infra:
+  frontend-infra:
     environment:
       name: ${{inputs.environment}}
     needs: oidc
@@ -55,10 +55,10 @@ jobs:
           echo "domain=$(echo $TG_OUTPUTS | jq -r '.domain.value')" >> $GITHUB_OUTPUT
 
 
-  web-sync:
+  frontend-sync:
     environment:
       name: ${{inputs.environment}}
-    needs: web-infra
+    needs: frontend-infra
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -81,14 +81,14 @@ jobs:
           just_action: frontend-upload
 
 
-  s3-buckets:
+  bucket-infra:
     environment:
       name: ${{inputs.environment}}
     needs: oidc
     runs-on: ubuntu-latest
     outputs:
-      bucket_name: ${{ steps.get_vars.outputs.bucket_name }}
-      domain: ${{ steps.get_vars.outputs.domain }}
+      auth_bucket_name: ${{ steps.get_bucket_auth_vars.outputs.bucket_name }}
+      api_bucket_name: ${{ steps.get_bucket_api_vars.outputs.bucket_name }}
     steps:
       - uses: actions/checkout@v4
 
@@ -119,3 +119,36 @@ jobs:
           TG_OUTPUTS: ${{ steps.bucket_api_action.outputs.tg_outputs  }}
         run: |
           echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.s3_bucket_name.value')" >> $GITHUB_OUTPUT
+
+
+  backend-build:
+    environment:
+      name: ${{inputs.environment}}
+    needs: bucket-infra
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: extractions/setup-just@v2
+
+      - name: Action Just
+        shell: bash
+        run: just backend-build
+
+      - name: Upload auth zip
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ needs.bucket-infra.outputs.auth_bucket_name }}
+          ZIP_NAME: auth
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: backend-upload 
+
+      - name: Upload api zip
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ needs.bucket-infra.outputs.api_bucket_name }}
+          ZIP_NAME: api
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: backend-upload 

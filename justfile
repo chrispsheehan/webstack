@@ -131,7 +131,11 @@ backend-upload:
         echo "Error: BUCKET_NAME environment variable is not set."
         exit 1
     fi
-    aws s3 sync {{justfile_directory()}}backend/api.zip "s3://$BUCKET_NAME/" --storage-class STANDARD
+    if [[ -z "$ZIP_NAME" ]]; then
+        echo "Error: ZIP_NAME environment variable is not set."
+        exit 1
+    fi
+    aws s3 sync {{justfile_directory()}}backend/"$ZIP_NAME".zip "s3://$BUCKET_NAME/" --storage-class STANDARD
 
 
 backend-build:
