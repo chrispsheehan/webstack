@@ -8,7 +8,9 @@ locals {
     "cloudfront:*",
     "wafv2:*",
     "acm:*",
-    "route53:*"
+    "route53:*",
+    "lambda:*",
+    "ssm:*"
   ]
   root_domain = "chrispsheehan.com"
 }
