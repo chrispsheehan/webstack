@@ -135,6 +135,10 @@ jobs:
         shell: bash
         run: just backend-build
 
+      - name: ls
+        shell: bash
+        run: ls backend -r
+
       - name: Upload auth zip
         uses: ./.github/actions/just_action
         env:
