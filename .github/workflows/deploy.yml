@@ -111,14 +111,14 @@ jobs:
         env:
           TG_OUTPUTS: ${{ steps.bucket_auth_action.outputs.tg_outputs  }}
         run: |
-          echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.s3_bucket_name.value')" >> $GITHUB_OUTPUT
+          echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.bucket_name.value')" >> $GITHUB_OUTPUT
 
       - name: Get api bucket name
         id: get_bucket_api_vars
         env:
           TG_OUTPUTS: ${{ steps.bucket_api_action.outputs.tg_outputs  }}
         run: |
-          echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.s3_bucket_name.value')" >> $GITHUB_OUTPUT
+          echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.bucket_name.value')" >> $GITHUB_OUTPUT
 
 
   backend-build:
