@@ -3,7 +3,7 @@ include {
 }
 
 inputs = {
-  bucket_reference = "api-lambda-code"
+  bucket_reference = "lambda-code-api"
 }
 
 terraform {
