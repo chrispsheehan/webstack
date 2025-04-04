@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - api-path-init
 
 permissions:
   id-token: write
