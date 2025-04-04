@@ -172,5 +172,5 @@ backend-build:
 
 start:
     #!/usr/bin/env bash
-    npm i
-    npm run dev
+    npm i --prefix frontend
+    npm run dev --prefix frontend
