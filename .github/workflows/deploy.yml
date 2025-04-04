@@ -97,14 +97,14 @@ jobs:
         id: bucket_auth_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{inputs.environment}}/aws/bucket_auth
+          tg_directory: infra/live/ci/aws/bucket_auth
 
       - name: Deploy api s3 bucket
         uses: ./.github/actions/terragrunt_action
         id: bucket_api_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{inputs.environment}}/aws/bucket_api
+          tg_directory: infra/live/ci/aws/bucket_api
 
       - name: Get auth bucket name
         id: get_bucket_auth_vars
