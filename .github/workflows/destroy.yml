@@ -22,8 +22,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - uses: ./.github/actions/terragrunt_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website
+          tg_action: destroy
+
+
+  backend:
+    environment:
+      name: ${{inputs.environment}}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/terragrunt_action
+        env:
+          TF_VAR_lambda_bucket: bucket
+          TF_VAR_lambda_zip: api.zip
+          TF_VAR_auth_lambda_bucket: bucket
+          TF_VAR_auth_lambda_zip: auth.zip
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{inputs.environment}}/aws/api
           tg_action: destroy
