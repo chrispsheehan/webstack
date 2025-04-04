@@ -17,11 +17,11 @@ resource "aws_iam_role" "lambda_auth_role" {
 
 resource "aws_iam_policy" "lambda_apikey_policy" {
   name   = "${local.lambda_auth_name}-apikey-policy"
-  policy = data.aws_iam_policy_document.apikey_policy.json 
+  policy = data.aws_iam_policy_document.apikey_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "auth" {
-  role = aws_iam_role.lambda_auth_role.name
+  role       = aws_iam_role.lambda_auth_role.name
   policy_arn = aws_iam_policy.lambda_apikey_policy.arn
 }
 

@@ -15,7 +15,7 @@ data "aws_iam_policy_document" "assume_role" {
 
 data "aws_iam_policy_document" "apikey_policy" {
   statement {
-    actions   = [
+    actions = [
       "ssm:GetParameter"
     ]
     resources = [
