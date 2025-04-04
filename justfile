@@ -104,7 +104,7 @@ clean-terragrunt-cache:
     find {{PROJECT_DIR}} -type f -name "terragrunt-debug.tfvars.json" -exec rm -f {} +
 
 
-web-upload:
+frontend-upload:
     #!/usr/bin/env bash
     set -euo pipefail
     if [[ -z "$BUCKET_NAME" ]]; then
@@ -114,7 +114,7 @@ web-upload:
     aws s3 sync {{justfile_directory()}}/frontend/dist "s3://$BUCKET_NAME/" --storage-class STANDARD
 
 
-web-build:
+frontend-build:
     #!/usr/bin/env bash
     set -euo pipefail
     rm -rf frontend/dist
