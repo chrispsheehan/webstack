@@ -29,7 +29,7 @@ format:
     #!/usr/bin/env bash
     terraform fmt -recursive
     terragrunt hclfmt
-    npm run format
+    npm run format --prefix frontend
 
 
 validate:
@@ -111,15 +111,15 @@ web-upload:
         echo "Error: BUCKET_NAME environment variable is not set."
         exit 1
     fi
-    aws s3 sync {{justfile_directory()}}/dist "s3://$BUCKET_NAME/" --storage-class STANDARD
+    aws s3 sync {{justfile_directory()}}/frontend/dist "s3://$BUCKET_NAME/" --storage-class STANDARD
 
 
 web-build:
     #!/usr/bin/env bash
     set -euo pipefail
-    rm -rf dist
-    npm install
-    npm run build
+    rm -rf frontend/dist
+    npm install --prefix frontend
+    npm run build --prefix frontend
 
 
 start:
