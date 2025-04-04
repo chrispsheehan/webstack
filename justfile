@@ -112,7 +112,7 @@ frontend-upload:
         echo "Error: BUCKET_NAME environment variable is not set."
         exit 1
     fi
-    aws s3 sync {{justfile_directory()}}/dist "s3://$BUCKET_NAME/" --storage-class STANDARD
+    aws s3 sync {{justfile_directory()}}/frontend/dist "s3://$BUCKET_NAME/" --storage-class STANDARD
     aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
 
 
