@@ -16,7 +16,7 @@ permissions:
   contents: write
 
 jobs:
-  website:
+  frontend:
     environment:
       name: ${{inputs.environment}}
     runs-on: ubuntu-latest

@@ -66,7 +66,7 @@ jobs:
       - name: Build web files
         uses: ./.github/actions/just_action
         env:
-          ASTRO_PUBLIC_BUILD_OWNER: ${{ needs.web-infra.outputs.domain }}
+          ASTRO_PUBLIC_BUILD_OWNER: ${{ needs.frontend-infra.outputs.domain }}
           ASTRO_GITHUB_REPO: ${{ github.action_repository }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
@@ -74,7 +74,7 @@ jobs:
 
       - name: Sync web files to s3
         env:
-          BUCKET_NAME: ${{ needs.web-infra.outputs.bucket_name }}
+          BUCKET_NAME: ${{ needs.frontend-infra.outputs.bucket_name }}
         uses: ./.github/actions/just_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
