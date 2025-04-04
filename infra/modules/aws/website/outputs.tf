@@ -15,5 +15,5 @@ output "distribution_id" {
 }
 
 output "domain" {
-  value = data.aws_route53_zone.this.name
+  value = aws_cloudfront_distribution.distribution.domain_name
 }
