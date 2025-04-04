@@ -159,7 +159,9 @@ jobs:
   backend:
     environment:
       name: ${{inputs.environment}}
-    needs: bucket-infra
+    needs: 
+      - bucket-infra
+      - backend-build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
