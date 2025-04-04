@@ -83,7 +83,7 @@ jobs:
 
   bucket-infra:
     environment:
-      name: ${{inputs.environment}}
+      name: ci
     needs: oidc
     runs-on: ubuntu-latest
     outputs:
