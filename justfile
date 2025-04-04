@@ -117,9 +117,51 @@ frontend-upload:
 frontend-build:
     #!/usr/bin/env bash
     set -euo pipefail
+    echo "🔄 Cleaning previous builds..."
     rm -rf frontend/dist
+    echo "📦 Building frontend..."
     npm install --prefix frontend
     npm run build --prefix frontend
+
+
+backend-upload:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [[ -z "$BUCKET_NAME" ]]; then
+        echo "Error: BUCKET_NAME environment variable is not set."
+        exit 1
+    fi
+    aws s3 sync {{justfile_directory()}}backend/api.zip "s3://$BUCKET_NAME/" --storage-class STANDARD
+
+
+backend-build:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    python3 -m venv venv
+    source venv/bin/activate
+
+    echo "🔄 Cleaning previous builds..."
+    rm -f backend/api.zip backend/auth.zip
+    rm -rf backend/build/
+
+    echo "📦 Building auth Lambda..."
+    mkdir -p backend/build/auth
+    pip install --target backend/build/auth -r backend/auth/requirements.txt
+    cp backend/auth/*.py backend/build/auth/
+    cd backend/build/auth
+    zip -r ../../auth.zip . > /dev/null
+    cd ../../../
+
+    echo "📦 Building api Lambda..."
+    mkdir -p backend/build/api
+    pip install --target backend/build/api -r backend/api/requirements.txt
+    cp backend/api/*.py backend/build/api/
+    cd backend/build/api
+    zip -r ../../api.zip . > /dev/null
+    cd ../../../
+
+    echo "✅ Done: backend/api.zip and backend/auth.zip"
 
 
 start:
