@@ -12,3 +12,8 @@ variable "project_name" {
   description = "Name of project - used in naming"
   type        = string
 }
+
+variable "bucket_reference" {
+  description = "The unique reference used in the s3 bucket name"
+  type        = string
+}
