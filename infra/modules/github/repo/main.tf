@@ -3,6 +3,10 @@ resource "github_repository" "this" {
   delete_branch_on_merge = true
 
   visibility = local.visibility
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "github_branch_protection" "main" {
