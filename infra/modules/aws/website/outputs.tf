@@ -15,5 +15,5 @@ output "distribution_id" {
 }
 
 output "domain" {
-  value = aws_cloudfront_distribution.distribution.domain_name
+  value = local.domain
 }
