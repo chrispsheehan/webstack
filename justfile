@@ -136,7 +136,7 @@ backend-upload:
         echo "Error: ZIP_NAME environment variable is not set."
         exit 1
     fi
-    aws s3 sync "backend/$ZIP_NAME.zip" "s3://$BUCKET_NAME/" --storage-class STANDARD
+    aws s3 cp "backend/$ZIP_NAME.zip" "s3://$BUCKET_NAME/" --storage-class STANDARD
 
 
 backend-build:
