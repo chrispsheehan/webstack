@@ -59,4 +59,4 @@ jobs:
       - name: Run prettier checks
         run: |
           npm install --prefix frontend
-          npm run format:check
+          npm run format:check --prefix frontend
