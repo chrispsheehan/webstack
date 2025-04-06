@@ -34,8 +34,8 @@ data "aws_iam_policy_document" "api_logs_policy" {
     effect = "Allow"
 
     resources = [
-      "${aws_cloudwatch_log_group.lambda_api_group}",
-      "${aws_cloudwatch_log_group.lambda_api_group}:*"
+      "${aws_cloudwatch_log_group.lambda_api_group.arn}",
+      "${aws_cloudwatch_log_group.lambda_api_group.arn}:*"
     ]
   }
 }
@@ -50,8 +50,8 @@ data "aws_iam_policy_document" "auth_logs_policy" {
     effect = "Allow"
 
     resources = [
-      "${aws_cloudwatch_log_group.lambda_auth_group}",
-      "${aws_cloudwatch_log_group.lambda_auth_group}:*"
+      "${aws_cloudwatch_log_group.lambda_auth_group.arn}",
+      "${aws_cloudwatch_log_group.lambda_auth_group.arn}:*"
     ]
   }
 }
