@@ -23,3 +23,8 @@ variable "log_retention_days" {
   type        = number
   default     = 1
 }
+
+variable "api_invoke_url" {
+  description = "Api stage invoke url"
+  type        = string
+}

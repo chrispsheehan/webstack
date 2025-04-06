@@ -104,6 +104,25 @@ resource "aws_cloudfront_distribution" "distribution" {
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
 
+  origin {
+    domain_name = replace(
+      replace(aws_apigatewayv2_stage.this.invoke_url, "https://", ""),
+      "/${var.environment}",
+      ""
+    )
+    origin_id   = local.api_origin
+    origin_path = "/${var.environment}"
+
+    custom_origin_config {
+      http_port                = 80
+      https_port               = 443
+      origin_protocol_policy   = "https-only"
+      origin_ssl_protocols     = ["TLSv1.2"]
+      origin_keepalive_timeout = 5
+      origin_read_timeout      = 30
+    }
+  }
+
   custom_error_response {
     //needs to be better
     error_caching_min_ttl = 10
@@ -122,6 +141,27 @@ resource "aws_cloudfront_distribution" "distribution" {
       restriction_type = "none"
       locations        = []
     }
+  }
+
+  ordered_cache_behavior {
+    path_pattern           = "/api/*"
+    target_origin_id       = local.api_origin
+    viewer_protocol_policy = "redirect-to-https"
+
+    allowed_methods = ["GET", "HEAD", "OPTIONS"]
+    cached_methods  = ["GET", "HEAD"]
+
+    forwarded_values {
+      query_string = true
+      cookies {
+        forward = "none"
+      }
+    }
+
+    min_ttl     = 0
+    default_ttl = 0
+    max_ttl     = 0
+    compress    = true
   }
 
   default_cache_behavior {

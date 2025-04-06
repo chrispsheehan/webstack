@@ -31,7 +31,9 @@ jobs:
   frontend-infra:
     environment:
       name: ${{inputs.environment}}
-    needs: oidc
+    needs: 
+      - oidc
+      - backend
     runs-on: ubuntu-latest
     outputs:
       bucket_name: ${{ steps.get_vars.outputs.bucket_name }}
@@ -43,6 +45,8 @@ jobs:
       - name: Deploy web infrastructure
         uses: ./.github/actions/terragrunt_action
         id: terragrunt_action
+        env:
+          TF_VAR_api_invoke_url: ${{ needs.backend.outputs.api_url }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website
@@ -159,6 +163,8 @@ jobs:
   backend:
     environment:
       name: ${{inputs.environment}}
+    outputs:
+      api_url: ${{ steps.get_api_vars.outputs.api_url }}
     needs: 
       - bucket-infra
       - backend-build
@@ -179,3 +185,10 @@ jobs:
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/api
+
+      - name: Get api invoke url
+        id: get_api_vars
+        env:
+          TG_OUTPUTS: ${{ steps.api_action.outputs.tg_outputs  }}
+        run: |
+          echo "api_url=$(echo $TG_OUTPUTS | jq -r '.api_url.value')" >> $GITHUB_OUTPUT
