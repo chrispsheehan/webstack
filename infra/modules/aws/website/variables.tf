@@ -28,3 +28,8 @@ variable "api_invoke_url" {
   description = "Api stage invoke url"
   type        = string
 }
+
+variable "api_key_ssm_name" {
+  description = "SSM param containing api key to forward to origin"
+  type        = string
+}

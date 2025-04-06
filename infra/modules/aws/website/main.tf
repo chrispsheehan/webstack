@@ -113,6 +113,11 @@ resource "aws_cloudfront_distribution" "distribution" {
     origin_id   = local.api_origin
     origin_path = "/${var.environment}"
 
+    custom_header {
+      name  = "Authorization"
+      value = data.aws_ssm_parameter.api_key.value
+    }
+
     custom_origin_config {
       http_port                = 80
       https_port               = 443
@@ -156,6 +161,7 @@ resource "aws_cloudfront_distribution" "distribution" {
       cookies {
         forward = "none"
       }
+      headers = ["Origin"]
     }
 
     min_ttl     = 0

@@ -2,6 +2,10 @@ data "aws_route53_zone" "this" {
   name = var.root_domain
 }
 
+data "aws_ssm_parameter" "api_key" {
+  name = var.api_key_ssm_name
+}
+
 data "aws_iam_policy_document" "website_files_policy" {
 
   version = "2012-10-17"
