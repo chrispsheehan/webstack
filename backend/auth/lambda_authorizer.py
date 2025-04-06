@@ -38,7 +38,7 @@ def generate_policy(principal_id, effect, resource):
         ]
     }
 
-    print("Generated policy:", json.dumps(policy_document, indent=2))
+    print("Generated policy:", json.dumps(policy_document, separators=(",", ":")))
 
     return {
         "principalId": principal_id,
