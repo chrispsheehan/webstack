@@ -112,6 +112,11 @@ resource "aws_apigatewayv2_api" "this" {
   protocol_type = "HTTP"
 }
 
+resource "aws_cloudwatch_log_group" "api_gateway_logs" {
+  name              = "/aws/apigateway/${local.lambda_api_name}"
+  retention_in_days = 1
+}
+
 resource "aws_apigatewayv2_stage" "this" {
   api_id      = aws_apigatewayv2_api.this.id
   name        = var.environment
@@ -120,6 +125,18 @@ resource "aws_apigatewayv2_stage" "this" {
   default_route_settings {
     throttling_burst_limit = 10
     throttling_rate_limit  = 5
+  }
+
+  access_log_settings {
+    format = jsonencode({
+      requestId       = "$context.requestId"
+      ip              = "$context.identity.sourceIp"
+      userAgent       = "$context.identity.userAgent"
+      requestTime     = "$context.requestTime"
+      status          = "$context.status"
+      responseLatency = "$context.responseLatency"
+    })
+    destination_arn = aws_cloudwatch_log_group.api_gateway_logs.arn
   }
 }
 
