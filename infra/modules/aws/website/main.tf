@@ -106,7 +106,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
   origin {
     domain_name = replace(
-      replace(aws_apigatewayv2_stage.this.invoke_url, "https://", ""),
+      replace(var.api_invoke_url, "https://", ""),
       "/${var.environment}",
       ""
     )
