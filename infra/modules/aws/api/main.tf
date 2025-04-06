@@ -50,7 +50,7 @@ resource "aws_lambda_function" "auth" {
   environment {
     variables = {
       API_KEY = aws_ssm_parameter.api_key_ssm.value
-      # API_RESOURCE = "arn:aws:execute-api:${var.aws_region}:${data.aws_caller_identity.current.account_id}:${aws_apigatewayv2_stage.this.api_id}/${aws_apigatewayv2_stage.this.name}/GET/*"
+      API_RESOURCE = "arn:aws:execute-api:${var.aws_region}:${data.aws_caller_identity.current.account_id}:${aws_apigatewayv2_stage.this.api_id}/${aws_apigatewayv2_stage.this.name}/GET/*"
     }
   }
 }
@@ -91,4 +91,70 @@ resource "aws_lambda_function" "api" {
 resource "aws_cloudwatch_log_group" "lambda_api_group" {
   name              = "/aws/lambda/${aws_lambda_function.api.function_name}"
   retention_in_days = 1
+}
+
+resource "aws_lambda_permission" "api" {
+  statement_id  = "${local.lambda_api_name}-allow-api-gateway-invoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.api.function_name
+  principal     = "apigateway.amazonaws.com"
+}
+
+resource "aws_lambda_permission" "auth" {
+  statement_id  = "${local.lambda_auth_name}-allow-api-gateway-invoke"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.auth.function_name
+  principal     = "apigateway.amazonaws.com"
+}
+
+resource "aws_apigatewayv2_api" "this" {
+  name          = local.lambda_api_name
+  protocol_type = "HTTP"
+}
+
+resource "aws_apigatewayv2_stage" "this" {
+  api_id      = aws_apigatewayv2_api.this.id
+  name        = var.environment
+  auto_deploy = true
+
+  default_route_settings {
+    throttling_burst_limit = 10
+    throttling_rate_limit  = 5
+  }
+}
+
+resource "aws_apigatewayv2_authorizer" "this" {
+  api_id          = aws_apigatewayv2_api.this.id
+  authorizer_type = "REQUEST"
+  authorizer_uri  = aws_lambda_function.auth.invoke_arn
+
+  identity_sources = ["$request.header.Authorization"]
+
+  name                              = local.lambda_auth_name
+  authorizer_payload_format_version = "2.0"
+}
+
+resource "aws_apigatewayv2_integration" "this" {
+  api_id             = aws_apigatewayv2_api.this.id
+  integration_type   = "AWS_PROXY"
+  integration_uri    = aws_lambda_function.api.invoke_arn
+  integration_method = "POST"
+}
+
+resource "aws_apigatewayv2_route" "this" {
+  api_id    = aws_apigatewayv2_api.this.id
+  route_key = "ANY /{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.this.id}"
+
+  authorization_type = "CUSTOM"
+  authorizer_id      = aws_apigatewayv2_authorizer.this.id
+}
+
+resource "aws_apigatewayv2_route" "default_route" {
+  api_id    = aws_apigatewayv2_api.this.id
+  route_key = "$default"
+  target    = "integrations/${aws_apigatewayv2_integration.this.id}"
+
+  authorization_type = "CUSTOM"
+  authorizer_id      = aws_apigatewayv2_authorizer.this.id
 }
