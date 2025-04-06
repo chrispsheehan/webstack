@@ -1,2 +1,2 @@
-flask==2.2.5
+Flask==2.2.5
 mangum==0.17.0
