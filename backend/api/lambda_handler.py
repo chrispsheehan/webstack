@@ -18,4 +18,4 @@ def catch_all(path):
     return jsonify({"message": f"Catch-all hit: {request.path}"}), 200
 
 # Handler for AWS Lambda
-handler = Mangum(app)
+handler = Mangum(app, lifespan="off")
