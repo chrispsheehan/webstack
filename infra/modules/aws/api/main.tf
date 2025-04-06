@@ -50,7 +50,7 @@ resource "aws_iam_role" "lambda_api_role" {
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
-resource "aws_lambda_function" "auth" {
+resource "aws_lambda_function" "api" {
   function_name = local.lambda_name
   handler       = "lambda_handler.handler"
   runtime       = local.lambda_runtime
