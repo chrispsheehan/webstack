@@ -66,7 +66,7 @@ resource "aws_iam_role" "lambda_api_role" {
 }
 
 resource "aws_iam_policy" "api_logs_access_policy" {
-  name   = "${local.lambda_auth_name}-logs-access-policy"
+  name   = "${local.lambda_api_name}-logs-access-policy"
   policy = data.aws_iam_policy_document.api_logs_policy.json
 }
 
