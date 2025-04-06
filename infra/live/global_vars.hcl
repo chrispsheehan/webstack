@@ -11,7 +11,8 @@ locals {
     "route53:*",
     "lambda:*",
     "ssm:*",
-    "logs:*"
+    "logs:*",
+    "apigateway:*"
   ]
   root_domain = "chrispsheehan.com"
 }
