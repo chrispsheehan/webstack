@@ -10,7 +10,8 @@ locals {
     "acm:*",
     "route53:*",
     "lambda:*",
-    "ssm:*"
+    "ssm:*",
+    "logs:*"
   ]
   root_domain = "chrispsheehan.com"
 }
