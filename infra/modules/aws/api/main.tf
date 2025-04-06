@@ -44,3 +44,21 @@ resource "aws_lambda_function" "auth" {
     }
   }
 }
+
+resource "aws_iam_role" "lambda_api_role" {
+  name               = "${local.lambda_auth_name}-lambda-api-role"
+  assume_role_policy = data.aws_iam_policy_document.assume_role.json
+}
+
+resource "aws_lambda_function" "auth" {
+  function_name = local.lambda_name
+  handler       = "lambda_handler.handler"
+  runtime       = local.lambda_runtime
+  role          = aws_iam_role.lambda_api_role.arn
+
+  s3_bucket = var.lambda_bucket
+  s3_key    = var.lambda_zip
+
+  memory_size = 256
+  timeout     = 10
+}
