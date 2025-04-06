@@ -71,7 +71,7 @@ resource "aws_iam_policy" "api_logs_access_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "api_logs_access_policy_attachment" {
-  role       = aws_iam_role.lambda_auth_role.name
+  role       = aws_iam_role.lambda_api_role.name
   policy_arn = aws_iam_policy.api_logs_access_policy.arn
 }
 
