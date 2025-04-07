@@ -211,6 +211,7 @@ resource "aws_apigatewayv2_integration" "this" {
   integration_method = "POST"
 
   request_parameters = {
+    # strip the /api from the path
     "overwrite:path" = "/$request.path.proxy"
   }
 }
