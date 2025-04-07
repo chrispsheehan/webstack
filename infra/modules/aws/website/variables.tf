@@ -18,6 +18,21 @@ variable "root_domain" {
   type        = string
 }
 
+variable "domain" {
+  description = "Domain to be accessible via the web"
+  type        = string
+}
+
+variable "api_domain" {
+  description = "API domain to be accessible via the web"
+  type        = string
+}
+
+variable "api_key_ssm" {
+  description = "Name of ssm param used to store api key"
+  type        = string
+}
+
 variable "log_retention_days" {
   description = "How long to keep cloudfront s3 logs before deletion"
   type        = number

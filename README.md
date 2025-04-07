@@ -14,6 +14,8 @@ just init dev
 just init prod
 ```
 
+Example plan command - `just tg ci aws/bucket_auth plan`
+
 **_WARNING_**
 Terragrunt will create the s3 state bucket the first time this is done - this should only happen _ONCE_.
 

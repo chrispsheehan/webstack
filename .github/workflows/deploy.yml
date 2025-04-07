@@ -13,6 +13,7 @@ permissions:
   id-token: write
   contents: write
 
+  
 jobs:
   oidc:
     environment:
@@ -20,15 +21,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: ./.github/actions/terragrunt_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
           tg_directory: infra/live/${{inputs.environment}}/aws/oidc
 
-  web-infra:
+
+  frontend-infra:
     environment:
       name: ${{inputs.environment}}
-    needs: oidc
+    needs: 
+      - security
     runs-on: ubuntu-latest
     outputs:
       bucket_name: ${{ steps.get_vars.outputs.bucket_name }}
@@ -36,12 +40,14 @@ jobs:
       distribution_id: ${{ steps.get_vars.outputs.distribution_id }}
     steps:
       - uses: actions/checkout@v4
+
       - name: Deploy web infrastructure
         uses: ./.github/actions/terragrunt_action
         id: terragrunt_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website
+
       - name: Get web bucket name
         id: get_vars
         env:
@@ -51,26 +57,143 @@ jobs:
           echo "domain=$(echo $TG_OUTPUTS | jq -r '.domain.value')" >> $GITHUB_OUTPUT
           echo "distribution_id=$(echo $TG_OUTPUTS | jq -r '.distribution_id.value')" >> $GITHUB_OUTPUT
 
-  web-sync:
+
+  frontend-sync:
     environment:
       name: ${{inputs.environment}}
-    needs: web-infra
+    needs: frontend-infra
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Build web files
         uses: ./.github/actions/just_action
         env:
-          PUBLIC_BUILD_OWNER: ${{ needs.web-infra.outputs.domain }}
+          PUBLIC_BUILD_OWNER: ${{ needs.frontend-infra.outputs.domain }}
           PUBLIC_GITHUB_REPO: ${{ github.repository }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: web-build
+          just_action: frontend-build
+
       - name: Sync web files to s3
         env:
-          BUCKET_NAME: ${{ needs.web-infra.outputs.bucket_name }}
-          DISTRIBUTION_ID: ${{ needs.web-infra.outputs.distribution_id }}
+          BUCKET_NAME: ${{ needs.frontend-infra.outputs.bucket_name }}
+          DISTRIBUTION_ID: ${{ needs.frontend-infra.outputs.distribution_id }}
         uses: ./.github/actions/just_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: web-upload
+          just_action: frontend-upload
+
+
+  security:
+    environment:
+      name: ${{inputs.environment}}
+    needs: oidc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy security
+        uses: ./.github/actions/terragrunt_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{inputs.environment}}/aws/security
+
+
+  bucket-infra:
+    environment:
+      name: ci
+    needs: 
+      - security
+    runs-on: ubuntu-latest
+    outputs:
+      auth_bucket_name: ${{ steps.get_bucket_auth_vars.outputs.bucket_name }}
+      api_bucket_name: ${{ steps.get_bucket_api_vars.outputs.bucket_name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy auth s3 bucket
+        uses: ./.github/actions/terragrunt_action
+        id: bucket_auth_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/ci/aws/bucket_auth
+
+      - name: Deploy api s3 bucket
+        uses: ./.github/actions/terragrunt_action
+        id: bucket_api_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/ci/aws/bucket_api
+
+      - name: Get auth bucket name
+        id: get_bucket_auth_vars
+        env:
+          TG_OUTPUTS: ${{ steps.bucket_auth_action.outputs.tg_outputs  }}
+        run: |
+          echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.bucket_name.value')" >> $GITHUB_OUTPUT
+
+      - name: Get api bucket name
+        id: get_bucket_api_vars
+        env:
+          TG_OUTPUTS: ${{ steps.bucket_api_action.outputs.tg_outputs  }}
+        run: |
+          echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.bucket_name.value')" >> $GITHUB_OUTPUT
+
+
+  backend-build:
+    environment:
+      name: ${{inputs.environment}}
+    needs: bucket-infra
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: extractions/setup-just@v2
+
+      - name: Action Just
+        shell: bash
+        run: just backend-build
+
+      - name: Upload auth zip
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ needs.bucket-infra.outputs.auth_bucket_name }}
+          ZIP_NAME: auth
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: backend-upload 
+
+      - name: Upload api zip
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ needs.bucket-infra.outputs.api_bucket_name }}
+          ZIP_NAME: api
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: backend-upload 
+
+  backend-infra:
+    environment:
+      name: ${{inputs.environment}}
+    needs:
+      - security
+      - bucket-infra
+      - backend-build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: extractions/setup-just@v2
+
+      - name: Deploy api
+        uses: ./.github/actions/terragrunt_action
+        id: api_action
+        env:
+          TF_VAR_lambda_bucket: ${{ needs.bucket-infra.outputs.api_bucket_name }}
+          TF_VAR_lambda_zip: api.zip
+          TF_VAR_auth_lambda_bucket: ${{ needs.bucket-infra.outputs.auth_bucket_name }}
+          TF_VAR_auth_lambda_zip: auth.zip
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{inputs.environment}}/aws/api

@@ -22,13 +22,14 @@ branch name:
     git checkout main
     git fetch && git pull
     git branch {{ name }} && git checkout {{ name }}
+    just temp-init
 
 
 format:    
     #!/usr/bin/env bash
     terraform fmt -recursive
     terragrunt hclfmt
-    npm run format
+    npm run format --prefix frontend
 
 
 validate:
@@ -88,6 +89,7 @@ setup-repo:
     #!/usr/bin/env bash
     export GITHUB_TOKEN=$(just get-git-token)
     just tg ci github/repo apply
+    just init ci
 
 
 PROJECT_DIR := justfile_directory()
@@ -103,26 +105,72 @@ clean-terragrunt-cache:
     find {{PROJECT_DIR}} -type f -name "terragrunt-debug.tfvars.json" -exec rm -f {} +
 
 
-web-upload:
+frontend-upload:
     #!/usr/bin/env bash
     set -euo pipefail
     if [[ -z "$BUCKET_NAME" ]]; then
         echo "Error: BUCKET_NAME environment variable is not set."
         exit 1
     fi
-    aws s3 sync {{justfile_directory()}}/dist "s3://$BUCKET_NAME/" --storage-class STANDARD
+    aws s3 sync {{justfile_directory()}}/frontend/dist "s3://$BUCKET_NAME/" --storage-class STANDARD
     aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
 
 
-web-build:
+frontend-build:
     #!/usr/bin/env bash
     set -euo pipefail
-    rm -rf dist
-    npm install
-    npm run build
+    echo "🔄 Cleaning previous builds..."
+    rm -rf frontend/dist
+    echo "📦 Building frontend..."
+    npm install --prefix frontend
+    npm run build --prefix frontend
+
+
+backend-upload:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [[ -z "$BUCKET_NAME" ]]; then
+        echo "Error: BUCKET_NAME environment variable is not set."
+        exit 1
+    fi
+    if [[ -z "$ZIP_NAME" ]]; then
+        echo "Error: ZIP_NAME environment variable is not set."
+        exit 1
+    fi
+    aws s3 cp "backend/$ZIP_NAME.zip" "s3://$BUCKET_NAME/" --storage-class STANDARD
+
+
+backend-build:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    python3 -m venv venv
+    source venv/bin/activate
+
+    echo "🔄 Cleaning previous builds..."
+    rm -f backend/api.zip backend/auth.zip
+    rm -rf backend/build/
+
+    echo "📦 Building auth Lambda..."
+    mkdir -p backend/build/auth
+    pip install --target backend/build/auth -r backend/auth/requirements.txt
+    cp backend/auth/*.py backend/build/auth/
+    cd backend/build/auth
+    zip -r ../../auth.zip . > /dev/null
+    cd ../../../
+
+    echo "📦 Building api Lambda..."
+    mkdir -p backend/build/api
+    pip install --target backend/build/api -r backend/api/requirements.txt
+    cp backend/api/*.py backend/build/api/
+    cd backend/build/api
+    zip -r ../../api.zip . > /dev/null
+    cd ../../../
+
+    echo "✅ Done: backend/api.zip and backend/auth.zip"
 
 
 start:
     #!/usr/bin/env bash
-    npm i
-    npm run dev
+    npm i --prefix frontend
+    npm run dev --prefix frontend

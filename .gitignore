@@ -3,10 +3,13 @@
 *.terraform
 *-debug.tfvars.json
 *.zip
-*.DS_Store
+*.DS_store
 
 # ignore generated files
 infra/live/*.tf
 dist
 .astro/
 node_modules/
+package/
+build/
+venv

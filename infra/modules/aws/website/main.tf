@@ -1,7 +1,7 @@
 resource "aws_acm_certificate" "web_cert" {
   provider = aws.domain_aws_region
 
-  domain_name               = local.domain
+  domain_name               = var.domain
   subject_alternative_names = local.domain_records
   validation_method         = "DNS"
 
@@ -104,6 +104,26 @@ resource "aws_cloudfront_distribution" "distribution" {
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
 
+  origin {
+    domain_name = var.api_domain
+    origin_id   = local.api_origin
+    origin_path = ""
+
+    custom_header {
+      name  = "Authorization"
+      value = data.aws_ssm_parameter.api_key.value
+    }
+
+    custom_origin_config {
+      http_port                = 80
+      https_port               = 443
+      origin_protocol_policy   = "https-only"
+      origin_ssl_protocols     = ["TLSv1.2"]
+      origin_keepalive_timeout = 5
+      origin_read_timeout      = 30
+    }
+  }
+
   custom_error_response {
     //needs to be better
     error_caching_min_ttl = 10
@@ -124,6 +144,28 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
   }
 
+  ordered_cache_behavior {
+    path_pattern           = "/api/*"
+    target_origin_id       = local.api_origin
+    viewer_protocol_policy = "redirect-to-https"
+
+    allowed_methods = ["GET", "HEAD", "OPTIONS"]
+    cached_methods  = ["GET", "HEAD"]
+
+    forwarded_values {
+      query_string = true
+      cookies {
+        forward = "none"
+      }
+      headers = ["Origin"]
+    }
+
+    min_ttl     = 0
+    default_ttl = 0
+    max_ttl     = 0
+    compress    = true
+  }
+
   default_cache_behavior {
     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
     viewer_protocol_policy = "redirect-to-https"
@@ -135,7 +177,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 }
 
 resource "aws_s3_bucket" "website_files" {
-  bucket        = local.domain
+  bucket        = var.domain
   force_destroy = true
 }
 
@@ -153,8 +195,12 @@ resource "aws_s3_bucket_policy" "website_files_policy" {
 }
 
 resource "aws_s3_bucket" "website_logs" {
-  bucket        = "${local.domain}.logs"
+  bucket        = "${var.domain}.logs"
   force_destroy = true
+
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "website_logs" {

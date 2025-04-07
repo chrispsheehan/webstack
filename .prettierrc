@@ -2,7 +2,7 @@
   "plugins": ["prettier-plugin-astro"],
   "overrides": [
     {
-      "files": "*.astro",
+      "files": "frontend/*.astro",
       "options": {
         "parser": "astro"
       }
