@@ -221,14 +221,10 @@ resource "aws_apigatewayv2_authorizer" "this" {
 # }
 
 resource "aws_apigatewayv2_integration" "example" {
-  api_id           = aws_apigatewayv2_api.this.id
-  integration_type = "HTTP_PROXY"
-
+  api_id             = aws_apigatewayv2_api.this.id
+  integration_type   = "HTTP_PROXY"
   integration_method = "ANY"
-
-  # Only use {proxy}, not the full route
-  integration_uri = "https://${var.api_domain}/{proxy}"
-  
+  integration_uri    = "https://${var.api_domain}"
   request_parameters = {
     "overwrite:path" = "/$request.path.proxy"
   }
@@ -237,10 +233,8 @@ resource "aws_apigatewayv2_integration" "example" {
 resource "aws_apigatewayv2_route" "example" {
   api_id    = aws_apigatewayv2_api.this.id
   route_key = "ANY /api/{proxy+}"
-
-  target = "integrations/${aws_apigatewayv2_integration.example.id}"
+  target    = "integrations/${aws_apigatewayv2_integration.example.id}"
 }
-
 # resource "aws_apigatewayv2_route" "default_route" {
 #   api_id    = aws_apigatewayv2_api.this.id
 #   route_key = "$default"
