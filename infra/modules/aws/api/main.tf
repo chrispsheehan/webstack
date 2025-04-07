@@ -209,6 +209,10 @@ resource "aws_apigatewayv2_integration" "this" {
   integration_type   = "AWS_PROXY"
   integration_uri    = aws_lambda_function.api.invoke_arn
   integration_method = "POST"
+
+  request_parameters = {
+    "overwrite:path" = "/$request.path.proxy"
+  }
 }
 
 resource "aws_apigatewayv2_route" "lambda_route" {

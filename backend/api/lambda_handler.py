@@ -3,9 +3,14 @@ import json
 def handler(event, context):
     # Extract the path from the event
     path = event.get('path', '/not/found')
+
+    event_json = json.dumps(event, indent=2)
     
     # Set a default response
-    response_body = {"message": "Path not found"}
+    response_body = {
+        "message": "Path not found",
+        "event": event_json
+    }
     
     # Handle different paths based on the `path` parameter
     if path == '/hello':
