@@ -4,7 +4,7 @@ resource "random_string" "api_key" {
 }
 
 resource "aws_ssm_parameter" "api_key_ssm" {
-  name        = "/${local.lambda_auth_name}/api_key"
+  name        = var.api_key_ssm
   description = "API key for ${local.lambda_auth_name}"
   type        = "SecureString"
   value       = random_string.api_key.result
@@ -105,6 +105,50 @@ resource "aws_lambda_permission" "auth" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.auth.function_name
   principal     = "apigateway.amazonaws.com"
+}
+
+resource "aws_acm_certificate" "api_cert" {
+  domain_name       = var.api_domain
+  validation_method = "DNS"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_route53_record" "api_validation" {
+  for_each = {
+    for dvo in aws_acm_certificate.api_cert.domain_validation_options : dvo.domain_name => {
+      name    = dvo.resource_record_name
+      record  = dvo.resource_record_value
+      type    = dvo.resource_record_type
+      zone_id = data.aws_route53_zone.this.id
+    }
+  }
+
+  allow_overwrite = true
+  name            = each.value.name
+  records         = [each.value.record]
+  ttl             = 60
+  type            = each.value.type
+  zone_id         = each.value.zone_id
+}
+
+resource "aws_acm_certificate_validation" "api" {
+  depends_on              = [aws_acm_certificate.api_cert]
+  certificate_arn         = aws_acm_certificate.api_cert.arn
+  validation_record_fqdns = [for record in aws_route53_record.api_validation : record.fqdn]
+}
+
+resource "aws_apigatewayv2_domain_name" "this" {
+  depends_on = [aws_acm_certificate_validation.api]
+
+  domain_name = var.api_domain
+  domain_name_configuration {
+    certificate_arn = aws_acm_certificate.api_cert.arn
+    endpoint_type   = "REGIONAL"
+    security_policy = "TLS_1_2"
+  }
 }
 
 resource "aws_apigatewayv2_api" "this" {

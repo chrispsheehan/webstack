@@ -3,7 +3,7 @@ data "aws_route53_zone" "this" {
 }
 
 data "aws_ssm_parameter" "api_key" {
-  name = var.api_key_ssm_name
+  name = var.api_key_ssm
 }
 
 data "aws_iam_policy_document" "website_files_policy" {

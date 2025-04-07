@@ -1,5 +1,9 @@
 data "aws_caller_identity" "current" {}
 
+data "aws_route53_zone" "this" {
+  name = var.root_domain
+}
+
 data "aws_iam_policy_document" "assume_role" {
   statement {
     effect = "Allow"

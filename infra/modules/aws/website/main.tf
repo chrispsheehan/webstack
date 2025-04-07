@@ -1,7 +1,7 @@
 resource "aws_acm_certificate" "web_cert" {
   provider = aws.domain_aws_region
 
-  domain_name               = local.domain
+  domain_name               = var.domain
   subject_alternative_names = local.domain_records
   validation_method         = "DNS"
 
@@ -105,11 +105,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   origin {
-    domain_name = replace(
-      replace(var.api_invoke_url, "https://", ""),
-      "/${var.environment}",
-      ""
-    )
+    domain_name = var.api_domain
     origin_id   = local.api_origin
     origin_path = "/${var.environment}"
 
@@ -181,7 +177,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 }
 
 resource "aws_s3_bucket" "website_files" {
-  bucket        = local.domain
+  bucket        = var.domain
   force_destroy = true
 }
 
@@ -199,7 +195,7 @@ resource "aws_s3_bucket_policy" "website_files_policy" {
 }
 
 resource "aws_s3_bucket" "website_logs" {
-  bucket        = "${local.domain}.logs"
+  bucket        = "${var.domain}.logs"
   force_destroy = true
 }
 

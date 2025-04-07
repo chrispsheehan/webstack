@@ -8,6 +8,21 @@ variable "aws_region" {
   type        = string
 }
 
+variable "root_domain" {
+  description = "Root domain matching the AWS hosted zone name"
+  type        = string
+}
+
+variable "api_domain" {
+  description = "API domain to be accessible via the web"
+  type        = string
+}
+
+variable "api_key_ssm" {
+  description = "Name of ssm param used to store api key"
+  type        = string
+}
+
 variable "environment" {
   description = "Name of environment i.e. dev, prod etc"
   type        = string

@@ -15,5 +15,5 @@ output "distribution_id" {
 }
 
 output "domain" {
-  value = local.domain
+  value = var.domain
 }

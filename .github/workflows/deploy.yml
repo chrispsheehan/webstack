@@ -45,9 +45,6 @@ jobs:
       - name: Deploy web infrastructure
         uses: ./.github/actions/terragrunt_action
         id: terragrunt_action
-        env:
-          TF_VAR_api_invoke_url: ${{ needs.backend.outputs.api_url }}
-          TF_VAR_api_key_ssm_name: ${{ needs.backend.outputs.api_key_ssm_name }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website
@@ -164,9 +161,6 @@ jobs:
   backend:
     environment:
       name: ${{inputs.environment}}
-    outputs:
-      api_url: ${{ steps.get_api_vars.outputs.api_url }}
-      api_key_ssm_name: ${{ steps.get_api_vars.outputs.api_key_ssm_name }}
     needs: 
       - bucket-infra
       - backend-build
@@ -187,11 +181,3 @@ jobs:
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/api
-
-      - name: Get api invoke url
-        id: get_api_vars
-        env:
-          TG_OUTPUTS: ${{ steps.api_action.outputs.tg_outputs  }}
-        run: |
-          echo "api_url=$(echo $TG_OUTPUTS | jq -r '.api_url.value')" >> $GITHUB_OUTPUT
-          echo "api_key_ssm_name=$(echo $TG_OUTPUTS | jq -r '.api_key_ssm_name.value')" >> $GITHUB_OUTPUT
