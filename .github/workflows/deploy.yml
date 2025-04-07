@@ -173,7 +173,7 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: backend-upload 
 
-  backend:
+  backend-infra:
     environment:
       name: ${{inputs.environment}}
     needs:
