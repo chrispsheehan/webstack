@@ -214,7 +214,7 @@ resource "aws_apigatewayv2_integration" "this" {
 resource "aws_apigatewayv2_route" "lambda_route" {
   api_id    = aws_apigatewayv2_api.this.id
   route_key = "ANY /api/{proxy+}"
-  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+  target    = "integrations/${aws_apigatewayv2_integration.this.id}"
 
   authorization_type = "CUSTOM"
   authorizer_id      = aws_apigatewayv2_authorizer.this.id
