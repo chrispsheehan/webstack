@@ -33,7 +33,6 @@ jobs:
       name: ${{inputs.environment}}
     needs: 
       - oidc
-      - backend
     runs-on: ubuntu-latest
     outputs:
       bucket_name: ${{ steps.get_vars.outputs.bucket_name }}
@@ -84,6 +83,21 @@ jobs:
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: frontend-upload
+
+
+  security:
+    environment:
+      name: ${{inputs.environment}}
+    needs: oidc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy security
+        uses: ./.github/actions/terragrunt_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{inputs.environment}}/aws/security
 
 
   bucket-infra:
@@ -161,7 +175,8 @@ jobs:
   backend:
     environment:
       name: ${{inputs.environment}}
-    needs: 
+    needs:
+      - security
       - bucket-infra
       - backend-build
     runs-on: ubuntu-latest
