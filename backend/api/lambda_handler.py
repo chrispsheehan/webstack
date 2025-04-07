@@ -2,7 +2,7 @@ import json
 
 def handler(event, context):
     # Extract the path from the event
-    path = event['rawPath']
+    path = event.get('path', '/not/found')
     
     # Set a default response
     response_body = {"message": "Path not found"}

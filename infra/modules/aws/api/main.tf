@@ -220,11 +220,11 @@ resource "aws_apigatewayv2_route" "this" {
   authorizer_id      = aws_apigatewayv2_authorizer.this.id
 }
 
-resource "aws_apigatewayv2_route" "default_route" {
-  api_id    = aws_apigatewayv2_api.this.id
-  route_key = "$default"
-  target    = "integrations/${aws_apigatewayv2_integration.this.id}"
+# resource "aws_apigatewayv2_route" "default_route" {
+#   api_id    = aws_apigatewayv2_api.this.id
+#   route_key = "$default"
+#   target    = "integrations/${aws_apigatewayv2_integration.this.id}"
 
-  authorization_type = "CUSTOM"
-  authorizer_id      = aws_apigatewayv2_authorizer.this.id
-}
+#   authorization_type = "CUSTOM"
+#   authorizer_id      = aws_apigatewayv2_authorizer.this.id
+# }
