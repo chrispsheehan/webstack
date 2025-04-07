@@ -204,12 +204,21 @@ resource "aws_apigatewayv2_authorizer" "this" {
   authorizer_payload_format_version = "2.0"
 }
 
-# resource "aws_apigatewayv2_integration" "this" {
-#   api_id             = aws_apigatewayv2_api.this.id
-#   integration_type   = "AWS_PROXY"
-#   integration_uri    = aws_lambda_function.api.invoke_arn
-#   integration_method = "POST"
-# }
+resource "aws_apigatewayv2_integration" "this" {
+  api_id             = aws_apigatewayv2_api.this.id
+  integration_type   = "AWS_PROXY"
+  integration_uri    = aws_lambda_function.api.invoke_arn
+  integration_method = "POST"
+}
+
+resource "aws_apigatewayv2_route" "lambda_route" {
+  api_id    = aws_apigatewayv2_api.this.id
+  route_key = "ANY /api/{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.lambda_integration.id}"
+
+  authorization_type = "CUSTOM"
+  authorizer_id      = aws_apigatewayv2_authorizer.this.id
+}
 
 # resource "aws_apigatewayv2_route" "this" {
 #   api_id    = aws_apigatewayv2_api.this.id
@@ -220,21 +229,21 @@ resource "aws_apigatewayv2_authorizer" "this" {
 #   authorizer_id      = aws_apigatewayv2_authorizer.this.id
 # }
 
-resource "aws_apigatewayv2_integration" "example" {
-  api_id             = aws_apigatewayv2_api.this.id
-  integration_type   = "HTTP_PROXY"
-  integration_method = "ANY"
-  integration_uri    = "https://${var.api_domain}"
-  request_parameters = {
-    "overwrite:path" = "/$request.path.proxy"
-  }
-}
+# resource "aws_apigatewayv2_integration" "example" {
+#   api_id             = aws_apigatewayv2_api.this.id
+#   integration_type   = "HTTP_PROXY"
+#   integration_method = "ANY"
+#   integration_uri    = "https://${var.api_domain}"
+#   request_parameters = {
+#     "overwrite:path" = "/$request.path.proxy"
+#   }
+# }
 
-resource "aws_apigatewayv2_route" "example" {
-  api_id    = aws_apigatewayv2_api.this.id
-  route_key = "ANY /api/{proxy+}"
-  target    = "integrations/${aws_apigatewayv2_integration.example.id}"
-}
+# resource "aws_apigatewayv2_route" "example" {
+#   api_id    = aws_apigatewayv2_api.this.id
+#   route_key = "ANY /api/{proxy+}"
+#   target    = "integrations/${aws_apigatewayv2_integration.example.id}"
+# }
 # resource "aws_apigatewayv2_route" "default_route" {
 #   api_id    = aws_apigatewayv2_api.this.id
 #   route_key = "$default"
