@@ -2,6 +2,7 @@
 import Footer from "../components/Footer.astro";
 import ThisSite from "../components/ThisSite.astro";
 import AboutMe from "../components/AboutMe.astro";
+import APICall from "../components/APICall.astro";
 
 const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "http://localhost:4321";
 ---
@@ -31,6 +32,8 @@ const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "http://localhost:4321"
       <AboutMe baseDomain={baseDomain} />
 
       <ThisSite />
+
+      <APICall />
     </main>
 
     <Footer baseDomain={baseDomain} />
