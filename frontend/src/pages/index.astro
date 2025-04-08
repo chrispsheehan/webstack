@@ -3,7 +3,7 @@ import Footer from "../components/Footer.astro";
 import ThisSite from "../components/ThisSite.astro";
 import AboutMe from "../components/AboutMe.astro";
 
-const siteOwner = import.meta.env.PUBLIC_BUILD_OWNER ?? "webstack-local.com";
+const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "http://localhost:4321";
 ---
 
 <!doctype html>
@@ -11,7 +11,7 @@ const siteOwner = import.meta.env.PUBLIC_BUILD_OWNER ?? "webstack-local.com";
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{siteOwner}</title>
+    <title>{baseDomain}</title>
     <link rel="stylesheet" href="/styles.css" />
     <link rel="icon" type="image/png" href="/face.png" />
   </head>
@@ -25,14 +25,14 @@ const siteOwner = import.meta.env.PUBLIC_BUILD_OWNER ?? "webstack-local.com";
 
     <main>
       <section id="hero">
-        <h1>Welcome to {siteOwner}</h1>
+        <h1>Welcome to {baseDomain}</h1>
       </section>
 
-      <AboutMe />
+      <AboutMe baseDomain={baseDomain} />
 
       <ThisSite />
     </main>
 
-    <Footer siteOwner={siteOwner} />
+    <Footer baseDomain={baseDomain} />
   </body>
 </html>

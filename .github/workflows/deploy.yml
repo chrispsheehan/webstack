@@ -69,7 +69,7 @@ jobs:
       - name: Build web files
         uses: ./.github/actions/just_action
         env:
-          PUBLIC_BUILD_OWNER: ${{ needs.frontend-infra.outputs.domain }}
+          PUBLIC_BASE_DOMAIN: ${{ needs.frontend-infra.outputs.domain }}
           PUBLIC_GITHUB_REPO: ${{ github.repository }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}

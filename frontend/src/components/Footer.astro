@@ -1,11 +1,11 @@
 ---
-const { siteOwner } = Astro.props;
+const { baseDomain } = Astro.props;
 const year = new Date().getFullYear();
 ---
 
 <footer>
   <div class="footer-container">
-    <p>&copy; {year} {siteOwner}</p>
+    <p>&copy; {year} {baseDomain}</p>
     <div class="social-links">
       <a
         href="https://github.com/chrispsheehan"

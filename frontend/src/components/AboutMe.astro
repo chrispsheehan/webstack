@@ -2,7 +2,9 @@
 let message = "Loading...";
 
 try {
-  const response = await fetch("/api/hello");
+  const { baseDomain } = Astro.props;
+
+  const response = await fetch(`${baseDomain}/api/hello`);
 
   if (!response.ok) {
     throw new Error(`HTTP error! Status: ${response.status}`);
