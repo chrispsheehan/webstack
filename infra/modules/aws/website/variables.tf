@@ -23,11 +23,6 @@ variable "domain" {
   type        = string
 }
 
-variable "api_domain" {
-  description = "API domain to be accessible via the web"
-  type        = string
-}
-
 variable "api_key_ssm" {
   description = "Name of ssm param used to store api key"
   type        = string
