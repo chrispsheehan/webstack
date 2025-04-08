@@ -46,7 +46,7 @@ jobs:
         uses: ./.github/actions/terragrunt_action
         id: terragrunt_action
         env:
-          TF_VAR_api_invoke_url: ${{ needs.backend-infra.outputs.api_invoke_url }}
+          TF_VAR_api_invoke_domain: ${{ needs.backend-infra.outputs.api_invoke_domain }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website
@@ -181,7 +181,7 @@ jobs:
     environment:
       name: ${{inputs.environment}}
     outputs:
-      api_invoke_url: ${{ steps.get_vars.outputs.api_invoke_url }}
+      api_invoke_domain: ${{ steps.get_vars.outputs.api_invoke_domain }}
     needs:
       - security
       - bucket-infra
@@ -209,4 +209,4 @@ jobs:
         env:
           TG_OUTPUTS: ${{ steps.api_action.outputs.tg_outputs  }}
         run: |
-          echo "api_invoke_url=$(echo $TG_OUTPUTS | jq -r '.api_invoke_url.value')" >> $GITHUB_OUTPUT
+          echo "api_invoke_domain=$(echo $TG_OUTPUTS | jq -r '.api_invoke_domain.value')" >> $GITHUB_OUTPUT
