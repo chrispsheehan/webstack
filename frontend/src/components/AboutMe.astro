@@ -11,7 +11,7 @@ try {
   message = await response.text();
 } catch (error) {
   console.error("Error fetching data:", error);
-  message = "Failed to load message.";
+  message = `Failed to load message. error: ${error}`;
 }
 
 // Define an array of certification objects
