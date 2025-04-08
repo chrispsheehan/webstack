@@ -105,7 +105,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   origin {
-    domain_name = "https://17zi34lwtj.execute-api.eu-west-2.amazonaws.com/dev"
+    domain_name = "17zi34lwtj.execute-api.eu-west-2.amazonaws.com/dev"
     origin_id   = local.api_origin
     origin_path = ""
 
