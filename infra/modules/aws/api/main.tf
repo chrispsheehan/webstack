@@ -95,62 +95,6 @@ resource "aws_lambda_permission" "auth" {
   principal     = "apigateway.amazonaws.com"
 }
 
-resource "aws_acm_certificate" "api_cert" {
-  domain_name       = var.api_domain
-  validation_method = "DNS"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-resource "aws_route53_record" "api_validation" {
-  for_each = {
-    for dvo in aws_acm_certificate.api_cert.domain_validation_options : dvo.domain_name => {
-      name    = dvo.resource_record_name
-      record  = dvo.resource_record_value
-      type    = dvo.resource_record_type
-      zone_id = data.aws_route53_zone.this.id
-    }
-  }
-
-  allow_overwrite = true
-  name            = each.value.name
-  records         = [each.value.record]
-  ttl             = 60
-  type            = each.value.type
-  zone_id         = each.value.zone_id
-}
-
-resource "aws_acm_certificate_validation" "api" {
-  depends_on              = [aws_acm_certificate.api_cert]
-  certificate_arn         = aws_acm_certificate.api_cert.arn
-  validation_record_fqdns = [for record in aws_route53_record.api_validation : record.fqdn]
-}
-
-resource "aws_apigatewayv2_domain_name" "this" {
-  depends_on = [aws_acm_certificate_validation.api]
-
-  domain_name = var.api_domain
-  domain_name_configuration {
-    certificate_arn = aws_acm_certificate.api_cert.arn
-    endpoint_type   = "REGIONAL"
-    security_policy = "TLS_1_2"
-  }
-}
-
-resource "aws_route53_record" "api" {
-  zone_id = data.aws_route53_zone.this.id
-  name    = aws_apigatewayv2_domain_name.this.domain_name
-  type    = "A"
-
-  alias {
-    name                   = aws_apigatewayv2_domain_name.this.domain_name_configuration[0].target_domain_name
-    zone_id                = aws_apigatewayv2_domain_name.this.domain_name_configuration[0].hosted_zone_id
-    evaluate_target_health = false
-  }
-}
-
 resource "aws_apigatewayv2_api" "this" {
   name          = local.lambda_api_name
   protocol_type = "HTTP"
@@ -184,13 +128,6 @@ resource "aws_apigatewayv2_stage" "this" {
     })
     destination_arn = aws_cloudwatch_log_group.api_gateway_logs.arn
   }
-}
-
-resource "aws_apigatewayv2_api_mapping" "this" {
-  api_id          = aws_apigatewayv2_api.this.id
-  domain_name     = aws_apigatewayv2_domain_name.this.id
-  stage           = aws_apigatewayv2_stage.this.id
-  api_mapping_key = ""
 }
 
 resource "aws_apigatewayv2_authorizer" "this" {
