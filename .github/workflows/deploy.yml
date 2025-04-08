@@ -107,7 +107,7 @@ jobs:
     environment:
       name: ci
     needs: 
-      - security
+      - oidc
     runs-on: ubuntu-latest
     outputs:
       auth_bucket_name: ${{ steps.get_bucket_auth_vars.outputs.bucket_name }}
