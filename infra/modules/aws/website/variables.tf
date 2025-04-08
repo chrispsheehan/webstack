@@ -23,6 +23,11 @@ variable "domain" {
   type        = string
 }
 
+variable "api_invoke_url" {
+  description = "Url to forward /api traffic to"
+  type        = string
+}
+
 variable "api_key_ssm" {
   description = "Name of ssm param used to store api key"
   type        = string
