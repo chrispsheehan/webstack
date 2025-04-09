@@ -32,18 +32,6 @@ format:
     npm run format --prefix frontend
 
 
-validate:
-    #!/usr/bin/env bash
-    for dir in terraform_modules/*; do
-        if [ -d "$dir" ] && [[ $(basename "$dir") != '!'* ]]; then
-            folder_name=$(basename "$dir")
-            echo "Validating $folder_name"
-            just tg "$folder_name" init
-            just tg "$folder_name" validate
-        fi
-    done
-
-
 # Terragrunt operation on {{module}} containing terragrunt.hcl
 tg env module op:
     #!/usr/bin/env bash
