@@ -70,10 +70,22 @@ generate "aws_provider" {
 provider "aws" {
   region              = "${local.aws_region}"
   allowed_account_ids = ["${local.aws_account_id}"]
+  default_tags {
+    tags = {
+      Project     = "${local.project_name}"
+      Environment = "${local.environment}"
+    }
+  }
 }
 provider "aws" {
   alias = "domain_aws_region"
   allowed_account_ids = ["${local.aws_account_id}"]
+  default_tags {
+    tags = {
+      Project     = "${local.project_name}"
+      Environment = "${local.environment}"
+    }
+  }
   # needs to be us-east-1
   region = "us-east-1"
 }
