@@ -33,6 +33,7 @@ jobs:
       name: ${{inputs.environment}}
     needs: 
       - security
+      - backend-infra
     runs-on: ubuntu-latest
     outputs:
       bucket_name: ${{ steps.get_vars.outputs.bucket_name }}
@@ -44,6 +45,8 @@ jobs:
       - name: Deploy web infrastructure
         uses: ./.github/actions/terragrunt_action
         id: terragrunt_action
+        env:
+          TF_VAR_api_invoke_domain: ${{ needs.backend-infra.outputs.api_invoke_domain }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website
@@ -69,7 +72,7 @@ jobs:
       - name: Build web files
         uses: ./.github/actions/just_action
         env:
-          PUBLIC_BUILD_OWNER: ${{ needs.frontend-infra.outputs.domain }}
+          PUBLIC_BASE_DOMAIN: ${{ needs.frontend-infra.outputs.domain }}
           PUBLIC_GITHUB_REPO: ${{ github.repository }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
@@ -104,7 +107,7 @@ jobs:
     environment:
       name: ci
     needs: 
-      - security
+      - oidc
     runs-on: ubuntu-latest
     outputs:
       auth_bucket_name: ${{ steps.get_bucket_auth_vars.outputs.bucket_name }}
@@ -173,9 +176,12 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: backend-upload 
 
+
   backend-infra:
     environment:
       name: ${{inputs.environment}}
+    outputs:
+      api_invoke_domain: ${{ steps.get_vars.outputs.api_invoke_domain }}
     needs:
       - security
       - bucket-infra
@@ -197,3 +203,10 @@ jobs:
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/api
+
+      - name: Get API invoke url
+        id: get_vars
+        env:
+          TG_OUTPUTS: ${{ steps.api_action.outputs.tg_outputs  }}
+        run: |
+          echo "api_invoke_domain=$(echo $TG_OUTPUTS | jq -r '.api_invoke_domain.value')" >> $GITHUB_OUTPUT

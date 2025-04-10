@@ -23,8 +23,8 @@ variable "domain" {
   type        = string
 }
 
-variable "api_domain" {
-  description = "API domain to be accessible via the web"
+variable "api_invoke_domain" {
+  description = "Url to forward /api traffic to"
   type        = string
 }
 

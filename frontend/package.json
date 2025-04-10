@@ -7,8 +7,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "format:check": "prettier --check .",
-    "format": "prettier --write ."
+    "format:check": "prettier --check \"**/*.{js,ts,astro,json,css,html,md}\"",
+    "format": "prettier --write . \"**/*.{js,ts,json,css,html,astro,md}\""
   },
   "devDependencies": {
     "astro": "^5.5.5",

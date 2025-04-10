@@ -105,9 +105,9 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   origin {
-    domain_name = var.api_domain
+    domain_name = var.api_invoke_domain
     origin_id   = local.api_origin
-    origin_path = ""
+    origin_path = "/${var.environment}"
 
     custom_header {
       name  = "Authorization"

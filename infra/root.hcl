@@ -16,7 +16,6 @@ locals {
 
   project_name = replace(local.github_repo, "/", "-")
   domain       = local.environment == "prod" ? "wip.${local.global_vars.inputs.root_domain}" : "wip.${local.environment}.${local.global_vars.inputs.root_domain}"
-  api_domain   = "api.${local.domain}"
   api_key_ssm  = "/${local.environment}/${local.project_name}/api_key"
 
   aws_region       = local.global_vars.inputs.aws_region
@@ -110,7 +109,6 @@ inputs = merge(
   local.environment_vars.inputs,
   {
     domain              = local.domain
-    api_domain          = local.api_domain
     api_key_ssm         = local.api_key_ssm
     aws_account_id      = local.aws_account_id
     aws_region          = local.aws_region

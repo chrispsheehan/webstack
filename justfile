@@ -19,9 +19,11 @@ get-git-repo:
 
 branch name:
     #!/usr/bin/env bash
+    git fetch origin
     git checkout main
-    git fetch && git pull
-    git branch {{ name }} && git checkout {{ name }}
+    git pull
+    git branch {{ name }}
+    git checkout {{ name }}
     just temp-init
 
 
