@@ -1,21 +1,30 @@
 import os
 import json
+import boto3
+
+ssm = boto3.client('ssm')
+param_name = os.environ['API_KEY_SSM_PARAM']
+
+response = ssm.get_parameter(Name=param_name, WithDecryption=True)
+api_key = response['Parameter']['Value']
+
 
 def lambda_handler(event, context):
     try:
         print("Received event:", json.dumps(event, indent=2))
 
-        # Extract the token from headers
         headers = event.get("headers", {}) or {}
         authorization_token = headers.get("authorization", "")
-        expected_token = os.environ.get("API_KEY", "")
+
+        api_key_param_name = os.environ.get("API_KEY_SSM_PARAM", "")
         api_resource = os.environ.get("API_RESOURCE", "")
 
-        print("Authorization token received:", authorization_token)
-        print("Expected token:", expected_token)
+        response = ssm.get_parameter(Name=api_key_param_name, WithDecryption=True)
+        api_key = response['Parameter']['Value']
+
         print("API Gateway Resource:", api_resource)
 
-        if authorization_token == expected_token:
+        if authorization_token == api_key:
             print("Authorization successful. Generating Allow policy.")
             return generate_policy("user", "Allow", api_resource)
         else:
