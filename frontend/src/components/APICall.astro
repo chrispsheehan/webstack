@@ -1,32 +1,33 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<section id="api-message">
-  <p>Loading...</p>
+  <section id="api-message">
+    <p>Loading...</p>
 
-  <script>
-    async function fetchData() {
-      try {
-        const response = await fetch('/api/hello');
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        const apiMessageElement = document.getElementById('api-message');
-        if (apiMessageElement) {
-          apiMessageElement.textContent = data.message;
-        } else {
-          console.error("Element with ID 'api-message' not found.");
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-        const apiMessageElement = document.getElementById('api-message');
-        if (apiMessageElement) {
-          apiMessageElement.textContent = `Failed to load message. ${error}`;
+    <script>
+      async function fetchData() {
+        try {
+          const response = await fetch("/api/hello");
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const data = await response.json();
+          const apiMessageElement = document.getElementById("api-message");
+          if (apiMessageElement) {
+            apiMessageElement.textContent = data.message;
+          } else {
+            console.error("Element with ID 'api-message' not found.");
+          }
+        } catch (error) {
+          console.error("Error fetching data:", error);
+          const apiMessageElement = document.getElementById("api-message");
+          if (apiMessageElement) {
+            apiMessageElement.textContent = `Failed to load message. ${error}`;
+          }
         }
       }
-    }
 
-    fetchData();
-  </script>
-</section>
+      fetchData();
+    </script>
+  </section>
+
 </html>
