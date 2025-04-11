@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
-from handler import handler  # import your lambda logic
+from api.lambda_handler import handler
+import json
 
 app = Flask(__name__)
 

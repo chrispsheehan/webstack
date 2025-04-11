@@ -1,7 +1,8 @@
 services:
-  lambda-sim:
+  api:
+    container_name: api
     build:
       context: ./backend
-      dockerfile: Dockerfile
+      dockerfile: ../Dockerfile
     ports:
       - "8080:8080"
