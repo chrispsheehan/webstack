@@ -163,5 +163,5 @@ backend-build:
 start:
     #!/usr/bin/env bash
     npm i --prefix frontend
-    docker compose up
+    docker compose up -d
     npm run dev --prefix frontend
