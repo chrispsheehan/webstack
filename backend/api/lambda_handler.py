@@ -13,7 +13,9 @@ def handler(event, context):
     }
     
     # Handle different paths based on the `path` parameter
-    if path == '/hello':
+    if path == '/health':
+        response_body = {"message": "Healthy"}
+    elif path == '/hello':
         response_body = {"message": "Hello, World!"}
     elif path == '/test':
         response_body = {"message": "This is the test route"}
