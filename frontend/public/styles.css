@@ -17,8 +17,8 @@
 
   --section-gap: 160px;
 
-  --font-body: 'Inter', sans-serif;
-  --font-heading: 'Montserrat', sans-serif;
+  --font-body: "Inter", sans-serif;
+  --font-heading: "Montserrat", sans-serif;
 }
 
 /* Base */
@@ -41,7 +41,9 @@ body {
 }
 
 /* Headings */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: var(--font-heading);
   color: var(--color-heading);
   margin-bottom: 0.5em;
