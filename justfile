@@ -164,4 +164,5 @@ start:
     #!/usr/bin/env bash
     npm i --prefix frontend
     docker compose up -d
+    docker compose logs -f &
     npm run dev --prefix frontend

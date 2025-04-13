@@ -19,4 +19,4 @@ def lambda_handler(path):
     return jsonify(json.loads(result["body"])), result["statusCode"]
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=8080, debug=True)
