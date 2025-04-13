@@ -1,80 +1,148 @@
-/* Ensure the html and body elements take up the full height of the viewport */
+:root {
+  --vt-c: #2e3735;
+  --vt-c-soft: #a5c4b8;
+  --vt-c-logo: #a2d5ac;
+  --vt-c-text-1: #e0f3cc;
+  --vt-c-text-2: #f2fce6;
+
+  --color-background: var(--vt-c);
+  --color-background-soft: var(--vt-c-soft);
+  --color-heading: var(--vt-c-text-1);
+  --color-btn-text: var(--vt-c);
+  --color-text: var(--vt-c-text-2);
+  --color-link: var(--vt-c-logo);
+
+  --color-header-background: #26312f;
+  --color-footer-background: #1a201e;
+
+  --section-gap: 160px;
+
+  --font-body: 'Inter', sans-serif;
+  --font-heading: 'Montserrat', sans-serif;
+}
+
+/* Base */
 html,
 body {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: var(--font-body);
+  background: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.6;
+  font-size: 16px;
 }
 
-/* Set the body to be a flex container with a column direction */
+/* Body layout */
 body {
   display: flex;
   flex-direction: column;
 }
 
-/* Allow the main content to grow and take up available space */
-main {
-  flex: 1;
+/* Headings */
+h1, h2, h3 {
+  font-family: var(--font-heading);
+  color: var(--color-heading);
+  margin-bottom: 0.5em;
 }
 
-/* Existing styles */
+main {
+  flex: 1;
+  padding: 24px;
+}
+
+/* Navigation */
 nav {
   display: flex;
   justify-content: space-between;
-  padding: 16px;
-  background: #333;
+  align-items: center;
+  padding: 20px 32px;
+  background: var(--color-header-background);
+  color: var(--color-text);
+  font-size: 18px;
 }
 
-.button {
-  padding: 10px 20px;
-  color: white;
-  background: #0073ff;
+nav a {
+  color: var(--color-link);
   text-decoration: none;
-  border-radius: 5px;
+  margin-left: 20px;
+}
+
+/* Button */
+.button {
+  padding: 12px 24px;
+  color: var(--color-btn-text);
+  background: var(--color-link);
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+/* Section styling */
+section {
+  padding: 60px 24px;
 }
 
 #hero {
-  padding: 50px;
-  background: #f4f4f4;
+  background: var(--color-background);
 }
 
 #about-me {
-  padding: 50px;
-  background: #cdcbcb;
+  background: var(--color-background);
 }
 
 #this-site {
-  padding: 50px;
-  background: #9a9999;
+  background: var(--color-background);
+  /* color: #1c1c1c; */
 }
 
 #api-message {
-  padding: 50px;
-  background: #5b5b5b;
+  background: var(--color-background);
 }
 
-/* Footer styling */
+/* Footer */
 footer {
-  padding: 16px;
-  background: #222;
-  color: white;
+  padding: 24px;
+  background: var(--color-footer-background);
+  color: var(--color-text);
+  font-size: 14px;
 }
 
-/* Flex container for footer content */
 .footer-container {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
   align-items: center;
 }
 
-/* Styling for social links */
 .social-links {
   display: flex;
-  gap: 10px; /* Adjusts spacing between icons */
+  gap: 12px;
 }
 
-/* Styling for social media icons */
 .social-icon {
   width: 24px;
   height: 24px;
+  fill: var(--color-link);
+}
+
+/* Typography tweaks */
+p {
+  max-width: 70ch;
+  margin-bottom: 1.25em;
+}
+
+/* Links */
+a {
+  color: var(--color-link);
+  text-decoration: underline;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--vt-c-text-1);
 }
