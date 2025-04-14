@@ -51,7 +51,7 @@ jobs:
   format-frontend:
     needs: check
     runs-on: ubuntu-latest
-    if: ${{ needs.check.outputs.frontend == 'true' }}
+
     name: Run astro formatting checks
     timeout-minutes: 2
     steps:
