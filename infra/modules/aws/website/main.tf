@@ -204,8 +204,11 @@ resource "aws_s3_bucket" "website_logs" {
 }
 
 resource "aws_s3_bucket_lifecycle_configuration" "website_logs" {
-  depends_on = [aws_s3_bucket.website_logs]
-  bucket     = aws_s3_bucket.website_logs.id
+  depends_on = [
+    aws_s3_bucket_policy.website_logs_policy
+  ]
+
+  bucket = aws_s3_bucket.website_logs.id
 
   rule {
     id     = "log"
