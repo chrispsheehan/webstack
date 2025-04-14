@@ -18,6 +18,9 @@ on:
       frontend:
         description: "Whether frontend files changed"
         value: ${{ jobs.changes.outputs.frontend == 'true' }}
+      backend:
+        description: "Whether backend files changed"
+        value: ${{ jobs.changes.outputs.backend == 'true' }}
 
 jobs:
   changes:
