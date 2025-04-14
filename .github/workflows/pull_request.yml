@@ -62,7 +62,9 @@ jobs:
           npm run format:check --prefix frontend
 
   build-frontend:
-    needs: format-frontend
+    needs:
+      - check 
+      - format-frontend
     runs-on: ubuntu-latest
     if: ${{ needs.check.outputs.frontend == 'true' }}
     name: Run frontend build
