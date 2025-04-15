@@ -37,8 +37,8 @@ resource "aws_lambda_function" "auth" {
 
   environment {
     variables = {
-      API_KEY      = data.aws_ssm_parameter.api_key_ssm.value
-      API_RESOURCE = "arn:aws:execute-api:${var.aws_region}:${data.aws_caller_identity.current.account_id}:${aws_apigatewayv2_stage.this.api_id}/${aws_apigatewayv2_stage.this.name}/GET/*"
+      API_KEY_SSM_PARAM = data.aws_ssm_parameter.api_key_ssm.name
+      API_RESOURCE      = "arn:aws:execute-api:${var.aws_region}:${data.aws_caller_identity.current.account_id}:${aws_apigatewayv2_stage.this.api_id}/${aws_apigatewayv2_stage.this.name}/GET/*"
     }
   }
 }
