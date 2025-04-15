@@ -39,8 +39,7 @@ get-initial-deploy-var:
       exit 0
     fi
   done
-
-  echo "initial_deploy=$INITIAL_DEPLOY" >> "$GITHUB_OUTPUT"
+  echo "$INITIAL_DEPLOY"
 
 
 

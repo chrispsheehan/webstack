@@ -56,7 +56,7 @@ jobs:
         id: terragrunt_action
         env:
           TF_VAR_api_invoke_domain: ${{ needs.backend-infra.outputs.api_invoke_domain }}
-          TF_VAR_initial_deploy: ${{ steps.get-init-deployment.outputs.initial_deploy }}
+          TF_VAR_initial_deploy: ${{ steps.get-init-deployment.outputs.just_outputs }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website
