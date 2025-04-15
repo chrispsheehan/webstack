@@ -4,6 +4,9 @@ resource "github_repository" "this" {
 
   visibility = local.visibility
 
+  allow_merge_commit = false
+  allow_squash_merge = true
+
   lifecycle {
     prevent_destroy = true
   }
