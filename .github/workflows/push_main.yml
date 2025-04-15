@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - get-auth-from-ssm
 
 permissions:
   id-token: write
