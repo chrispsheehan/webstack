@@ -14,5 +14,10 @@
     "astro": "^5.5.5",
     "prettier": "^3.5.3",
     "prettier-plugin-astro": "^0.14.1"
+  },
+  "dependencies": {
+    "@astrojs/react": "^4.2.4",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   }
 }
