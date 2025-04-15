@@ -17,6 +17,31 @@ get-git-repo:
     echo "${repo_basename%%.*}"
 
 
+get-initial-deploy-var:
+  #!/usr/bin/env bash
+  set -euo pipefail
+
+  TAG_KEY="Project"
+  TAG_VALUE=${GITHUB_REPOSITORY//\//-}
+  ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+  DISTRIBUTION_IDS=$(aws cloudfront list-distributions --query "DistributionList.Items[].Id" --output text)
+  INITIAL_DEPLOY=true
+
+  for ID in $DISTRIBUTION_IDS; do
+    ARN="arn:aws:cloudfront::${ACCOUNT_ID}:distribution/${ID}"
+
+    TAG_MATCH=$(aws cloudfront list-tags-for-resource --resource "$ARN" \
+      --query "Tags.Items[?Key=='${TAG_KEY}' && Value=='${TAG_VALUE}']" \
+      --output json)
+
+    if [[ "$TAG_MATCH" != "[]" ]]; then
+      INITIAL_DEPLOY=false
+    fi
+  done
+  echo "$INITIAL_DEPLOY"
+
+
+
 branch name:
     #!/usr/bin/env bash
     git fetch origin

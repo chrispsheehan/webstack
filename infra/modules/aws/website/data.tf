@@ -21,7 +21,7 @@ data "aws_iam_policy_document" "website_files_policy" {
     condition {
       test     = "StringLike"
       variable = "AWS:SourceArn"
-      values   = [aws_cloudfront_distribution.distribution.arn]
+      values   = [aws_cloudfront_distribution.this.arn]
     }
   }
 }
@@ -46,7 +46,7 @@ data "aws_iam_policy_document" "website_logs_policy" {
     condition {
       test     = "StringLike"
       variable = "AWS:SourceArn"
-      values   = ["${aws_cloudfront_distribution.distribution.arn}"]
+      values   = local.cloudfront_iam_values
     }
   }
 }
