@@ -42,11 +42,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Get initial deployment variable
+        id: get-init-deployment
+        uses: ./.github/actions/just_action
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: get-initial-deploy-var
+
       - name: Deploy web infrastructure
         uses: ./.github/actions/terragrunt_action
         id: terragrunt_action
         env:
           TF_VAR_api_invoke_domain: ${{ needs.backend-infra.outputs.api_invoke_domain }}
+          TF_VAR_initial_deploy: ${{ steps.get-init-deployment.outputs.initial_deploy }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website
