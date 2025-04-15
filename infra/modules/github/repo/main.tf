@@ -6,7 +6,7 @@ resource "github_repository" "this" {
 
   allow_merge_commit = false
   allow_squash_merge = true
-  allow_rebase_merge = false 
+  allow_rebase_merge = false
 
   lifecycle {
     prevent_destroy = true
@@ -17,10 +17,12 @@ resource "github_branch_protection" "main" {
   repository_id       = github_repository.this.node_id
   pattern             = var.default_branch
   allows_force_pushes = false
+  enforce_admins      = true
 
   required_pull_request_reviews {
     dismiss_stale_reviews      = true
     require_code_owner_reviews = false
+    require_last_push_approval = false
   }
 }
 
