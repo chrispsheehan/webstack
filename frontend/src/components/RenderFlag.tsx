@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
 export default function RenderFlag() {
   const [ok, setOk] = useState(false);
@@ -6,7 +6,7 @@ export default function RenderFlag() {
   useEffect(() => {
     async function checkRender() {
       try {
-        const res = await fetch('/api/render');
+        const res = await fetch("/api/render");
         const data = await res.json();
         if (res.ok && data.ok) setOk(true);
       } catch {
