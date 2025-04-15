@@ -1,34 +1,19 @@
 import json
 
 def handler(event, context):
-    path = event.get('path', '/not/found')
-    event_json = json.dumps(event, indent=2)
+    path = event.get('path', '')
 
-    # Default response
-    response_body = {
-        "message": "Path not found",
-        "event": event_json
-    }
-    status_code = 404  # Default to 404 for unknown paths
-
-    # Route handling
     if path == '/health':
-        response_body = {"message": "Unhealthy"}
-        status_code = 500
-    elif path == '/hello':
-        response_body = {"message": "Hello, World!"}
-        status_code = 200
-    elif path == '/test':
-        response_body = {"message": "This is the test route"}
-        status_code = 200
-    elif path == '/goodbye':
-        response_body = {"message": "Goodbye, see you later!"}
-        status_code = 200
-    else:
-        response_body = {"message": f"Unknown path: {path}"}
-        status_code = 404
+        return respond(200, {"message": "Unhealthy"})
 
+    if path == '/render':
+        return respond(200, {"ok": True})
+
+    return respond(404, {"message": f"Unknown path: {path}"})
+
+
+def respond(status_code, body):
     return {
         "statusCode": status_code,
-        "body": json.dumps(response_body)
+        "body": json.dumps(body)
     }
