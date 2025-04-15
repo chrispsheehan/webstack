@@ -23,9 +23,9 @@ get-initial-deploy-var:
 
   TAG_KEY="Project"
   TAG_VALUE=${GITHUB_REPOSITORY//\//-}
-
   ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
   DISTRIBUTION_IDS=$(aws cloudfront list-distributions --query "DistributionList.Items[].Id" --output text)
+  INITIAL_DEPLOY=true
 
   for ID in $DISTRIBUTION_IDS; do
     ARN="arn:aws:cloudfront::${ACCOUNT_ID}:distribution/${ID}"
@@ -35,12 +35,12 @@ get-initial-deploy-var:
       --output json)
 
     if [[ "$TAG_MATCH" != "[]" ]]; then
-      @echo "initial_deploy=false" >> "$$GITHUB_OUTPUT"
+      INITIAL_DEPLOY=false
       exit 0
     fi
   done
 
-  @echo "initial_deploy=true" >> "$$GITHUB_OUTPUT"
+  echo "initial_deploy=$INITIAL_DEPLOY" >> "$GITHUB_OUTPUT"
 
 
 
