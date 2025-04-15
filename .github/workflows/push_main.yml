@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - fix-s3-logs-race
 
 permissions:
   id-token: write
