@@ -36,7 +36,6 @@ get-initial-deploy-var:
 
     if [[ "$TAG_MATCH" != "[]" ]]; then
       INITIAL_DEPLOY=false
-      exit 0
     fi
   done
   echo "$INITIAL_DEPLOY"
