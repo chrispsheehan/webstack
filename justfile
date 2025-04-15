@@ -35,12 +35,12 @@ get-initial-deploy-var:
       --output json)
 
     if [[ "$TAG_MATCH" != "[]" ]]; then
-      echo "false"  # Not initial deploy
+      @echo "initial_deploy=false" >> "$$GITHUB_OUTPUT"
       exit 0
     fi
   done
 
-  echo "true"  # Initial deploy
+  @echo "initial_deploy=true" >> "$$GITHUB_OUTPUT"
 
 
 
