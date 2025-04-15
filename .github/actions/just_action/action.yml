@@ -40,6 +40,6 @@ runs:
       shell: bash
       run: |
         echo "📦 Running just command: ${{ inputs.just_action }}"
-        result=$(just ${{ inputs.just_action }})
+        result=$(just ${{ inputs.just_action }} | tail -n 1 | tr -d '\r')
         echo "Result: $result"
         echo "result=$result" >> "$GITHUB_OUTPUT"
