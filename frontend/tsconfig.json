@@ -1,5 +1,19 @@
 {
   "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler", // 👈 FIX: this is key
+    "strict": true,
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
+  },
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist"]
 }

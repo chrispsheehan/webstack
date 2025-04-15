@@ -4,10 +4,10 @@ def handler(event, context):
     path = event.get('path', '')
 
     if path == '/health':
-        return respond(200, {"message": "Unhealthy"})
+        return respond(200, {"message": "healthy"})
 
     if path == '/render':
-        return respond(200, {"ok": True})
+        return respond(200, {"ok": False})
 
     return respond(404, {"message": f"Unknown path: {path}"})
 
