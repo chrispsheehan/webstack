@@ -57,6 +57,7 @@ branch name:
     git branch {{ name }}
     git checkout {{ name }}
     just temp-init
+    git push -u origin HEAD
 
 
 format:    
