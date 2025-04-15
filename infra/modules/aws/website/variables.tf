@@ -38,3 +38,9 @@ variable "log_retention_days" {
   type        = number
   default     = 1
 }
+
+variable "initial_deploy" {
+  description = "Is this the first time the website is being deployed? If so we prevent race conditions and circular dependencies caused by IAM generation variables."
+  type        = bool
+  default     = true
+}

@@ -82,7 +82,7 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   signing_protocol                  = "sigv4"
 }
 
-resource "aws_cloudfront_distribution" "distribution" {
+resource "aws_cloudfront_distribution" "this" {
   provider   = aws.domain_aws_region
   depends_on = [aws_wafv2_web_acl.dist_waf, aws_s3_bucket.website_logs]
 
@@ -246,8 +246,8 @@ resource "aws_route53_record" "web" {
   type    = "A"
 
   alias {
-    name                   = aws_cloudfront_distribution.distribution.domain_name
-    zone_id                = aws_cloudfront_distribution.distribution.hosted_zone_id
+    name                   = aws_cloudfront_distribution.this.domain_name
+    zone_id                = aws_cloudfront_distribution.this.hosted_zone_id
     evaluate_target_health = false
   }
 }
