@@ -13,7 +13,6 @@ permissions:
   id-token: write
   contents: write
 
-  
 jobs:
   oidc:
     environment:
@@ -27,11 +26,10 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
           tg_directory: infra/live/${{inputs.environment}}/aws/oidc
 
-
   frontend-infra:
     environment:
       name: ${{inputs.environment}}
-    needs: 
+    needs:
       - security
       - backend-infra
     runs-on: ubuntu-latest
@@ -70,7 +68,6 @@ jobs:
           echo "domain=$(echo $TG_OUTPUTS | jq -r '.domain.value')" >> $GITHUB_OUTPUT
           echo "distribution_id=$(echo $TG_OUTPUTS | jq -r '.distribution_id.value')" >> $GITHUB_OUTPUT
 
-
   frontend-sync:
     environment:
       name: ${{inputs.environment}}
@@ -97,7 +94,6 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: frontend-upload
 
-
   security:
     environment:
       name: ${{inputs.environment}}
@@ -112,11 +108,10 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/security
 
-
   bucket-infra:
     environment:
       name: ci
-    needs: 
+    needs:
       - oidc
     runs-on: ubuntu-latest
     outputs:
@@ -153,7 +148,6 @@ jobs:
         run: |
           echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.bucket_name.value')" >> $GITHUB_OUTPUT
 
-
   backend-build:
     environment:
       name: ${{inputs.environment}}
@@ -175,7 +169,7 @@ jobs:
           ZIP_NAME: auth
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: backend-upload 
+          just_action: backend-upload
 
       - name: Upload api zip
         uses: ./.github/actions/just_action
@@ -184,8 +178,7 @@ jobs:
           ZIP_NAME: api
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: backend-upload 
-
+          just_action: backend-upload
 
   backend-infra:
     environment:

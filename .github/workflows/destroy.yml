@@ -24,7 +24,7 @@ jobs:
       TF_VAR_api_invoke_domain: "does.not.exist"
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: ./.github/actions/terragrunt_action
         env:
           TF_VAR_api_invoke_domain: no.com
@@ -32,7 +32,6 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website
           tg_action: destroy
-
 
   backend:
     environment:
@@ -55,7 +54,7 @@ jobs:
   security:
     environment:
       name: ${{inputs.environment}}
-    needs: 
+    needs:
       - frontend
       - backend
     runs-on: ubuntu-latest
