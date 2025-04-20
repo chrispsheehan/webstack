@@ -99,9 +99,10 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   origin {
-    domain_name              = aws_s3_bucket.website_files.bucket_regional_domain_name
-    origin_id                = aws_s3_bucket.website_files.bucket_regional_domain_name
+    domain_name              = data.aws_s3_bucket.website_files.bucket_regional_domain_name
+    origin_id                = data.aws_s3_bucket.website_files.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
+    origin_path              = "/${var.deploy_version}"
   }
 
   origin {
@@ -172,25 +173,12 @@ resource "aws_cloudfront_distribution" "this" {
     compress               = true
     allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = aws_s3_bucket.website_files.bucket_regional_domain_name
-  }
-}
-
-resource "aws_s3_bucket" "website_files" {
-  bucket        = var.domain
-  force_destroy = true
-}
-
-resource "aws_s3_bucket_ownership_controls" "website_files" {
-  depends_on = [aws_s3_bucket.website_files]
-  bucket     = aws_s3_bucket.website_files.id
-  rule {
-    object_ownership = "BucketOwnerEnforced"
+    target_origin_id       = data.aws_s3_bucket.website_files.bucket_regional_domain_name
   }
 }
 
 resource "aws_s3_bucket_policy" "website_files_policy" {
-  bucket = aws_s3_bucket.website_files.id
+  bucket = data.aws_s3_bucket.website_files.id
   policy = data.aws_iam_policy_document.website_files_policy.json
 }
 
