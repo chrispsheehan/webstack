@@ -29,7 +29,7 @@ resource "aws_lambda_function" "auth" {
   runtime       = local.lambda_runtime
   role          = aws_iam_role.lambda_auth_role.arn
 
-  s3_bucket = var.auth_lambda_bucket
+  s3_bucket = var.lambda_bucket
   s3_key    = var.auth_lambda_zip
 
   memory_size = 256
