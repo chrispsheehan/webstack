@@ -11,8 +11,20 @@ permissions:
   contents: write
 
 jobs:
-  dev:
-    uses: ./.github/workflows/deploy.yml
+  build:
+    uses: ./.github/workflows/build.yml
     secrets: inherit
     with:
       environment: dev
+      version: dev
+
+  dev:
+    uses: ./.github/workflows/deploy.yml
+    needs: build
+    secrets: inherit
+    with:
+      web_bucket: ${{ needs.build.outputs.web_bucket }}
+      auth_bucket: ${{ needs.build.outputs.web_bucket }}
+      api_bucket: ${{ needs.build.outputs.web_bucket }}
+      environment: dev
+      version: dev

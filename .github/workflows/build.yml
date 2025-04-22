@@ -1,0 +1,127 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+    outputs:
+      web_bucket:
+        description: "Bucket containing static website files"
+        value: ${{ jobs.bucket-infra.outputs.web_bucket_name }}
+      auth_bucket:
+        description: "Bucket containing auth lambda zips"
+        value: ${{ jobs.bucket-infra.outputs.auth_bucket_name }}
+      api_bucket:
+        description: "Bucket containing api lambda zips"
+        value: ${{ jobs.bucket-infra.outputs.api_bucket_name }}
+
+concurrency: # only run one instance of workflow at any one time
+  group: ${{ github.workflow }}-${{inputs.environment}}
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: write
+
+env:
+  VERSION: ${{inputs.version }}
+
+jobs:
+  bucket-infra:
+    environment:
+      name: ci
+    runs-on: ubuntu-latest
+    outputs:
+      lambda_bucket_name: ${{ steps.get_bucket_lambda_vars.outputs.bucket_name }}
+      web_bucket_name: ${{ steps.get_bucket_web_vars.outputs.bucket_name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy lambda s3 bucket
+        uses: ./.github/actions/terragrunt_action
+        id: bucket_lambda_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/ci/aws/bucket_lambda
+
+      - name: Deploy static web s3 bucket
+        uses: ./.github/actions/terragrunt_action
+        id: bucket_web_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/ci/aws/bucket_website
+
+      - name: Get lambda bucket name
+        id: get_bucket_lambda_vars
+        env:
+          TG_OUTPUTS: ${{ steps.bucket_lambda_action.outputs.tg_outputs  }}
+        run: |
+          echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.bucket_name.value')" >> $GITHUB_OUTPUT
+
+      - name: Get website bucket name
+        id: get_bucket_web_vars
+        env:
+          TG_OUTPUTS: ${{ steps.bucket_web_action.outputs.tg_outputs  }}
+        run: |
+          echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.bucket_name.value')" >> $GITHUB_OUTPUT
+
+
+  backend-build:
+    environment:
+      name: ${{inputs.environment}}
+    needs: bucket-infra
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: extractions/setup-just@v2
+
+      - name: Action Just
+        shell: bash
+        run: just backend-build
+
+      - name: Upload auth zip
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ needs.bucket-infra.outputs.lambda_bucket_name }}
+          ZIP_NAME: auth
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: backend-upload
+
+      - name: Upload api zip
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ needs.bucket-infra.outputs.lambda_bucket_name }}
+          ZIP_NAME: api
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: backend-upload
+
+  frontend-build:
+    environment:
+      name: ${{inputs.environment}}
+    needs: bucket-infra
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build web files
+        uses: ./.github/actions/just_action
+        env:
+          PUBLIC_BASE_DOMAIN: ${{ vars.BASE_DOMAIN }}
+          PUBLIC_GITHUB_REPO: ${{ github.repository }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: frontend-build
+
+      - name: Sync web files to s3
+        env:
+          BUCKET_NAME: ${{ needs.bucket-infra.outputs.web_bucket_name }}
+        uses: ./.github/actions/just_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: frontend-upload
