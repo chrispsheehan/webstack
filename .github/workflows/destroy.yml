@@ -44,7 +44,6 @@ jobs:
         env:
           TF_VAR_lambda_bucket: bucket
           TF_VAR_lambda_zip: api.zip
-          TF_VAR_auth_lambda_bucket: bucket
           TF_VAR_auth_lambda_zip: auth.zip
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}

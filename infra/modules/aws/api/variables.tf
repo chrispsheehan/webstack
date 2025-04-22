@@ -38,11 +38,6 @@ variable "lambda_zip" {
   type        = string
 }
 
-variable "auth_lambda_bucket" {
-  description = "S3 bucket to pull auth lambda code from"
-  type        = string
-}
-
 variable "auth_lambda_zip" {
   description = "Lambda auth code (zipped) to be deployed"
   type        = string
