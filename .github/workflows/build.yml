@@ -52,7 +52,6 @@ jobs:
           echo "bucket_web=$(echo $TG_OUTPUTS | jq -r '.bucket_web.value')" >> $GITHUB_OUTPUT
           echo "bucket_lambda=$(echo $TG_OUTPUTS | jq -r '.bucket_lambda.value')" >> $GITHUB_OUTPUT
 
-
   backend-build:
     environment:
       name: ${{inputs.environment}}

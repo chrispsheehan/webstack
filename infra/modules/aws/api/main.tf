@@ -30,7 +30,7 @@ resource "aws_lambda_function" "auth" {
   role          = aws_iam_role.lambda_auth_role.arn
 
   s3_bucket = var.lambda_bucket
-  s3_key    = var.auth_lambda_zip
+  s3_key    = local.lambda_auth_key
 
   memory_size = 256
   timeout     = 10
@@ -70,7 +70,7 @@ resource "aws_lambda_function" "api" {
   role          = aws_iam_role.lambda_api_role.arn
 
   s3_bucket = var.lambda_bucket
-  s3_key    = var.lambda_zip
+  s3_key    = local.lambda_api_key
 
   memory_size = 256
   timeout     = 10

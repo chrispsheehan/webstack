@@ -23,7 +23,7 @@ permissions:
   contents: write
 
 env:
-  TF_VAR_version: ${{ inputs.version }}
+  TF_VAR_deploy_version: ${{ inputs.version }}
 
 jobs:
   oidc:
@@ -52,7 +52,6 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/security
 
-
   backend:
     environment:
       name: ${{inputs.environment}}
@@ -71,8 +70,6 @@ jobs:
         id: api_action
         env:
           TF_VAR_lambda_bucket: ${{ inputs.lambda_bucket }}
-          TF_VAR_lambda_zip: api.zip
-          TF_VAR_auth_lambda_zip: auth.zip
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/api
@@ -83,7 +80,6 @@ jobs:
           TG_OUTPUTS: ${{ steps.api_action.outputs.tg_outputs  }}
         run: |
           echo "api_invoke_domain=$(echo $TG_OUTPUTS | jq -r '.api_invoke_domain.value')" >> $GITHUB_OUTPUT
-
 
   frontend:
     environment:
