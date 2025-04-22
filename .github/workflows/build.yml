@@ -32,38 +32,25 @@ jobs:
       name: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     outputs:
-      lambda_bucket_name: ${{ steps.get_bucket_lambda.outputs.bucket_name }}
-      web_bucket_name: ${{ steps.get_bucket_web.outputs.bucket_name }}
+      lambda_bucket_name: ${{ steps.get_bucket_names.outputs.bucket_lambda }}
+      web_bucket_name: ${{ steps.get_bucket_names.outputs.bucket_web }}
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy lambda s3 bucket
+      - name: Deploy code buckets
         uses: ./.github/actions/terragrunt_action
-        id: bucket_lambda_action
+        id: code_bucket_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{ inputs.environment }}/aws/bucket_lambda
+          tg_directory: infra/live/${{ inputs.environment }}/aws/code_bucket
 
-      - name: Deploy static web s3 bucket
-        uses: ./.github/actions/terragrunt_action
-        id: bucket_web_action
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{ inputs.environment }}/aws/bucket_website
-
-      - name: Get lambda bucket name
-        id: get_bucket_lambda
+      - name: Get bucket names
+        id: get_bucket_names
         env:
-          TG_OUTPUTS: ${{ steps.bucket_lambda_action.outputs.tg_outputs  }}
+          TG_OUTPUTS: ${{ steps.code_bucket_action.outputs.tg_outputs  }}
         run: |
-          echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.bucket_name.value')" >> $GITHUB_OUTPUT
-
-      - name: Get website bucket name
-        id: get_bucket_web
-        env:
-          TG_OUTPUTS: ${{ steps.bucket_web_action.outputs.tg_outputs  }}
-        run: |
-          echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.bucket_name.value')" >> $GITHUB_OUTPUT
+          echo "bucket_web=$(echo $TG_OUTPUTS | jq -r '.bucket_web.value')" >> $GITHUB_OUTPUT
+          echo "bucket_lambda=$(echo $TG_OUTPUTS | jq -r '.bucket_lambda.value')" >> $GITHUB_OUTPUT
 
 
   backend-build:
