@@ -1,4 +1,4 @@
-variable "domain" {
+variable "web_bucket" {
   description = "S3 bucket to host static web files"
   type        = string
 }
