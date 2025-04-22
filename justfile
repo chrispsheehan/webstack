@@ -113,8 +113,6 @@ setup-repo:
     #!/usr/bin/env bash
     export GITHUB_TOKEN=$(just get-git-token)
     just tg ci github/repo apply
-    just init ci
-
 
 PROJECT_DIR := justfile_directory()
 
