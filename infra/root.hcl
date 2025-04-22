@@ -123,5 +123,6 @@ inputs = merge(
     state_bucket        = local.state_bucket
     state_lock_table    = local.state_lock_table
     lambda_bucket       = local.lambda_bucket
+    web_bucket          = local.web_bucket
   }
 )
