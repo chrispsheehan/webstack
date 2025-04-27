@@ -15,6 +15,9 @@ permissions:
   id-token: write
   contents: write
 
+env:
+  TF_VAR_deploy_version: this
+
 jobs:
   frontend:
     environment:
@@ -25,7 +28,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/terragrunt_action
+      - name: Destroy frontend
+        uses: ./.github/actions/terragrunt_action
         env:
           TF_VAR_api_invoke_domain: no.com
         with:
@@ -40,7 +44,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: ./.github/actions/terragrunt_action
+      - name: Destroy backend
+        uses: ./.github/actions/terragrunt_action
         env:
           TF_VAR_lambda_bucket: bucket
           TF_VAR_lambda_zip: api.zip
@@ -60,9 +65,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy security
+      - name: Destroy security
         uses: ./.github/actions/terragrunt_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/security
+          tg_action: destroy
+
+  build:
+    environment:
+      name: ${{inputs.environment}}
+    needs:
+      - frontend
+      - backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Destroy code_bucket
+        uses: ./.github/actions/terragrunt_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{inputs.environment}}/aws/code_bucket
           tg_action: destroy
