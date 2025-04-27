@@ -4,8 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       environment:
+        description: 'Select environment'
         required: true
-        type: string
+        type: choice
+        options:
+          - dev
 
 concurrency: # only run one instance of workflow at any one time
   group: ${{ github.workflow }}-${{inputs.environment}}
@@ -25,7 +28,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TF_VAR_api_invoke_domain: "does.not.exist"
-      TF_VAR_website_bucket_name: this
     steps:
       - uses: actions/checkout@v4
 

@@ -50,7 +50,7 @@ variable "deploy_version" {
   type        = string
 }
 
-variable "website_bucket_name" {
+variable "website_bucket" {
   description = "The name of the s3 bucket hosting static web files"
   type        = string
 }

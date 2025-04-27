@@ -3,7 +3,7 @@ data "aws_route53_zone" "this" {
 }
 
 data "aws_s3_bucket" "website_files" {
-  bucket = var.website_bucket_name
+  bucket = var.website_bucket
 }
 
 data "aws_ssm_parameter" "api_key" {
