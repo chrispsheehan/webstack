@@ -32,6 +32,7 @@ brew install just
 brew install awscli
 brew install gh
 brew install node
+npm install -g prettier
 ```
 
 ## deploy from temp branch

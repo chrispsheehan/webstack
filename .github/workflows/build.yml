@@ -1,0 +1,110 @@
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+      version:
+        required: true
+        type: string
+    outputs:
+      web_bucket:
+        description: "Bucket containing static website files"
+        value: ${{ jobs.infra.outputs.web_bucket_name }}
+      lambda_bucket:
+        description: "Bucket containing lambda zips"
+        value: ${{ jobs.infra.outputs.lambda_bucket_name }}
+
+concurrency: # only run one instance of workflow at any one time
+  group: ${{ github.workflow }}-${{inputs.environment}}
+  cancel-in-progress: false
+
+permissions:
+  id-token: write
+  contents: write
+
+env:
+  VERSION: ${{inputs.version }}
+
+jobs:
+  infra:
+    environment:
+      name: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    outputs:
+      lambda_bucket_name: ${{ steps.get_bucket_names.outputs.bucket_lambda }}
+      web_bucket_name: ${{ steps.get_bucket_names.outputs.bucket_web }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy code buckets
+        uses: ./.github/actions/terragrunt_action
+        id: code_bucket_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{ inputs.environment }}/aws/code_bucket
+
+      - name: Get bucket names
+        id: get_bucket_names
+        env:
+          TG_OUTPUTS: ${{ steps.code_bucket_action.outputs.tg_outputs  }}
+        run: |
+          echo "bucket_web=$(echo $TG_OUTPUTS | jq -r '.bucket_web.value')" >> $GITHUB_OUTPUT
+          echo "bucket_lambda=$(echo $TG_OUTPUTS | jq -r '.bucket_lambda.value')" >> $GITHUB_OUTPUT
+
+  backend:
+    environment:
+      name: ${{inputs.environment}}
+    needs: infra
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: extractions/setup-just@v2
+
+      - name: Action Just
+        shell: bash
+        run: just backend-build
+
+      - name: Upload auth zip
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ needs.infra.outputs.lambda_bucket_name }}
+          ZIP_NAME: auth
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: backend-upload
+
+      - name: Upload api zip
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ needs.infra.outputs.lambda_bucket_name }}
+          ZIP_NAME: api
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: backend-upload
+
+  frontend:
+    environment:
+      name: ${{inputs.environment}}
+    needs: infra
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build web files
+        uses: ./.github/actions/just_action
+        env:
+          PUBLIC_BASE_DOMAIN: ${{ vars.BASE_DOMAIN }}
+          PUBLIC_GITHUB_REPO: ${{ github.repository }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: frontend-build
+
+      - name: Sync web files to s3
+        env:
+          BUCKET_NAME: ${{ needs.infra.outputs.web_bucket_name }}
+        uses: ./.github/actions/just_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: frontend-upload

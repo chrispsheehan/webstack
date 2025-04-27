@@ -44,3 +44,13 @@ variable "initial_deploy" {
   type        = bool
   default     = true
 }
+
+variable "deploy_version" {
+  description = "Version of the website to be deployed"
+  type        = string
+}
+
+variable "website_bucket_name" {
+  description = "The name of the s3 bucket hosting static web files"
+  type        = string
+}

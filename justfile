@@ -65,6 +65,7 @@ format:
     terraform fmt -recursive
     terragrunt hclfmt
     npm run format --prefix frontend
+    prettier --no-config --write ".github/**/*.y?(a)ml"
 
 
 # Terragrunt operation on {{module}} containing terragrunt.hcl
@@ -112,8 +113,6 @@ setup-repo:
     #!/usr/bin/env bash
     export GITHUB_TOKEN=$(just get-git-token)
     just tg ci github/repo apply
-    just init ci
-
 
 PROJECT_DIR := justfile_directory()
 
@@ -135,7 +134,20 @@ frontend-upload:
         echo "Error: BUCKET_NAME environment variable is not set."
         exit 1
     fi
-    aws s3 sync {{justfile_directory()}}/frontend/dist "s3://$BUCKET_NAME/" --storage-class STANDARD
+    if [[ -z "$VERSION" ]]; then
+        echo "Error: VERSION environment variable is not set."
+        exit 1
+    fi
+    aws s3 sync {{justfile_directory()}}/frontend/dist "s3://$BUCKET_NAME/$VERSION/" --storage-class STANDARD
+
+
+frontend-refresh:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    if [[ -z "$DISTRIBUTION_ID" ]]; then
+        echo "Error: VERSION environment variable is not set."
+        exit 1
+    fi
     aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
 
 
@@ -156,11 +168,15 @@ backend-upload:
         echo "Error: BUCKET_NAME environment variable is not set."
         exit 1
     fi
+    if [[ -z "$VERSION" ]]; then
+        echo "Error: VERSION environment variable is not set."
+        exit 1
+    fi
     if [[ -z "$ZIP_NAME" ]]; then
         echo "Error: ZIP_NAME environment variable is not set."
         exit 1
     fi
-    aws s3 cp "backend/$ZIP_NAME.zip" "s3://$BUCKET_NAME/" --storage-class STANDARD
+    aws s3 cp "backend/$ZIP_NAME.zip" "s3://$BUCKET_NAME/$VERSION/" --storage-class STANDARD
 
 
 backend-build:

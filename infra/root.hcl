@@ -23,6 +23,9 @@ locals {
   state_bucket     = "${local.aws_account_id}-${local.aws_region}-${local.project_name}-tfstate"
   state_key        = "${local.environment}/${local.provider}/${local.module}/terraform.tfstate"
   state_lock_table = "${local.project_name}-tf-lockid"
+
+  lambda_bucket = "${local.aws_account_id}-${local.aws_region}-${local.project_name}-${local.environment}-lambda"
+  web_bucket    = "${local.aws_account_id}-${local.aws_region}-${local.project_name}-${local.environment}-web"
 }
 
 terraform {
@@ -119,5 +122,7 @@ inputs = merge(
     deploy_role_name    = local.deploy_role_name
     state_bucket        = local.state_bucket
     state_lock_table    = local.state_lock_table
+    lambda_bucket       = local.lambda_bucket
+    web_bucket          = local.web_bucket
   }
 )

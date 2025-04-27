@@ -28,22 +28,24 @@ variable "project_name" {
   type        = string
 }
 
+variable "deploy_version" {
+  description = "Version of the website to be deployed"
+  type        = string
+}
+
 variable "lambda_bucket" {
   description = "S3 bucket to pull lambda code from"
   type        = string
 }
 
-variable "lambda_zip" {
+variable "api_lambda_zip" {
   description = "Lambda code (zipped) to be deployed"
   type        = string
-}
-
-variable "auth_lambda_bucket" {
-  description = "S3 bucket to pull auth lambda code from"
-  type        = string
+  default     = "api.zip"
 }
 
 variable "auth_lambda_zip" {
   description = "Lambda auth code (zipped) to be deployed"
   type        = string
+  default     = "auth.zip"
 }

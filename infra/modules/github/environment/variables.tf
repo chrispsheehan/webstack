@@ -8,6 +8,11 @@ variable "aws_account_id" {
   type        = string
 }
 
+variable "root_domain" {
+  description = "Domain to set in the github envirionments"
+  type        = string
+}
+
 variable "deploy_role_name" {
   description = "AWS role used in ci deployments"
   type        = string
