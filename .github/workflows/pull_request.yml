@@ -63,7 +63,7 @@ jobs:
 
       - name: Terraform validate check
         run: terragrunt run-all validate -backend=false
-        working-directory: infra/modules
+        working-directory: /infra/live
 
   format-frontend:
     needs: check
