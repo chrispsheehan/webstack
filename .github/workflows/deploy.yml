@@ -29,22 +29,9 @@ env:
   TF_VAR_deploy_version: ${{ inputs.version }}
 
 jobs:
-  oidc:
-    environment:
-      name: ${{ inputs.github_environment }} # specify environment - seen at /settings/environments/ in UI
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: ./.github/actions/terragrunt_action
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
-          tg_directory: infra/live/${{inputs.environment}}/aws/oidc
-
   security:
     environment:
       name: ${{ inputs.github_environment }}
-    needs: oidc
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
