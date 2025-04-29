@@ -53,8 +53,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: extractions/setup-just@v2
-
       - name: Deploy api
         uses: ./.github/actions/terragrunt_action
         id: api_action
@@ -111,3 +109,11 @@ jobs:
           echo "bucket_name=$(echo $TG_OUTPUTS | jq -r '.s3_bucket_name.value')" >> $GITHUB_OUTPUT
           echo "domain=$(echo $TG_OUTPUTS | jq -r '.domain.value')" >> $GITHUB_OUTPUT
           echo "distribution_id=$(echo $TG_OUTPUTS | jq -r '.distribution_id.value')" >> $GITHUB_OUTPUT
+
+      - name: Run cloudfront invalidation
+        uses: ./.github/actions/just_action
+        env:
+          DISTRIBUTION_ID: ${{ steps.get_vars.outputs.distribution_id }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: frontend-refresh
