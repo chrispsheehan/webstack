@@ -1,6 +1,9 @@
 on:
   workflow_call:
     inputs:
+      github_environment:
+        default: ci
+        type: string
       web_bucket:
         required: true
         type: string
@@ -28,7 +31,7 @@ env:
 jobs:
   oidc:
     environment:
-      name: ${{inputs.environment}} # specify environment - seen at /settings/environments/ in UI
+      name: ${{ inputs.github_environment }} # specify environment - seen at /settings/environments/ in UI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -40,7 +43,7 @@ jobs:
 
   security:
     environment:
-      name: ${{inputs.environment}}
+      name: ${{ inputs.github_environment }}
     needs: oidc
     runs-on: ubuntu-latest
     steps:
@@ -54,7 +57,7 @@ jobs:
 
   backend:
     environment:
-      name: ${{inputs.environment}}
+      name: ${{ inputs.github_environment }}
     outputs:
       api_invoke_domain: ${{ steps.get_vars.outputs.api_invoke_domain }}
     needs:
@@ -83,7 +86,7 @@ jobs:
 
   frontend:
     environment:
-      name: ${{inputs.environment}}
+      name: ${{ inputs.github_environment }}
     needs:
       - security
       - backend
