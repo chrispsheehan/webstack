@@ -6,12 +6,10 @@ Full stack web project.
 
 **One time** setup with `just import-repo` to import the repo into the terraform state.
 
-Apply github settings and create github environments seeded with required variables and branch controls.
+Apply github settings and create github `ci` environment seeded with required variables and branch controls.
 
 ```sh
 just setup-repo
-just init dev
-just init prod
 ```
 
 Example plan command - `just tg ci aws/bucket_auth plan`
