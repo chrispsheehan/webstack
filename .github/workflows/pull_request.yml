@@ -34,7 +34,6 @@ jobs:
     timeout-minutes: 2
     steps:
       - uses: actions/checkout@v4
-      - uses: extractions/setup-just@v3
       - uses: hashicorp/setup-terraform@v3
       - uses: autero1/action-terragrunt@v1.3.2
         with:
@@ -47,6 +46,24 @@ jobs:
       - name: Terragrunt hclfmt check
         run: terragrunt hclfmt --terragrunt-check
         working-directory: infra
+
+  validate-terragrunt:
+    needs: 
+      - check
+      - format-terragrunt
+    runs-on: ubuntu-latest
+    if: ${{ needs.check.outputs.terragrunt == 'true' }}
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - uses: autero1/action-terragrunt@v1.3.2
+        with:
+          terragrunt_version: 0.45.10
+
+      - name: Terraform validate check
+        run: terragrunt run-all validate -backend=false
+        working-directory: infra/modules
 
   format-frontend:
     needs: check
