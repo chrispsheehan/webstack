@@ -3,8 +3,11 @@ name: Kill Environment
 on:
   workflow_dispatch:
     inputs:
+      github_environment:
+        default: ci
+        type: string
       environment:
-        description: 'Select environment'
+        description: "Select environment"
         required: true
         type: choice
         options:
@@ -24,7 +27,7 @@ env:
 jobs:
   frontend:
     environment:
-      name: ${{inputs.environment}}
+      name: ${{ inputs.github_environment }}
     runs-on: ubuntu-latest
     env:
       TF_VAR_api_invoke_domain: "does.not.exist"
@@ -42,7 +45,7 @@ jobs:
 
   backend:
     environment:
-      name: ${{inputs.environment}}
+      name: ${{ inputs.github_environment }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -77,7 +80,7 @@ jobs:
 
   build:
     environment:
-      name: ${{inputs.environment}}
+      name: ${{ inputs.github_environment }}
     needs:
       - frontend
       - backend
