@@ -91,7 +91,7 @@ temp-init:
     #!/usr/bin/env bash
     export GITHUB_TOKEN=$(just get-git-token)
     export TEMP_DEPLOY_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    just tg dev github/environment apply
+    just tg ci github/environment apply
 
 
 import-repo-warning:
