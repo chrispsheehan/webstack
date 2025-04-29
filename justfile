@@ -149,7 +149,36 @@ frontend-refresh:
         echo "Error: VERSION environment variable is not set."
         exit 1
     fi
-    aws cloudfront create-invalidation --distribution-id $DISTRIBUTION_ID --paths "/*"
+
+    MAX_ATTEMPTS=18
+    SLEEP_INTERVAL=10
+
+    echo "🔄 Creating CloudFront invalidation..."
+    INVALIDATION_ID=$(aws cloudfront create-invalidation \
+    --distribution-id "$DISTRIBUTION_ID" \
+    --paths "/*" \
+    --query 'Invalidation.Id' \
+    --output text)
+
+    for ((i=1; i<=MAX_ATTEMPTS; i++)); do
+    STATUS=$(aws cloudfront get-invalidation \
+        --distribution-id "$DISTRIBUTION_ID" \
+        --id "$INVALIDATION_ID" \
+        --query 'Invalidation.Status' \
+        --output text)
+
+    echo "Attempt $i: Invalidation status is $STATUS"
+
+    if [[ "$STATUS" == "Completed" ]]; then
+        echo "✅ Invalidation $INVALIDATION_ID completed successfully."
+        exit 0
+    fi
+
+    sleep "$SLEEP_INTERVAL"
+    done
+
+    echo "❌ Invalidation $INVALIDATION_ID did not complete within expected time."
+    exit 1
 
 
 frontend-build:
