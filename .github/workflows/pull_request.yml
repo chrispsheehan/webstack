@@ -61,8 +61,12 @@ jobs:
         with:
           terragrunt_version: 0.45.10
 
+      - name: Terraform init
+        run: terragrunt run-all init -backend=false
+        working-directory: infra/live
+
       - name: Terraform validate check
-        run: terragrunt run-all validate -backend=false
+        run: terragrunt run-all validate
         working-directory: infra/live
 
   format-frontend:
