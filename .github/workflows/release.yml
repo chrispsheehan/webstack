@@ -110,7 +110,7 @@ jobs:
 
   build:
     needs:
-      - create-tag
+      - get-next-tag
       - release
     uses: ./.github/workflows/build.yml
     with:
