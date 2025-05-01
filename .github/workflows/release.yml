@@ -41,7 +41,10 @@ jobs:
       # Only commits with types like fix:, feat:, or breaking changes (feat!: or commits including a BREAKING CHANGE note) will cause the version to increment.
       - name: Get next version
         id: get_next_version
-        uses: thenativeweb/get-next-version@main
+        uses: thenativeweb/get-next-version@v2.6.3
+        with:
+          MINOR_UPDATE_TYPES: 'feat'
+          PATCH_UPDATE_TYPES: 'fix,chore'
       - name: Show the next version
         run: |
           echo ${{ steps.get_next_version.outputs.version }}
@@ -105,3 +108,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+  build:
+    needs:
+      - create-tag
+      - release
+    uses: ./.github/workflows/build.yml
+    with:
+      environment: ci
+      version: ${{ needs.get-next-tag.outputs.tag }}
