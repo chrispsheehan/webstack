@@ -1,0 +1,107 @@
+name: Create new version release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  get-current-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      current_tag: ${{ steps.get_tag.outputs.CURRENT_TAG }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get current tag
+        id: get_tag
+        run: |
+          CURRENT_TAG=$(git describe --tags --abbrev=0)
+          echo "CURRENT_TAG=${CURRENT_TAG}" >> $GITHUB_OUTPUT
+
+  get-next-tag:
+    runs-on: ubuntu-latest
+    outputs:
+      tag: ${{ steps.get_next_version.outputs.version }}
+      has-next-version: ${{ steps.get_next_version.outputs.hasNextVersion }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # Only commits with types like fix:, feat:, or breaking changes (feat!: or commits including a BREAKING CHANGE note) will cause the version to increment.
+      - name: Get next version
+        id: get_next_version
+        uses: thenativeweb/get-next-version@main
+      - name: Show the next version
+        run: |
+          echo ${{ steps.get_next_version.outputs.version }}
+          echo ${{ steps.get_next_version.outputs.hasNextVersion }}
+
+  create-tag:
+    needs: get-next-tag
+    if: ${{ needs.get-next-tag.outputs.has-next-version == 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ needs.get-next-tag.outputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create new tag
+        run: |
+          echo "Tagging $TAG"
+          git tag "$TAG"
+          git push origin --tag "$TAG"
+
+  get-commits:
+    needs:
+      - get-next-tag
+      - create-tag
+      - get-current-tag
+    if: ${{ needs.get-next-tag.outputs.has-next-version == 'true' }}
+    runs-on: ubuntu-latest
+    outputs:
+      commits: ${{ steps.commits.outputs.COMMITS }}
+    env:
+      TAG: ${{ needs.get-next-tag.outputs.tag }}
+      CURRENT_TAG: ${{ needs.get-current-tag.outputs.current_tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Get commit messages
+        id: commits
+        run: |
+          COMMITS=$(git log ${CURRENT_TAG}..${TAG} --pretty=format:"* %s")
+          echo "commits<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMITS" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+  release:
+    runs-on: ubuntu-latest
+    needs:
+      - get-next-tag
+      - create-tag
+      - get-commits
+    if: ${{ needs.get-next-tag.outputs.has-next-version == 'true' }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ needs.get-next-tag.outputs.tag }}
+          body: |
+            Release Notes:
+            ${{ needs.get-commits.outputs.commits }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
