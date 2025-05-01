@@ -63,7 +63,7 @@ jobs:
 
   security:
     environment:
-      name: ${{inputs.environment}}
+      name: ${{ inputs.github_environment }}
     needs:
       - frontend
       - backend
