@@ -113,6 +113,9 @@ jobs:
       - get-next-tag
       - release
     uses: ./.github/workflows/build.yml
+    permissions:
+      id-token: write
+      contents: write
     with:
       environment: ci
       version: ${{ needs.get-next-tag.outputs.tag }}
