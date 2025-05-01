@@ -8,7 +8,6 @@ permissions:
   contents: write
 
 jobs:
-
   oidc:
     environment:
       name: ci # specify environment - seen at /settings/environments/ in UI
@@ -27,7 +26,7 @@ jobs:
     secrets: inherit
     with:
       environment: dev
-      version: dev    
+      version: dev
 
   dev:
     uses: ./.github/workflows/deploy.yml
