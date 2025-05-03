@@ -26,7 +26,7 @@ jobs:
     secrets: inherit
     with:
       environment: dev
-      version: dev
+      version: ${{ github.sha }}
 
   dev:
     uses: ./.github/workflows/deploy.yml
@@ -34,4 +34,4 @@ jobs:
     secrets: inherit
     with:
       environment: dev
-      version: dev
+      version: ${{ github.sha }}

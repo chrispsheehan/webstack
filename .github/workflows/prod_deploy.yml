@@ -8,32 +8,9 @@ permissions:
   contents: write
 
 jobs:
-  oidc:
-    environment:
-      name: ci # specify environment - seen at /settings/environments/ in UI
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: ./.github/actions/terragrunt_action
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
-          tg_directory: infra/live/ci/aws/oidc
-
-  build:
-    needs: oidc
-    uses: ./.github/workflows/build.yml
-    secrets: inherit
-    with:
-      environment: dev
-      version: ${{ github.sha }}
-
   dev:
     uses: ./.github/workflows/deploy.yml
-    needs: build
     secrets: inherit
     with:
-      web_bucket: ${{ needs.build.outputs.web_bucket }}
-      lambda_bucket: ${{ needs.build.outputs.lambda_bucket }}
-      environment: dev
-      version: ${{ github.sha }}
+      environment: prod
+      version: 0.2.0
