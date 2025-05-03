@@ -33,6 +33,5 @@ jobs:
     needs: build
     secrets: inherit
     with:
-      lambda_bucket: ${{ needs.build.outputs.lambda_bucket }}
       environment: dev
       version: dev

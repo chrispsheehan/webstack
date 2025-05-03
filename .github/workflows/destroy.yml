@@ -53,7 +53,6 @@ jobs:
       - name: Destroy backend
         uses: ./.github/actions/terragrunt_action
         env:
-          TF_VAR_lambda_bucket: bucket
           TF_VAR_lambda_zip: api.zip
           TF_VAR_auth_lambda_zip: auth.zip
         with:
