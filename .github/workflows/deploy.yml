@@ -4,9 +4,6 @@ on:
       github_environment:
         default: ci
         type: string
-      web_bucket:
-        required: true
-        type: string
       lambda_bucket:
         required: true
         type: string
