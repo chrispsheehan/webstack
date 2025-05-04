@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  dev:
+  prod:
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
     with:
