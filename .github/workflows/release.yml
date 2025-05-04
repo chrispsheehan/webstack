@@ -115,5 +115,5 @@ jobs:
       id-token: write
       contents: write
     with:
-      environment: ci
+      environment: prod
       version: ${{ needs.get-next-tag.outputs.tag }}
