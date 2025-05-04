@@ -26,14 +26,12 @@ jobs:
     secrets: inherit
     with:
       environment: dev
-      version: dev
+      version: ${{ github.sha }}
 
   dev:
     uses: ./.github/workflows/deploy.yml
     needs: build
     secrets: inherit
     with:
-      web_bucket: ${{ needs.build.outputs.web_bucket }}
-      lambda_bucket: ${{ needs.build.outputs.lambda_bucket }}
       environment: dev
-      version: dev
+      version: ${{ github.sha }}

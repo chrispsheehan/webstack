@@ -1,0 +1,16 @@
+name: Push on main
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  dev:
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
+    with:
+      environment: prod
+      version: 0.2.0

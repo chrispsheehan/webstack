@@ -4,12 +4,6 @@ on:
       github_environment:
         default: ci
         type: string
-      web_bucket:
-        required: true
-        type: string
-      lambda_bucket:
-        required: true
-        type: string
       environment:
         required: true
         type: string
@@ -56,8 +50,6 @@ jobs:
       - name: Deploy api
         uses: ./.github/actions/terragrunt_action
         id: api_action
-        env:
-          TF_VAR_lambda_bucket: ${{ inputs.lambda_bucket }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/api
