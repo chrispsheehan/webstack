@@ -12,6 +12,7 @@ on:
         type: choice
         options:
           - dev
+          - prod
 
 concurrency: # only run one instance of workflow at any one time
   group: ${{ github.workflow }}-${{inputs.environment}}
