@@ -10,6 +10,8 @@ Apply github settings and create github `ci` environment seeded with required va
 
 ```sh
 just setup-repo
+just init dev
+judt init prod
 ```
 
 Example plan command - `just tg ci aws/bucket_auth plan`
