@@ -27,8 +27,8 @@ locals {
   state_key        = "${local.environment}/${local.provider}/${local.module}/terraform.tfstate"
   state_lock_table = "${local.project_name}-tf-lockid"
 
-  # separate s3 version bucket when dev
-  s3_bucket_base = local.environment == "dev" ? "${local.base_reference}-${local.environment}" : "${local.base_reference}"
+  # separate s3 version bucket when dev, otherwise ci
+  s3_bucket_base = local.environment == "dev" ? "${local.base_reference}-${local.environment}" : "${local.base_reference}-ci"
   lambda_bucket  = "${local.s3_bucket_base}-lambda"
   web_bucket     = "${local.s3_bucket_base}-web"
 }
@@ -124,6 +124,7 @@ inputs = merge(
     environment         = local.environment
     github_repo         = local.github_repo
     deploy_role_name    = local.deploy_role_name
+    deploy_environments = [local.environment]
     state_bucket        = local.state_bucket
     state_lock_table    = local.state_lock_table
     lambda_bucket       = local.lambda_bucket
