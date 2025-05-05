@@ -15,6 +15,8 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("environment_vars.hcl"))
 
   project_name = replace(local.github_repo, "/", "-")
+  
+  # get root domain when prod
   domain       = local.environment == "prod" ? "wip.${local.global_vars.inputs.root_domain}" : "wip.${local.environment}.${local.global_vars.inputs.root_domain}"
   api_key_ssm  = "/${local.environment}/${local.project_name}/api_key"
 
@@ -25,6 +27,7 @@ locals {
   state_key        = "${local.environment}/${local.provider}/${local.module}/terraform.tfstate"
   state_lock_table = "${local.project_name}-tf-lockid"
 
+  # separate s3 version bucket when dev
   s3_bucket_base = local.environment == "dev" ? "${local.base_reference}-${local.environment}" : "${local.base_reference}"
   lambda_bucket  = "${local.s3_bucket_base}-lambda"
   web_bucket     = "${local.s3_bucket_base}-web"
