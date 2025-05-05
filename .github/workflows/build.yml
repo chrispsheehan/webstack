@@ -1,9 +1,6 @@
 on:
   workflow_call:
     inputs:
-      github_environment:
-        default: ci
-        type: string
       environment:
         required: true
         type: string
@@ -32,7 +29,7 @@ env:
 jobs:
   infra:
     environment:
-      name: ${{ inputs.github_environment }}
+      name: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     outputs:
       lambda_bucket_name: ${{ steps.get_bucket_names.outputs.bucket_lambda }}
@@ -57,7 +54,7 @@ jobs:
 
   backend:
     environment:
-      name: ${{ inputs.github_environment }}
+      name: ${{ inputs.environment }}
     needs: infra
     runs-on: ubuntu-latest
     steps:
@@ -89,7 +86,7 @@ jobs:
 
   frontend:
     environment:
-      name: ${{ inputs.github_environment }}
+      name: ${{ inputs.environment }}
     needs: infra
     runs-on: ubuntu-latest
     steps:
