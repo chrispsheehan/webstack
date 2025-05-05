@@ -10,7 +10,7 @@ permissions:
 jobs:
   oidc:
     environment:
-      name: ci # specify environment - seen at /settings/environments/ in UI
+      name: dev # specify environment - seen at /settings/environments/ in UI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
