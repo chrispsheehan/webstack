@@ -15,10 +15,10 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("environment_vars.hcl"))
 
   project_name = replace(local.github_repo, "/", "-")
-  
+
   # get root domain when prod
-  domain       = local.environment == "prod" ? "wip.${local.global_vars.inputs.root_domain}" : "wip.${local.environment}.${local.global_vars.inputs.root_domain}"
-  api_key_ssm  = "/${local.environment}/${local.project_name}/api_key"
+  domain      = local.environment == "prod" ? "wip.${local.global_vars.inputs.root_domain}" : "wip.${local.environment}.${local.global_vars.inputs.root_domain}"
+  api_key_ssm = "/${local.environment}/${local.project_name}/api_key"
 
   aws_region       = local.global_vars.inputs.aws_region
   base_reference   = "${local.aws_account_id}-${local.aws_region}-${local.project_name}"
