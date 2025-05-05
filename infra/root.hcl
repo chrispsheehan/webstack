@@ -19,13 +19,15 @@ locals {
   api_key_ssm  = "/${local.environment}/${local.project_name}/api_key"
 
   aws_region       = local.global_vars.inputs.aws_region
+  base_reference   = "${local.aws_account_id}-${local.aws_region}-${local.project_name}"
   deploy_role_name = "${local.project_name}-${local.environment}-github-oidc-role"
-  state_bucket     = "${local.aws_account_id}-${local.aws_region}-${local.project_name}-tfstate"
+  state_bucket     = "${local.base_reference}-tfstate"
   state_key        = "${local.environment}/${local.provider}/${local.module}/terraform.tfstate"
   state_lock_table = "${local.project_name}-tf-lockid"
 
-  lambda_bucket = "${local.aws_account_id}-${local.aws_region}-${local.project_name}-${local.environment}-lambda"
-  web_bucket    = "${local.aws_account_id}-${local.aws_region}-${local.project_name}-${local.environment}-web"
+  s3_bucket_base = local.environment == "dev" ? "${local.base_reference}-${local.environment}" : "${local.base_reference}"
+  lambda_bucket  = "${local.s3_bucket_base}-lambda"
+  web_bucket     = "${local.s3_bucket_base}-web"
 }
 
 terraform {
