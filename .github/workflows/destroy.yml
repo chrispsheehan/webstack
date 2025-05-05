@@ -3,16 +3,12 @@ name: Kill Environment
 on:
   workflow_dispatch:
     inputs:
-      github_environment:
-        default: ci
-        type: string
       environment:
         description: "Select environment"
         required: true
         type: choice
         options:
           - dev
-          - prod
 
 concurrency: # only run one instance of workflow at any one time
   group: ${{ github.workflow }}-${{inputs.environment}}
@@ -28,7 +24,7 @@ env:
 jobs:
   frontend:
     environment:
-      name: ${{ inputs.github_environment }}
+      name: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     env:
       TF_VAR_api_invoke_domain: "does.not.exist"
@@ -46,7 +42,7 @@ jobs:
 
   backend:
     environment:
-      name: ${{ inputs.github_environment }}
+      name: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -63,7 +59,7 @@ jobs:
 
   security:
     environment:
-      name: ${{ inputs.github_environment }}
+      name: ${{ inputs.environment }}
     needs:
       - frontend
       - backend
@@ -80,7 +76,7 @@ jobs:
 
   build:
     environment:
-      name: ${{ inputs.github_environment }}
+      name: ${{ inputs.environment }}
     needs:
       - frontend
       - backend
