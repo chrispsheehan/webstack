@@ -1,0 +1,24 @@
+name: Dev Deploy
+
+on:
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: write
+
+jobs:
+  build:
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
+    with:
+      environment: dev
+      version: ${{ github.sha }}
+
+  dev:
+    uses: ./.github/workflows/deploy.yml
+    needs: build
+    secrets: inherit
+    with:
+      environment: dev
+      version: ${{ github.sha }}

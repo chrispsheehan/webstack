@@ -15,17 +15,22 @@ locals {
   environment_vars = read_terragrunt_config(find_in_parent_folders("environment_vars.hcl"))
 
   project_name = replace(local.github_repo, "/", "-")
-  domain       = local.environment == "prod" ? "wip.${local.global_vars.inputs.root_domain}" : "wip.${local.environment}.${local.global_vars.inputs.root_domain}"
-  api_key_ssm  = "/${local.environment}/${local.project_name}/api_key"
+
+  # get root domain when prod
+  domain      = local.environment == "prod" ? "wip.${local.global_vars.inputs.root_domain}" : "wip.${local.environment}.${local.global_vars.inputs.root_domain}"
+  api_key_ssm = "/${local.environment}/${local.project_name}/api_key"
 
   aws_region       = local.global_vars.inputs.aws_region
+  base_reference   = "${local.aws_account_id}-${local.aws_region}-${local.project_name}"
   deploy_role_name = "${local.project_name}-${local.environment}-github-oidc-role"
-  state_bucket     = "${local.aws_account_id}-${local.aws_region}-${local.project_name}-tfstate"
+  state_bucket     = "${local.base_reference}-tfstate"
   state_key        = "${local.environment}/${local.provider}/${local.module}/terraform.tfstate"
   state_lock_table = "${local.project_name}-tf-lockid"
 
-  lambda_bucket = "${local.aws_account_id}-${local.aws_region}-${local.project_name}-${local.environment}-lambda"
-  web_bucket    = "${local.aws_account_id}-${local.aws_region}-${local.project_name}-${local.environment}-web"
+  # separate s3 version bucket when dev, otherwise ci
+  s3_bucket_base = local.environment == "dev" ? "${local.base_reference}-${local.environment}" : "${local.base_reference}-ci"
+  lambda_bucket  = "${local.s3_bucket_base}-lambda"
+  web_bucket     = "${local.s3_bucket_base}-web"
 }
 
 terraform {
@@ -117,9 +122,9 @@ inputs = merge(
     aws_region          = local.aws_region
     project_name        = local.project_name
     environment         = local.environment
-    deploy_environments = [local.environment]
     github_repo         = local.github_repo
     deploy_role_name    = local.deploy_role_name
+    deploy_environments = [local.environment]
     state_bucket        = local.state_bucket
     state_lock_table    = local.state_lock_table
     lambda_bucket       = local.lambda_bucket

@@ -91,7 +91,7 @@ temp-init:
     #!/usr/bin/env bash
     export GITHUB_TOKEN=$(just get-git-token)
     export TEMP_DEPLOY_BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    just tg ci github/environment apply
+    just tg dev github/environment apply
 
 
 import-repo-warning:
@@ -113,6 +113,7 @@ setup-repo:
     #!/usr/bin/env bash
     export GITHUB_TOKEN=$(just get-git-token)
     just tg ci github/repo apply
+    just tg ci aws/oidc apply
     just init ci
 
 PROJECT_DIR := justfile_directory()

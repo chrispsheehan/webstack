@@ -1,9 +1,6 @@
 on:
   workflow_call:
     inputs:
-      github_environment:
-        default: ci
-        type: string
       environment:
         required: true
         type: string
@@ -23,9 +20,22 @@ env:
   TF_VAR_deploy_version: ${{ inputs.version }}
 
 jobs:
+  oidc:
+    environment:
+      name: dev # specify environment - seen at /settings/environments/ in UI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/terragrunt_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
+          tg_directory: infra/live/${{inputs.environment}}/aws/oidc
+
   security:
     environment:
-      name: ${{ inputs.github_environment }}
+      name: ${{ inputs.environment }}
+    needs: oidc
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,7 +48,7 @@ jobs:
 
   backend:
     environment:
-      name: ${{ inputs.github_environment }}
+      name: ${{ inputs.environment }}
     outputs:
       api_invoke_domain: ${{ steps.get_vars.outputs.api_invoke_domain }}
     needs:
@@ -63,7 +73,7 @@ jobs:
 
   frontend:
     environment:
-      name: ${{ inputs.github_environment }}
+      name: ${{ inputs.environment }}
     needs:
       - security
       - backend
