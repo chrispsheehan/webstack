@@ -2,6 +2,9 @@ name: Dev Deploy
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - frontend-build-artifact
 
 permissions:
   id-token: write
