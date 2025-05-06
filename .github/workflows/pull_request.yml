@@ -2,17 +2,36 @@ name: Pull Request
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize, review_requested, ready_for_review]
+    types: [opened, reopened, synchronize, review_requested, ready_for_review, edited]
 
 jobs:
+  check-pr-title:
+    runs-on: ubuntu-latest
+    env:
+      PR_TITLE: ${{ github.event.pull_request.title }}
+      ALLOWED_PREFIXES: "feat: chore: fix: !feat:"
+    steps:
+      - name: Fail if PR title does not start with an allowed prefix
+        run: |
+          echo "PR title: $PR_TITLE"
+          for prefix in $ALLOWED_PREFIXES; do
+            if [[ "$PR_TITLE" == "$prefix"* ]]; then
+              echo "✅ PR title is valid."
+              exit 0
+            fi
+          done
+          echo "::error::❌ PR title must start with one of: $ALLOWED_PREFIXES"
+          exit 1
+
   check:
+    needs: check-pr-title
     permissions:
       pull-requests: read
       contents: read
     uses: ./.github/workflows/get_changes.yml
     with:
       ref: ${{ github.sha }}
-    secrets: inherit
+    secrets: inherit  
 
   format-github:
     needs: check
@@ -31,6 +50,7 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     if: ${{ needs.check.outputs.terragrunt == 'true' }}
+    name: Run terragrunt formatting checks
     timeout-minutes: 2
     steps:
       - uses: actions/checkout@v4
