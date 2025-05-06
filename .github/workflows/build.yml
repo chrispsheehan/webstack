@@ -97,6 +97,7 @@ jobs:
         env:
           PUBLIC_BASE_DOMAIN: ${{ vars.BASE_DOMAIN }}
           PUBLIC_GITHUB_REPO: ${{ github.repository }}
+          PUBLIC_SITE_VERSION: ${{ inputs.version }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: frontend-build
