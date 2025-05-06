@@ -50,6 +50,7 @@ jobs:
     needs: check
     runs-on: ubuntu-latest
     if: ${{ needs.check.outputs.terragrunt == 'true' }}
+    name: Run terragrunt formatting checks
     timeout-minutes: 2
     steps:
       - uses: actions/checkout@v4
