@@ -54,6 +54,16 @@ main {
   padding: 24px;
 }
 
+.cert a {
+  text-decoration: none;
+  display: inline-block;
+}
+
+.cert a img {
+  border: none;
+}
+
+
 /* Navigation */
 nav {
   display: flex;
