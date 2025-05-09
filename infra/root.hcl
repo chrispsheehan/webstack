@@ -17,7 +17,7 @@ locals {
   project_name = replace(local.github_repo, "/", "-")
 
   # get root domain when prod
-  domain      = local.environment == "prod" ? "wip.${local.global_vars.inputs.root_domain}" : "wip.${local.environment}.${local.global_vars.inputs.root_domain}"
+  domain      = local.environment == "prod" ? "${local.global_vars.inputs.root_domain}" : "${local.environment}.${local.global_vars.inputs.root_domain}"
   api_key_ssm = "/${local.environment}/${local.project_name}/api_key"
 
   aws_region       = local.global_vars.inputs.aws_region
