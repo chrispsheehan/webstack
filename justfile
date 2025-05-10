@@ -56,7 +56,6 @@ branch name:
     git pull
     git branch {{ name }}
     git checkout {{ name }}
-    just temp-init
     git push -u origin HEAD
 
 
@@ -242,6 +241,10 @@ backend-build:
 
 start:
     #!/usr/bin/env bash
+    if ! docker info > /dev/null 2>&1; then
+      echo "Error: Docker daemon is not running. Please start Docker and try again." >&2
+      exit 1
+    fi
     npm i --prefix frontend
     docker compose up -d
     docker compose logs -f &
