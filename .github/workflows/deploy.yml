@@ -46,10 +46,14 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/security
 
-  check-version:
+
+  backend:
     environment:
       name: ${{ inputs.environment }}
-    needs: oidc
+    outputs:
+      api_invoke_domain: ${{ steps.get_vars.outputs.api_invoke_domain }}
+    needs:
+      - security
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -62,26 +66,6 @@ jobs:
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: check-version
-
-      - name: Check Web version exists
-        uses: ./.github/actions/just_action
-        env:
-          BUCKET_NAME: ${{ vars.WEB_S3_BUCKET }}
-          VERSION: ${{ inputs.version }}
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: check-version
-
-  backend:
-    environment:
-      name: ${{ inputs.environment }}
-    outputs:
-      api_invoke_domain: ${{ steps.get_vars.outputs.api_invoke_domain }}
-    needs:
-      - security
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
       - name: Deploy api
         uses: ./.github/actions/terragrunt_action
@@ -109,6 +93,15 @@ jobs:
       distribution_id: ${{ steps.get_vars.outputs.distribution_id }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Check Web version exists
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ vars.WEB_S3_BUCKET }}
+          VERSION: ${{ inputs.version }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: check-version
 
       - name: Get initial deployment variable
         id: get-init-deployment
