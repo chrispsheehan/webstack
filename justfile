@@ -146,7 +146,7 @@ check-version:
 
     FILES=$(aws s3 ls $FULL_BUCKET_NAME --recursive | wc -l | xargs)
     if [ -n "$FILES" ]; then
-        echo "✅ $FILES file(s) found the following under $FULL_BUCKET_NAME"
+        echo "✅ $FILES file(s) found in $FULL_BUCKET_NAME"
     else
         echo "❌ No files found under $FULL_BUCKET_NAME"
         exit 1
