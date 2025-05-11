@@ -39,3 +39,13 @@ variable "environment_tags" {
   description = "The target tags for environment to deploy from i.e * for all"
   default     = []
 }
+
+variable "web_bucket" {
+  description = "S3 bucket to host static web files"
+  type        = string
+}
+
+variable "lambda_bucket" {
+  description = "S3 bucket to host lambda code files"
+  type        = string
+}
