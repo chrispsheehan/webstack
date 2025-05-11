@@ -57,6 +57,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Check Lambda version exists
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ vars.LAMBDA_S3_BUCKET }}
+          VERSION: ${{ inputs.version }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: check-version
+
       - name: Deploy api
         uses: ./.github/actions/terragrunt_action
         id: api_action
@@ -83,6 +92,15 @@ jobs:
       distribution_id: ${{ steps.get_vars.outputs.distribution_id }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Check Web version exists
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ vars.WEB_S3_BUCKET }}
+          VERSION: ${{ inputs.version }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: check-version
 
       - name: Get initial deployment variable
         id: get-init-deployment
