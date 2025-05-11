@@ -46,6 +46,32 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/security
 
+  check-version:
+    environment:
+      name: ${{ inputs.environment }}
+    needs: oidc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Lambda version exists
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ vars.LAMBDA_S3_BUCKET }}
+          VERSION: ${{ inputs.version }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: check-version
+
+      - name: Check Web version exists
+        uses: ./.github/actions/just_action
+        env:
+          BUCKET_NAME: ${{ vars.WEB_S3_BUCKET }}
+          VERSION: ${{ inputs.version }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: check-version
+
   backend:
     environment:
       name: ${{ inputs.environment }}
