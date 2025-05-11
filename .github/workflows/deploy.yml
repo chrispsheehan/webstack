@@ -46,7 +46,6 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/security
 
-
   backend:
     environment:
       name: ${{ inputs.environment }}
