@@ -128,17 +128,34 @@ clean-terragrunt-cache:
     find {{PROJECT_DIR}} -type f -name "terragrunt-debug.tfvars.json" -exec rm -f {} +
 
 
+check-version:
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    FULL_BUCKET_NAME="$BUCKET_NAME/$VERSION/"
+
+    if ! aws s3api head-bucket --bucket "$BUCKET_NAME" >/dev/null 2>&1; then
+        echo "❌ The bucket '$BUCKET_NAME' does not exist or is inaccessible."
+        exit 1
+    fi
+
+    if ! aws s3 ls "$FULL_BUCKET_NAME" >/dev/null 2>&1; then
+        echo "❌ The subpath '$VERSION' does not exist in bucket '$BUCKET_NAME'."
+        exit 1
+    fi
+
+    FILES=$(aws s3 ls $FULL_BUCKET_NAME --recursive | wc -l | xargs)
+    if [ -n "$FILES" ]; then
+        echo "✅ $FILES file(s) found the following under $FULL_BUCKET_NAME"
+    else
+        echo "❌ No files found under $FULL_BUCKET_NAME"
+        exit 1
+    fi
+
+
 frontend-upload:
     #!/usr/bin/env bash
     set -euo pipefail
-    if [[ -z "$BUCKET_NAME" ]]; then
-        echo "Error: BUCKET_NAME environment variable is not set."
-        exit 1
-    fi
-    if [[ -z "$VERSION" ]]; then
-        echo "Error: VERSION environment variable is not set."
-        exit 1
-    fi
     aws s3 sync {{justfile_directory()}}/frontend/dist "s3://$BUCKET_NAME/$VERSION/" --storage-class STANDARD
 
 
@@ -155,10 +172,10 @@ frontend-refresh:
 
     echo "🔄 Creating CloudFront invalidation..."
     INVALIDATION_ID=$(aws cloudfront create-invalidation \
-    --distribution-id "$DISTRIBUTION_ID" \
-    --paths "/*" \
-    --query 'Invalidation.Id' \
-    --output text)
+        --distribution-id "$DISTRIBUTION_ID" \
+        --paths "/*" \
+        --query 'Invalidation.Id' \
+        --output text)
 
     for ((i=1; i<=MAX_ATTEMPTS; i++)); do
     STATUS=$(aws cloudfront get-invalidation \
@@ -194,18 +211,6 @@ frontend-build:
 backend-upload:
     #!/usr/bin/env bash
     set -euo pipefail
-    if [[ -z "$BUCKET_NAME" ]]; then
-        echo "Error: BUCKET_NAME environment variable is not set."
-        exit 1
-    fi
-    if [[ -z "$VERSION" ]]; then
-        echo "Error: VERSION environment variable is not set."
-        exit 1
-    fi
-    if [[ -z "$ZIP_NAME" ]]; then
-        echo "Error: ZIP_NAME environment variable is not set."
-        exit 1
-    fi
     aws s3 cp "backend/$ZIP_NAME.zip" "s3://$BUCKET_NAME/$VERSION/" --storage-class STANDARD
 
 
