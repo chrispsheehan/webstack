@@ -26,8 +26,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
 
-      - uses: ./.github/actions/terragrunt_action
+      - uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
           tg_directory: infra/live/${{inputs.environment}}/aws/oidc
@@ -39,9 +41,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
 
       - name: Deploy security
-        uses: ./.github/actions/terragrunt_action
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/security
@@ -56,9 +60,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
 
       - name: Check Lambda version exists
-        uses: ./.github/actions/just_action
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
           BUCKET_NAME: ${{ vars.LAMBDA_S3_BUCKET }}
           VERSION: ${{ inputs.version }}
@@ -67,7 +73,7 @@ jobs:
           just_action: check-version
 
       - name: Deploy api
-        uses: ./.github/actions/terragrunt_action
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
         id: api_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
@@ -92,9 +98,11 @@ jobs:
       distribution_id: ${{ steps.get_vars.outputs.distribution_id }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
 
       - name: Check Web version exists
-        uses: ./.github/actions/just_action
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
           BUCKET_NAME: ${{ vars.WEB_S3_BUCKET }}
           VERSION: ${{ inputs.version }}
@@ -104,7 +112,7 @@ jobs:
 
       - name: Get initial deployment variable
         id: get-init-deployment
-        uses: ./.github/actions/just_action
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
         with:
@@ -112,7 +120,7 @@ jobs:
           just_action: get-initial-deploy-var
 
       - name: Deploy web infrastructure
-        uses: ./.github/actions/terragrunt_action
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
         id: terragrunt_action
         env:
           TF_VAR_api_invoke_domain: ${{ needs.backend.outputs.api_invoke_domain }}
@@ -131,7 +139,7 @@ jobs:
           echo "distribution_id=$(echo $TG_OUTPUTS | jq -r '.distribution_id.value')" >> $GITHUB_OUTPUT
 
       - name: Run cloudfront invalidation
-        uses: ./.github/actions/just_action
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
           DISTRIBUTION_ID: ${{ steps.get_vars.outputs.distribution_id }}
         with:

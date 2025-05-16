@@ -36,9 +36,11 @@ jobs:
       web_bucket_name: ${{ steps.get_bucket_names.outputs.bucket_web }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
 
       - name: Deploy code buckets
-        uses: ./.github/actions/terragrunt_action
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
         id: code_bucket_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
@@ -59,6 +61,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
 
       - uses: extractions/setup-just@v2
 
@@ -67,7 +71,7 @@ jobs:
         run: just backend-build
 
       - name: Upload auth zip
-        uses: ./.github/actions/just_action
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
           BUCKET_NAME: ${{ needs.infra.outputs.lambda_bucket_name }}
           ZIP_NAME: auth
@@ -76,7 +80,7 @@ jobs:
           just_action: backend-upload
 
       - name: Upload api zip
-        uses: ./.github/actions/just_action
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
           BUCKET_NAME: ${{ needs.infra.outputs.lambda_bucket_name }}
           ZIP_NAME: api
@@ -91,9 +95,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
 
       - name: Build web files
-        uses: ./.github/actions/just_action
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
           PUBLIC_BASE_DOMAIN: ${{ vars.BASE_DOMAIN }}
           PUBLIC_GITHUB_REPO: ${{ github.repository }}
@@ -105,7 +111,7 @@ jobs:
       - name: Sync web files to s3
         env:
           BUCKET_NAME: ${{ needs.infra.outputs.web_bucket_name }}
-        uses: ./.github/actions/just_action
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: frontend-upload
