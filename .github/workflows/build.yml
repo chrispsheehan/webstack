@@ -35,10 +35,8 @@ jobs:
       lambda_bucket_name: ${{ steps.get_bucket_names.outputs.bucket_lambda }}
       web_bucket_name: ${{ steps.get_bucket_names.outputs.bucket_web }}
     steps:
-      - uses: actions/checkout@v4
-
       - name: Deploy code buckets
-        uses: ./.github/actions/terragrunt_action
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
         id: code_bucket_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
