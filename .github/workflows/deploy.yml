@@ -25,8 +25,9 @@ jobs:
       name: dev # specify environment - seen at /settings/environments/ in UI
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy OIDC
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/terragrunt_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
           tg_directory: infra/live/${{inputs.environment}}/aws/oidc
@@ -37,8 +38,10 @@ jobs:
     needs: oidc
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+
       - name: Deploy security
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        uses: ./.github/actions/terragrunt_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/security
@@ -64,7 +67,7 @@ jobs:
           just_action: check-version
 
       - name: Deploy api
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        uses: ./.github/actions/terragrunt_action
         id: api_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
@@ -109,7 +112,7 @@ jobs:
           just_action: get-initial-deploy-var
 
       - name: Deploy web infrastructure
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        uses: ./.github/actions/terragrunt_action
         id: terragrunt_action
         env:
           TF_VAR_api_invoke_domain: ${{ needs.backend.outputs.api_invoke_domain }}
