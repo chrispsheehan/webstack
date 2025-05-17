@@ -244,6 +244,7 @@ backend-build:
         )
         echo "✅ Done: backend/$app_name.zip"
     done
+    ls -r
 
 
 start:
