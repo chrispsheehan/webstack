@@ -211,7 +211,16 @@ frontend-build:
 backend-upload:
     #!/usr/bin/env bash
     set -euo pipefail
-    aws s3 cp "backend/$ZIP_NAME.zip" "s3://$BUCKET_NAME/$VERSION/" --storage-class STANDARD
+
+    BACKEND_DIR="{{justfile_directory()}}/backend"
+
+    echo "📤 Uploading .zip files from $BACKEND_DIR to s3://$BUCKET_NAME/$VERSION/"
+
+    aws s3 cp "$BACKEND_DIR" "s3://$BUCKET_NAME/$VERSION/" \
+        --recursive \
+        --exclude "*" \
+        --include "*.zip" \
+        --storage-class STANDARD
 
 
 backend-build:
@@ -221,27 +230,24 @@ backend-build:
     python3 -m venv venv
     source venv/bin/activate
 
+    BACKEND_DIR="{{justfile_directory()}}/backend"
+    BACKEND_BUILD_DIR="$BACKEND_DIR/build"
+
     echo "🔄 Cleaning previous builds..."
-    rm -f backend/api.zip backend/auth.zip
-    rm -rf backend/build/
+    rm -rf $BACKEND_BUILD_DIR
 
-    echo "📦 Building auth Lambda..."
-    mkdir -p backend/build/auth
-    pip install --target backend/build/auth -r backend/auth/requirements.txt
-    cp backend/auth/*.py backend/build/auth/
-    cd backend/build/auth
-    zip -r ../../auth.zip . > /dev/null
-    cd ../../../
-
-    echo "📦 Building api Lambda..."
-    mkdir -p backend/build/api
-    pip install --target backend/build/api -r backend/api/requirements.txt
-    cp backend/api/*.py backend/build/api/
-    cd backend/build/api
-    zip -r ../../api.zip . > /dev/null
-    cd ../../../
-
-    echo "✅ Done: backend/api.zip and backend/auth.zip"
+    for dir in $(find "$BACKEND_DIR" -mindepth 1 -maxdepth 1 -type d); do
+        app_name=$(basename "$dir")
+        echo "📦 Building $app_name Lambda..."
+        mkdir -p "$BACKEND_BUILD_DIR/$app_name"
+        pip install --target "$BACKEND_BUILD_DIR/$app_name" -r "$dir/requirements.txt"
+        cp "$dir"/*.py "$BACKEND_BUILD_DIR/$app_name/"
+        (
+            cd "$BACKEND_BUILD_DIR/$app_name"
+            zip -r "../../$app_name.zip" . > /dev/null
+        )
+        echo "✅ Done: backend/$app_name.zip"
+    done
 
 
 start:
