@@ -210,8 +210,13 @@ frontend-build:
 
 backend-upload:
     #!/usr/bin/env bash
+    BACKEND_DIR="{{justfile_directory()}}/backend"
+    
     set -euo pipefail
-    aws s3 cp "backend/$ZIP_NAME.zip" "s3://$BUCKET_NAME/$VERSION/" --storage-class STANDARD
+    for dir in $(find "$BACKEND_DIR" -mindepth 1 -maxdepth 1 -type d); do
+        app_name=$(basename "$dir")
+        aws s3 cp "backend/$app_name.zip" "s3://$BUCKET_NAME/$VERSION/" --storage-class STANDARD
+    done
 
 
 backend-build:

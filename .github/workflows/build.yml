@@ -74,16 +74,6 @@ jobs:
         uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
           BUCKET_NAME: ${{ needs.infra.outputs.lambda_bucket_name }}
-          ZIP_NAME: auth
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: backend-upload
-
-      - name: Upload api zip
-        uses: chrispsheehan/just-aws-oidc-action@0.1.1
-        env:
-          BUCKET_NAME: ${{ needs.infra.outputs.lambda_bucket_name }}
-          ZIP_NAME: api
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: backend-upload
