@@ -236,12 +236,13 @@ backend-build:
         app_name=$(basename "$dir")
         echo "📦 Building $app_name Lambda..."
         mkdir -p "$BACKEND_BUILD_DIR/$app_name"
-        pip install --target backend/build/$app_name -r backend/$app_name/requirements.txt
-        cp backend/$app_name/*.py backend/build/$app_name/
-        cd backend/build/$app_name
-        zip -r ../../$app_name.zip . > /dev/null
+        pip install --target "$BACKEND_BUILD_DIR/$app_name" -r "$dir/requirements.txt"
+        cp "$dir"/*.py "$BACKEND_BUILD_DIR/$app_name/"
+        (
+            cd "$BACKEND_BUILD_DIR/$app_name"
+            zip -r "../../$app_name.zip" . > /dev/null
+        )
         echo "✅ Done: backend/$app_name.zip"
-        cd ../../../
     done
 
 
