@@ -213,11 +213,14 @@ backend-upload:
     set -euo pipefail
 
     BACKEND_DIR="{{justfile_directory()}}/backend"
-    BACKEND_BUILD_DIR="$BACKEND_DIR/build"
 
-    echo "📤 Uploading all files from $BACKEND_BUILD_DIR to s3://$BUCKET_NAME/$VERSION/"
-    aws s3 cp "$BACKEND_BUILD_DIR" "s3://$BUCKET_NAME/$VERSION/" --recursive --storage-class STANDARD
+    echo "📤 Uploading .zip files from $BACKEND_DIR to s3://$BUCKET_NAME/$VERSION/"
 
+    aws s3 cp "$BACKEND_DIR" "s3://$BUCKET_NAME/$VERSION/" \
+        --recursive \
+        --exclude "*" \
+        --include "*.zip" \
+        --storage-class STANDARD
 
 
 backend-build:
