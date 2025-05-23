@@ -70,7 +70,7 @@ jobs:
         shell: bash
         run: just backend-build
 
-      - name: Upload Lambda zipß
+      - name: Upload Lambda zips
         uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
           BUCKET_NAME: ${{ needs.infra.outputs.lambda_bucket_name }}
