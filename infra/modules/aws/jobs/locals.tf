@@ -1,0 +1,6 @@
+locals {
+  lambda_runtime            = "python3.11"
+  lambda_name               = var.environment == "prod" ? var.project_name : "${var.environment}-${var.project_name}"
+  lambda_cost_explorer_name = "${local.lambda_name}-cost-explorer"
+  lambda_cost_explorer_key  = "${var.deploy_version}/${var.cost_explorer_lambda_zip}"
+}
