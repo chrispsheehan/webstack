@@ -57,6 +57,7 @@ jobs:
       api_invoke_domain: ${{ steps.get_vars.outputs.api_invoke_domain }}
     needs:
       - security
+      - jobs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -89,8 +90,6 @@ jobs:
   jobs:
     environment:
       name: ${{ inputs.environment }}
-    needs:
-      - security
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -119,7 +118,6 @@ jobs:
     needs:
       - security
       - backend
-      - jobs
     runs-on: ubuntu-latest
     outputs:
       domain: ${{ steps.get_vars.outputs.domain }}
