@@ -1,7 +1,7 @@
 import boto3
 import json
 
-def lambda_handler(event, context):
+def handler(event, context):
     # Initialize the Cost Explorer client
     ce = boto3.client('ce')
 
