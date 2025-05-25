@@ -41,3 +41,21 @@ resource "aws_cloudwatch_log_group" "lambda_cost_explorer_group" {
   name              = "/aws/lambda/${aws_lambda_function.cost_explorer.function_name}"
   retention_in_days = 1
 }
+
+resource "aws_s3_bucket" "state_results" {
+  bucket        = var.jobs_state_bucket
+  force_destroy = false
+}
+
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket                  = aws_s3_bucket.state_results.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_policy" "this" {
+  bucket = aws_s3_bucket.state_results.id
+  policy = data.aws_iam_policy_document.state_results_access.json
+}

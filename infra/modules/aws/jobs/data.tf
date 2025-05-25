@@ -38,3 +38,26 @@ data "aws_iam_policy_document" "cost_explorer_policy" {
     resources = ["*"]
   }
 }
+
+data "aws_iam_policy_document" "state_results_access" {
+  statement {
+    sid    = "AllowLambdaWriteToCostReports"
+    effect = "Allow"
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        aws_lambda_function.cost_explorer.arn
+      ]
+    }
+
+    actions = [
+      "s3:PutObject",
+      "s3:PutObjectAcl"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.jobs_state_bucket}"
+    ]
+  }
+}

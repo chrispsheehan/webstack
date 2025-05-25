@@ -28,9 +28,10 @@ locals {
   state_lock_table = "${local.project_name}-tf-lockid"
 
   # separate s3 version bucket when dev, otherwise ci
-  s3_bucket_base = local.environment == "dev" ? "${local.base_reference}-${local.environment}" : "${local.base_reference}-ci"
-  lambda_bucket  = "${local.s3_bucket_base}-lambda"
-  web_bucket     = "${local.s3_bucket_base}-web"
+  s3_bucket_base    = local.environment == "dev" ? "${local.base_reference}-${local.environment}" : "${local.base_reference}-ci"
+  lambda_bucket     = "${local.s3_bucket_base}-lambda"
+  web_bucket        = "${local.s3_bucket_base}-web"
+  jobs_state_bucket = "${local.s3_bucket_base}-jobs-state"
 }
 
 terraform {
@@ -129,5 +130,6 @@ inputs = merge(
     state_lock_table    = local.state_lock_table
     lambda_bucket       = local.lambda_bucket
     web_bucket          = local.web_bucket
+    jobs_state_bucket   = local.jobs_state_bucket
   }
 )

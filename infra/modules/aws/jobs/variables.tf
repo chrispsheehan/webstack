@@ -34,3 +34,7 @@ variable "cost_explorer_lambda_zip" {
   default     = "cost_explorer.zip"
 }
 
+variable "jobs_state_bucket" {
+  description = "S3 bucket store results state"
+  type        = string
+}
