@@ -5,9 +5,25 @@ def lambda_handler(event, context):
     # Initialize the Cost Explorer client
     ce = boto3.client('ce')
 
-    # Load the filter from costfilter.json
-    with open('costfilter.json') as f:
-        cost_filter = json.load(f)
+    # Define the cost filter directly in code
+    cost_filter = {
+        "And": [
+            {
+                "Tags": {
+                    "Key": "Environment",
+                    "Values": ["dev"],
+                    "MatchOptions": ["EQUALS"]
+                }
+            },
+            {
+                "Tags": {
+                    "Key": "Project",
+                    "Values": ["chrispsheehan-webstack"],
+                    "MatchOptions": ["EQUALS"]
+                }
+            }
+        ]
+    }
 
     # Define the time period
     time_period = {
@@ -29,5 +45,4 @@ def lambda_handler(event, context):
     # Output the response to the console
     print(json.dumps(response, indent=2))
 
-    # Process and return the response
     return response
