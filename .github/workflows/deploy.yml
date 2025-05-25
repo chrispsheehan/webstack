@@ -119,6 +119,7 @@ jobs:
     needs:
       - security
       - backend
+      - jobs
     runs-on: ubuntu-latest
     outputs:
       domain: ${{ steps.get_vars.outputs.domain }}
