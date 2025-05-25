@@ -11,7 +11,7 @@ resource "aws_iam_policy" "cost_explorer_logs_access_policy" {
 
 resource "aws_iam_policy" "cost_explorer_policy" {
   name   = "${local.lambda_cost_explorer_name}-cost-explorer-policy"
-  policy      = data.aws_iam_policy_document.cost_explorer_policy.json
+  policy = data.aws_iam_policy_document.cost_explorer_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "cost_explorer_logs_access_policy_attachment" {
