@@ -50,7 +50,7 @@ resource "aws_lambda_function" "cost_explorer" {
     variables = {
       REPORT_BUCKET    = aws_s3_bucket.state_results.bucket
       PROJECT_NAME     = var.project_name
-      ENVIRONMENT_NAMR = var.environment
+      ENVIRONMENT_NAME = var.environment
     }
   }
 }
