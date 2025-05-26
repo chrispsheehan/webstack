@@ -20,7 +20,7 @@ def handler(event, context):
     if not environment_name:
         raise ValueError("❌ ENVIRONMENT_NAME environment variable is not set.")
 
-    # Build cost filter
+    # Cost Explorer filter
     cost_filter = {
         "And": [
             {
@@ -40,15 +40,19 @@ def handler(event, context):
         ]
     }
 
+    metrics = ['BlendedCost', 'UnblendedCost']
+    
     # Dates
     today = datetime.utcnow().date()
     yesterday = today - timedelta(days=1)
     month_start = today.replace(day=1)
-    
-    # Format for Cost Explorer
-    metrics = ['BlendedCost', 'UnblendedCost']
 
-    # 1. Daily cost (for yesterday)
+    # Previous month
+    first_day_this_month = today.replace(day=1)
+    last_day_prev_month = first_day_this_month - timedelta(days=1)
+    first_day_prev_month = last_day_prev_month.replace(day=1)
+
+    # 1. Daily cost (yesterday)
     daily_resp = ce.get_cost_and_usage(
         TimePeriod={
             'Start': str(yesterday),
@@ -59,7 +63,7 @@ def handler(event, context):
         Filter=cost_filter
     )
 
-    # 2. Month-to-date cost (Start of month to today)
+    # 2. Month-to-date
     monthly_resp = ce.get_cost_and_usage(
         TimePeriod={
             'Start': str(month_start),
@@ -70,11 +74,27 @@ def handler(event, context):
         Filter=cost_filter
     )
 
-    # Combine and format response
+    # 3. Previous full month
+    prev_month_resp = ce.get_cost_and_usage(
+        TimePeriod={
+            'Start': str(first_day_prev_month),
+            'End': str(last_day_prev_month + timedelta(days=1))  # CE end is exclusive
+        },
+        Granularity='MONTHLY',
+        Metrics=metrics,
+        Filter=cost_filter
+    )
+
+    # Combine all into one output
     combined = {
         "date": str(yesterday),
-        "daily": daily_resp['ResultsByTime'][0],  # single day
-        "month_to_date": monthly_resp['ResultsByTime'][0]
+        "daily": daily_resp['ResultsByTime'][0],
+        "month_to_date": monthly_resp['ResultsByTime'][0],
+        "previous_month": {
+            "start": str(first_day_prev_month),
+            "end": str(last_day_prev_month),
+            "data": prev_month_resp['ResultsByTime'][0]
+        }
     }
 
     # Save to S3 with the date as the key
