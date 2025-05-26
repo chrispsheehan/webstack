@@ -4,24 +4,34 @@ import json
 from datetime import datetime
 
 def handler(event, context):
-    # Initialize clients
     ce = boto3.client('ce')
     s3 = boto3.client('s3')
 
-    # Define the cost filter
+    bucket_name = os.environ.get("REPORT_BUCKET")
+    if not bucket_name:
+        raise ValueError("❌ COST_REPORT_BUCKET environment variable is not set.")
+
+    project_name = os.environ.get("PROJECT_NAME")
+    if not bucket_name:
+        raise ValueError("❌ PROJECT_NAME environment variable is not set.")
+    
+    environment_name = os.environ.get("ENVIRONMENT_NAME")
+    if not bucket_name:
+        raise ValueError("❌ ENVIRONMENT_NAME environment variable is not set.")
+
     cost_filter = {
         "And": [
             {
                 "Tags": {
                     "Key": "Environment",
-                    "Values": ["dev"],
+                    "Values": [environment_name],
                     "MatchOptions": ["EQUALS"]
                 }
             },
             {
                 "Tags": {
                     "Key": "Project",
-                    "Values": ["chrispsheehan-webstack"],
+                    "Values": [project_name],
                     "MatchOptions": ["EQUALS"]
                 }
             }
@@ -47,10 +57,6 @@ def handler(event, context):
     # Convert response to JSON
     response_json = json.dumps(response, indent=2)
 
-    # Save to S3
-    bucket_name = os.environ.get("REPORT_BUCKET")
-    if not bucket_name:
-        raise ValueError("❌ COST_REPORT_BUCKET environment variable is not set.")
     key_name = f"cost-explorer/reports/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json"
 
     s3.put_object(
