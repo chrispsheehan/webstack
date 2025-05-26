@@ -1,3 +1,5 @@
+data "aws_caller_identity" "current" {}
+
 data "aws_iam_policy_document" "assume_role" {
   statement {
     effect = "Allow"
@@ -61,7 +63,7 @@ data "aws_iam_policy_document" "state_results_access" {
     principals {
       type = "AWS"
       identifiers = [
-        aws_lambda_function.cost_explorer.arn
+        "arn:aws:lambda:${var.aws_region}:${data.aws_caller_identity.current.account_id}:function:${local.lambda_cost_explorer_name}"
       ]
     }
 
