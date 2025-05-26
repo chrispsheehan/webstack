@@ -14,6 +14,11 @@ resource "aws_iam_policy" "cost_explorer_policy" {
   policy = data.aws_iam_policy_document.cost_explorer_policy.json
 }
 
+resource "aws_iam_policy" "cost_explorer_s3_policy" {
+  name   = "${local.lambda_cost_explorer_name}-s3-access-policy"
+  policy = data.aws_iam_policy_document.cost_explorer_s3_policy.json
+}
+
 resource "aws_iam_role_policy_attachment" "cost_explorer_logs_access_policy_attachment" {
   role       = aws_iam_role.lambda_cost_explorer_role.name
   policy_arn = aws_iam_policy.cost_explorer_logs_access_policy.arn
@@ -22,6 +27,11 @@ resource "aws_iam_role_policy_attachment" "cost_explorer_logs_access_policy_atta
 resource "aws_iam_role_policy_attachment" "cost_explorer_policy_attachment" {
   role       = aws_iam_role.lambda_cost_explorer_role.name
   policy_arn = aws_iam_policy.cost_explorer_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "cost_explorer_s3_policy_attachment" {
+  role       = aws_iam_role.lambda_cost_explorer_role.name
+  policy_arn = aws_iam_policy.cost_explorer_s3_policy.arn
 }
 
 resource "aws_lambda_function" "cost_explorer" {
@@ -35,6 +45,12 @@ resource "aws_lambda_function" "cost_explorer" {
 
   memory_size = 256
   timeout     = 10
+
+  environment {
+    variables = {
+      REPORT_BUCKET = aws_s3_bucket.state_results.bucket
+    }
+  }
 }
 
 resource "aws_cloudwatch_log_group" "lambda_cost_explorer_group" {

@@ -11,11 +11,25 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-data "aws_iam_policy_document" "cost_explorer_logs_policy" {
+data "aws_iam_policy_document" "cost_explorer_s3_policy" {
   statement {
     actions = [
       "logs:CreateLogStream",
       "logs:PutLogEvents"
+    ]
+
+    effect = "Allow"
+
+    resources = [
+      "arn:aws:s3:::${var.jobs_state_bucket}"
+    ]
+  }
+}
+
+data "aws_iam_policy_document" "cost_explorer_logs_policy" {
+  statement {
+    actions = [
+      "s3:PutObject"
     ]
 
     effect = "Allow"
