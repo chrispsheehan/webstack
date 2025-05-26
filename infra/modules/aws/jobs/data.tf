@@ -70,7 +70,7 @@ data "aws_iam_policy_document" "state_results_access" {
     ]
 
     resources = [
-      "arn:aws:s3:::${var.jobs_state_bucket}"
+      "arn:aws:s3:::${var.jobs_state_bucket}/*"
     ]
   }
 }
