@@ -1,11 +1,14 @@
+import os
 import boto3
 import json
+from datetime import datetime
 
 def handler(event, context):
-    # Initialize the Cost Explorer client
+    # Initialize clients
     ce = boto3.client('ce')
+    s3 = boto3.client('s3')
 
-    # Define the cost filter directly in code
+    # Define the cost filter
     cost_filter = {
         "And": [
             {
@@ -25,16 +28,15 @@ def handler(event, context):
         ]
     }
 
-    # Define the time period
+    # Define time period
     time_period = {
         'Start': '2025-04-01',
         'End': '2025-04-30'
     }
 
-    # Define the metrics
     metrics = ['BlendedCost', 'UnblendedCost']
 
-    # Make the API call
+    # Get cost and usage
     response = ce.get_cost_and_usage(
         TimePeriod=time_period,
         Granularity='MONTHLY',
@@ -42,7 +44,21 @@ def handler(event, context):
         Filter=cost_filter
     )
 
-    # Output the response to the console
-    print(json.dumps(response, indent=2))
+    # Convert response to JSON
+    response_json = json.dumps(response, indent=2)
 
-    return response
+    # Save to S3
+    bucket_name = os.environ.get("REPORT_BUCKET")
+    if not bucket_name:
+        raise ValueError("❌ COST_REPORT_BUCKET environment variable is not set.")
+    key_name = f"cost-explorer/reports/{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.json"
+
+    s3.put_object(
+        Bucket=bucket_name,
+        Key=key_name,
+        Body=response_json,
+        ContentType='application/json'
+    )
+
+    print(f"✅ Report saved to s3://{bucket_name}/{key_name}")
+    return {"s3_path": f"s3://{bucket_name}/{key_name}"}
