@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 data "aws_iam_policy_document" "assume_role" {
   statement {
     effect = "Allow"
@@ -57,13 +55,12 @@ data "aws_iam_policy_document" "cost_explorer_policy" {
 
 data "aws_iam_policy_document" "state_results_access" {
   statement {
-    sid    = "AllowLambdaWriteToCostReports"
     effect = "Allow"
 
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:lambda:${var.aws_region}:${data.aws_caller_identity.current.account_id}:function:${local.lambda_cost_explorer_name}"
+        aws_iam_role.lambda_cost_explorer_role.arn
       ]
     }
 
