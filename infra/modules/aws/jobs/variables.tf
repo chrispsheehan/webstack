@@ -34,6 +34,10 @@ variable "cost_explorer_lambda_zip" {
   default     = "cost_explorer.zip"
 }
 
+variable "lambda_api_name" {
+  type = string
+}
+
 variable "lambda_cost_explorer_name" {
   type = string
 }
