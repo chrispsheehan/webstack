@@ -49,3 +49,8 @@ variable "auth_lambda_zip" {
   type        = string
   default     = "auth.zip"
 }
+
+variable "jobs_state_bucket" {
+  description = "S3 bucket store results state"
+  type        = string
+}

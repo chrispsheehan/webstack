@@ -74,6 +74,12 @@ resource "aws_lambda_function" "api" {
 
   memory_size = 256
   timeout     = 10
+
+  environment {
+    variables = {
+      REPORT_BUCKET = var.jobs_state_bucket
+    }
+  }
 }
 
 resource "aws_cloudwatch_log_group" "lambda_api_group" {
