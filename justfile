@@ -53,7 +53,7 @@ branch name:
     #!/usr/bin/env bash
     git fetch origin
     git checkout main
-    git branch --set-upstream-to=origin/main main
+    git branch --set-upstream-to=origin/main {{ name }}
     git pull
     git checkout -b {{ name }}
     git push -u origin {{ name }}
