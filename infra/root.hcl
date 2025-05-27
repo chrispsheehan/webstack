@@ -33,7 +33,7 @@ locals {
   web_bucket        = "${local.s3_bucket_base}-web"
   jobs_state_bucket = "${local.s3_bucket_base}-jobs-state"
 
-  lambda_name               = local.environment == "prod" ? local.project_name : "${local.environment}-${local.environment}"
+  lambda_name               = local.environment == "prod" ? local.project_name : "${local.environment}-${local.project_name}"
   lambda_api_name           = "${local.lambda_name}-api"
   lambda_auth_name          = "${local.lambda_name}-auth"
   lambda_cost_explorer_name = "${local.lambda_name}-cost-explorer"
