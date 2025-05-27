@@ -4,7 +4,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN pip install Flask
+RUN pip install Flask boto3
 
 RUN pip install -r api/requirements.txt
 
