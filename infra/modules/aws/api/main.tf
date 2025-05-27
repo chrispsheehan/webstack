@@ -1,10 +1,10 @@
 resource "aws_iam_role" "lambda_auth_role" {
-  name               = "${local.lambda_auth_name}-lambda-role"
+  name               = "${var.lambda_auth_name}-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
 resource "aws_iam_policy" "lambda_apikey_policy" {
-  name   = "${local.lambda_auth_name}-apikey-policy"
+  name   = "${var.lambda_auth_name}-apikey-policy"
   policy = data.aws_iam_policy_document.apikey_policy.json
 }
 
@@ -14,7 +14,7 @@ resource "aws_iam_role_policy_attachment" "api_key" {
 }
 
 resource "aws_iam_policy" "auth_logs_access_policy" {
-  name   = "${local.lambda_auth_name}-logs-access-policy"
+  name   = "${var.lambda_auth_name}-logs-access-policy"
   policy = data.aws_iam_policy_document.auth_logs_policy.json
 }
 
@@ -24,7 +24,7 @@ resource "aws_iam_role_policy_attachment" "auth_logs_access_policy_attachment" {
 }
 
 resource "aws_lambda_function" "auth" {
-  function_name = local.lambda_auth_name
+  function_name = var.lambda_auth_name
   handler       = "lambda_authorizer.lambda_handler"
   runtime       = local.lambda_runtime
   role          = aws_iam_role.lambda_auth_role.arn
@@ -49,12 +49,12 @@ resource "aws_cloudwatch_log_group" "lambda_auth_group" {
 }
 
 resource "aws_iam_role" "lambda_api_role" {
-  name               = "${local.lambda_api_name}-lambda-role"
+  name               = "${var.lambda_api_name}-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
 resource "aws_iam_policy" "api_logs_access_policy" {
-  name   = "${local.lambda_api_name}-logs-access-policy"
+  name   = "${var.lambda_api_name}-logs-access-policy"
   policy = data.aws_iam_policy_document.api_logs_policy.json
 }
 
@@ -64,7 +64,7 @@ resource "aws_iam_role_policy_attachment" "api_logs_access_policy_attachment" {
 }
 
 resource "aws_lambda_function" "api" {
-  function_name = local.lambda_api_name
+  function_name = var.lambda_api_name
   handler       = "lambda_handler.handler"
   runtime       = local.lambda_runtime
   role          = aws_iam_role.lambda_api_role.arn
@@ -88,26 +88,26 @@ resource "aws_cloudwatch_log_group" "lambda_api_group" {
 }
 
 resource "aws_lambda_permission" "api" {
-  statement_id  = "${local.lambda_api_name}-allow-api-gateway-invoke"
+  statement_id  = "${var.lambda_api_name}-allow-api-gateway-invoke"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.api.function_name
   principal     = "apigateway.amazonaws.com"
 }
 
 resource "aws_lambda_permission" "auth" {
-  statement_id  = "${local.lambda_auth_name}-allow-api-gateway-invoke"
+  statement_id  = "${var.lambda_auth_name}-allow-api-gateway-invoke"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.auth.function_name
   principal     = "apigateway.amazonaws.com"
 }
 
 resource "aws_apigatewayv2_api" "this" {
-  name          = local.lambda_api_name
+  name          = var.lambda_api_name
   protocol_type = "HTTP"
 }
 
 resource "aws_cloudwatch_log_group" "api_gateway_logs" {
-  name              = "/aws/apigateway/${local.lambda_api_name}"
+  name              = "/aws/apigateway/${var.lambda_api_name}"
   retention_in_days = 1
 }
 
@@ -143,7 +143,7 @@ resource "aws_apigatewayv2_authorizer" "this" {
 
   identity_sources = ["$request.header.Authorization"]
 
-  name                              = local.lambda_auth_name
+  name                              = var.lambda_auth_name
   authorizer_payload_format_version = "2.0"
 }
 

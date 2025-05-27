@@ -1,21 +1,20 @@
-
 resource "aws_iam_role" "lambda_cost_explorer_role" {
-  name               = "${local.lambda_cost_explorer_name}-lambda-role"
+  name               = "${var.lambda_cost_explorer_name}-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
 resource "aws_iam_policy" "cost_explorer_logs_access_policy" {
-  name   = "${local.lambda_cost_explorer_name}-logs-access-policy"
+  name   = "${var.lambda_cost_explorer_name}-logs-access-policy"
   policy = data.aws_iam_policy_document.cost_explorer_logs_policy.json
 }
 
 resource "aws_iam_policy" "cost_explorer_policy" {
-  name   = "${local.lambda_cost_explorer_name}-cost-explorer-policy"
+  name   = "${var.lambda_cost_explorer_name}-cost-explorer-policy"
   policy = data.aws_iam_policy_document.cost_explorer_policy.json
 }
 
 resource "aws_iam_policy" "cost_explorer_s3_policy" {
-  name   = "${local.lambda_cost_explorer_name}-s3-access-policy"
+  name   = "${var.lambda_cost_explorer_name}-s3-access-policy"
   policy = data.aws_iam_policy_document.cost_explorer_s3_policy.json
 }
 
@@ -35,7 +34,7 @@ resource "aws_iam_role_policy_attachment" "cost_explorer_s3_policy_attachment" {
 }
 
 resource "aws_lambda_function" "cost_explorer" {
-  function_name = local.lambda_cost_explorer_name
+  function_name = var.lambda_cost_explorer_name
   handler       = "lambda_handler.handler"
   runtime       = local.lambda_runtime
   role          = aws_iam_role.lambda_cost_explorer_role.arn
