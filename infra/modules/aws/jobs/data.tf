@@ -62,14 +62,32 @@ data "aws_iam_policy_document" "state_results_access" {
     principals {
       type = "AWS"
       identifiers = [
-        aws_iam_role.lambda_cost_explorer_role.arn,
-        "arn:aws:lambda:${var.aws_region}:${data.aws_caller_identity.current.account_id}:function:${var.lambda_api_name}"
+        aws_iam_role.lambda_cost_explorer_role.arn
       ]
     }
 
     actions = [
       "s3:PutObject",
       "s3:PutObjectAcl"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.jobs_state_bucket}/*"
+    ]
+  }
+
+  statement {
+    effect = "Allow"
+
+    principals {
+      type = "AWS"
+      identifiers = [
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.lambda_api_name}-lambda-role"
+      ]
+    }
+
+    actions = [
+      "s3:GetObject"
     ]
 
     resources = [
