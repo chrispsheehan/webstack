@@ -1,6 +1,7 @@
 locals {
   domain_records = [
-    var.domain
+    "www.${var.domain}",
+    "${var.domain}"
   ]
   reference               = replace(var.domain, ".", "-")
   bucket_name             = "${var.aws_account_id}-${var.aws_region}-${var.environment}-${local.reference}"
