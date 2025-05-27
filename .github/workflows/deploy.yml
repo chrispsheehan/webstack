@@ -57,6 +57,7 @@ jobs:
       api_invoke_domain: ${{ steps.get_vars.outputs.api_invoke_domain }}
     needs:
       - security
+      - jobs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -85,6 +86,33 @@ jobs:
           TG_OUTPUTS: ${{ steps.api_action.outputs.tg_outputs  }}
         run: |
           echo "api_invoke_domain=$(echo $TG_OUTPUTS | jq -r '.api_invoke_domain.value')" >> $GITHUB_OUTPUT
+
+  jobs:
+    environment:
+      name: ${{ inputs.environment }}
+    needs:
+      - oidc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
+
+      - name: Check Lambda version exists
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
+        env:
+          BUCKET_NAME: ${{ vars.LAMBDA_S3_BUCKET }}
+          VERSION: ${{ inputs.version }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: check-version
+
+      - name: Deploy jobs
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        id: api_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{inputs.environment}}/aws/jobs
 
   frontend:
     environment:

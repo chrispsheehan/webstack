@@ -43,18 +43,31 @@ jobs:
   backend:
     environment:
       name: ${{ inputs.environment }}
+    needs:
+      - jobs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Destroy backend
         uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
-        env:
-          TF_VAR_lambda_zip: api.zip
-          TF_VAR_auth_lambda_zip: auth.zip
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/api
+          tg_action: destroy
+
+  jobs:
+    environment:
+      name: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Destroy jobs
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{inputs.environment}}/aws/jobs
           tg_action: destroy
 
   security:
@@ -63,6 +76,7 @@ jobs:
     needs:
       - frontend
       - backend
+      - jobs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -80,6 +94,7 @@ jobs:
     needs:
       - frontend
       - backend
+      - jobs
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
