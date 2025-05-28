@@ -12,7 +12,8 @@ locals {
     "lambda:*",
     "ssm:*",
     "logs:*",
-    "apigateway:*"
+    "apigateway:*",
+    "events:*"
   ]
   root_domain = "chrispsheehan.com"
 }
