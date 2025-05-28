@@ -76,3 +76,23 @@ resource "aws_s3_bucket_policy" "this" {
   bucket = aws_s3_bucket.state_results.id
   policy = data.aws_iam_policy_document.state_results_access.json
 }
+
+resource "aws_cloudwatch_event_rule" "daily_trigger" {
+  name                = "${var.lambda_cost_explorer_name}-daily-trigger"
+  description         = "Triggers the Lambda function daily at 3:00 AM UTC"
+  schedule_expression = "cron(0 3 * * ? *)"
+}
+
+resource "aws_cloudwatch_event_target" "cost_explorer_lambda_target" {
+  rule      = aws_cloudwatch_event_rule.daily_trigger.name
+  target_id = var.lambda_cost_explorer_name
+  arn       = aws_lambda_function.cost_explorer.arn
+}
+
+resource "aws_lambda_permission" "cost_explorer_allow_eventbridge" {
+  statement_id  = "AllowExecutionFromEventBridge"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.cost_explorer.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.daily_trigger.arn
+}
