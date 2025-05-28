@@ -16,6 +16,19 @@ get-git-repo:
     repo_basename=$(basename $(git remote get-url origin))
     echo "${repo_basename%%.*}"
 
+lambda-invoke:
+    #!/bin/bash
+    OUTPUT_FILE=output.json
+    rm -f $OUTPUT_FILE
+    RESPONSE=$(aws lambda invoke --function-name $LAMBDA_NAME --region $AWS_REGION --payload "$PAYLOAD" $OUTPUT_FILE)
+    LAMBDA_RETURN_CODE=$(jq -r '.StatusCode' <<< "$RESPONSE")
+    if [ "$LAMBDA_RETURN_CODE" -eq 200 ]; then
+        echo "Lambda function invoked successfully."
+    else
+        echo "Lambda function failed with return code: $LAMBDA_RETURN_CODE"
+    fi
+    cat $OUTPUT_FILE
+
 
 get-initial-deploy-var:
   #!/usr/bin/env bash

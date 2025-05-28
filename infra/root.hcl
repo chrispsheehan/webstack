@@ -32,6 +32,11 @@ locals {
   lambda_bucket     = "${local.s3_bucket_base}-lambda"
   web_bucket        = "${local.s3_bucket_base}-web"
   jobs_state_bucket = "${local.s3_bucket_base}-jobs-state"
+
+  lambda_name               = local.environment == "prod" ? local.project_name : "${local.environment}-${local.project_name}"
+  lambda_api_name           = "${local.lambda_name}-api"
+  lambda_auth_name          = "${local.lambda_name}-auth"
+  lambda_cost_explorer_name = "${local.lambda_name}-cost-explorer"
 }
 
 terraform {
@@ -117,19 +122,22 @@ inputs = merge(
   local.global_vars.inputs,
   local.environment_vars.inputs,
   {
-    domain              = local.domain
-    api_key_ssm         = local.api_key_ssm
-    aws_account_id      = local.aws_account_id
-    aws_region          = local.aws_region
-    project_name        = local.project_name
-    environment         = local.environment
-    github_repo         = local.github_repo
-    deploy_role_name    = local.deploy_role_name
-    deploy_environments = [local.environment]
-    state_bucket        = local.state_bucket
-    state_lock_table    = local.state_lock_table
-    lambda_bucket       = local.lambda_bucket
-    web_bucket          = local.web_bucket
-    jobs_state_bucket   = local.jobs_state_bucket
+    domain                    = local.domain
+    api_key_ssm               = local.api_key_ssm
+    aws_account_id            = local.aws_account_id
+    aws_region                = local.aws_region
+    project_name              = local.project_name
+    environment               = local.environment
+    github_repo               = local.github_repo
+    deploy_role_name          = local.deploy_role_name
+    deploy_environments       = [local.environment]
+    state_bucket              = local.state_bucket
+    state_lock_table          = local.state_lock_table
+    lambda_bucket             = local.lambda_bucket
+    web_bucket                = local.web_bucket
+    jobs_state_bucket         = local.jobs_state_bucket
+    lambda_api_name           = local.lambda_api_name
+    lambda_auth_name          = local.lambda_auth_name
+    lambda_cost_explorer_name = local.lambda_cost_explorer_name
   }
 )

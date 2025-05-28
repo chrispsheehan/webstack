@@ -1,21 +1,20 @@
-
 resource "aws_iam_role" "lambda_cost_explorer_role" {
-  name               = "${local.lambda_cost_explorer_name}-lambda-role"
+  name               = "${var.lambda_cost_explorer_name}-lambda-role"
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
 resource "aws_iam_policy" "cost_explorer_logs_access_policy" {
-  name   = "${local.lambda_cost_explorer_name}-logs-access-policy"
+  name   = "${var.lambda_cost_explorer_name}-logs-access-policy"
   policy = data.aws_iam_policy_document.cost_explorer_logs_policy.json
 }
 
 resource "aws_iam_policy" "cost_explorer_policy" {
-  name   = "${local.lambda_cost_explorer_name}-cost-explorer-policy"
+  name   = "${var.lambda_cost_explorer_name}-cost-explorer-policy"
   policy = data.aws_iam_policy_document.cost_explorer_policy.json
 }
 
 resource "aws_iam_policy" "cost_explorer_s3_policy" {
-  name   = "${local.lambda_cost_explorer_name}-s3-access-policy"
+  name   = "${var.lambda_cost_explorer_name}-s3-access-policy"
   policy = data.aws_iam_policy_document.cost_explorer_s3_policy.json
 }
 
@@ -35,7 +34,7 @@ resource "aws_iam_role_policy_attachment" "cost_explorer_s3_policy_attachment" {
 }
 
 resource "aws_lambda_function" "cost_explorer" {
-  function_name = local.lambda_cost_explorer_name
+  function_name = var.lambda_cost_explorer_name
   handler       = "lambda_handler.handler"
   runtime       = local.lambda_runtime
   role          = aws_iam_role.lambda_cost_explorer_role.arn
@@ -76,4 +75,24 @@ resource "aws_s3_bucket_public_access_block" "this" {
 resource "aws_s3_bucket_policy" "this" {
   bucket = aws_s3_bucket.state_results.id
   policy = data.aws_iam_policy_document.state_results_access.json
+}
+
+resource "aws_cloudwatch_event_rule" "daily_trigger" {
+  name                = "${var.lambda_cost_explorer_name}-daily-trigger"
+  description         = "Triggers the Lambda function daily at 3:00 AM UTC"
+  schedule_expression = "cron(0 3 * * ? *)"
+}
+
+resource "aws_cloudwatch_event_target" "cost_explorer_lambda_target" {
+  rule      = aws_cloudwatch_event_rule.daily_trigger.name
+  target_id = var.lambda_cost_explorer_name
+  arn       = aws_lambda_function.cost_explorer.arn
+}
+
+resource "aws_lambda_permission" "cost_explorer_allow_eventbridge" {
+  statement_id  = "AllowExecutionFromEventBridge"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.cost_explorer.function_name
+  principal     = "events.amazonaws.com"
+  source_arn    = aws_cloudwatch_event_rule.daily_trigger.arn
 }

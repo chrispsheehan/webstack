@@ -44,8 +44,21 @@ variable "api_lambda_zip" {
   default     = "api.zip"
 }
 
+variable "lambda_api_name" {
+  type = string
+}
+
 variable "auth_lambda_zip" {
   description = "Lambda auth code (zipped) to be deployed"
   type        = string
   default     = "auth.zip"
+}
+
+variable "lambda_auth_name" {
+  type = string
+}
+
+variable "jobs_state_bucket" {
+  description = "S3 bucket store results state"
+  type        = string
 }
