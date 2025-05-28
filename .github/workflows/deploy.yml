@@ -93,6 +93,8 @@ jobs:
     needs:
       - oidc
     runs-on: ubuntu-latest
+    outputs:
+      lambda_cost_explorer_name: ${{ steps.get_jobs_vars.outputs.lambda_cost_explorer_name}}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -109,10 +111,36 @@ jobs:
 
       - name: Deploy jobs
         uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
-        id: api_action
+        id: jobs_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/jobs
+
+      - name: Get jobs function names
+        id: get_jobs_vars
+        env:
+          TG_OUTPUTS: ${{ steps.jobs_action.outputs.tg_outputs  }}
+        run: |
+          echo "lambda_cost_explorer_name=$(echo $TG_OUTPUTS | jq -r '.lambda_cost_explorer_name.value')" >> $GITHUB_OUTPUT
+
+  jobs-trigger:
+    environment:
+      name: ${{ inputs.environment }}
+    needs:
+      - jobs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
+
+      - name: Trigger cost explorer lambda
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
+        env:
+          LAMBDA_NAME: ${{ needs.jobs.outputs.lambda_cost_explorer_name }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: lambda-invoke
 
   frontend:
     environment:
