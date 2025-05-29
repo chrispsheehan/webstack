@@ -1,4 +1,6 @@
 ---
+import RenderData from "./RenderData";
+
 const githubRepo =
   import.meta.env.PUBLIC_GITHUB_REPO ?? "chrispsheehan/webstack";
 ---
@@ -16,4 +18,5 @@ const githubRepo =
       alt="Webstack Workflow Status"
     />
   </a> -->
+  <RenderData client:load />
 </section>

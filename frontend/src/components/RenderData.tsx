@@ -53,7 +53,7 @@ export default function RenderCostData() {
 
   return (
     <section id="cost-report">
-      <h2>💰 AWS Cost Report</h2>
+      <h3>💰 AWS Running cost</h3>
       <ul>
         <li>
           <strong>Daily:</strong>{" "}
