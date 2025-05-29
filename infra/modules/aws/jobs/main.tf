@@ -73,6 +73,8 @@ resource "aws_s3_bucket_public_access_block" "this" {
 }
 
 resource "aws_s3_bucket_policy" "this" {
+  depends_on = [aws_iam_role.lambda_cost_explorer_role]
+
   bucket = aws_s3_bucket.state_results.id
   policy = data.aws_iam_policy_document.state_results_access.json
 }
