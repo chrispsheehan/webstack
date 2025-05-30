@@ -13,25 +13,13 @@ data "aws_iam_policy_document" "assume_role" {
   }
 }
 
-data "aws_iam_policy_document" "cost_explorer_s3_policy" {
+data "aws_iam_policy_document" "cost_explorer_iam_policy" {
   statement {
+    sid = "AllowLambdaCloudwatchLogGroupPut"
+
     actions = [
       "logs:CreateLogStream",
       "logs:PutLogEvents"
-    ]
-
-    effect = "Allow"
-
-    resources = [
-      "arn:aws:s3:::${var.jobs_state_bucket}"
-    ]
-  }
-}
-
-data "aws_iam_policy_document" "cost_explorer_logs_policy" {
-  statement {
-    actions = [
-      "s3:PutObject"
     ]
 
     effect = "Allow"
@@ -41,10 +29,10 @@ data "aws_iam_policy_document" "cost_explorer_logs_policy" {
       "${aws_cloudwatch_log_group.lambda_cost_explorer_group.arn}:*"
     ]
   }
-}
 
-data "aws_iam_policy_document" "cost_explorer_policy" {
   statement {
+    sid = "AllowLambdaCostExplorerGet"
+
     effect = "Allow"
 
     actions = [
@@ -53,16 +41,16 @@ data "aws_iam_policy_document" "cost_explorer_policy" {
 
     resources = ["*"]
   }
-}
 
-data "aws_iam_policy_document" "state_results_access" {
   statement {
+    sid = "AllowCostExplorerLambdaPutStateS3Object"
+
     effect = "Allow"
 
     principals {
       type = "AWS"
       identifiers = [
-        aws_iam_role.lambda_cost_explorer_role.arn
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.lambda_cost_explorer_name}"
       ]
     }
 
@@ -77,12 +65,14 @@ data "aws_iam_policy_document" "state_results_access" {
   }
 
   statement {
+    sid = "AllowAPILambdaGetStateS3Object"
+
     effect = "Allow"
 
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.lambda_api_name}-lambda-role"
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/${var.lambda_api_name}"
       ]
     }
 
