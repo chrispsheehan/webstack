@@ -87,11 +87,28 @@ jobs:
         run: |
           echo "api_invoke_domain=$(echo $TG_OUTPUTS | jq -r '.api_invoke_domain.value')" >> $GITHUB_OUTPUT
 
-  jobs:
+  state:
     environment:
       name: ${{ inputs.environment }}
     needs:
       - oidc
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
+
+      - name: Deploy state
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{inputs.environment}}/aws/state
+
+  jobs:
+    environment:
+      name: ${{ inputs.environment }}
+    needs:
+      - state
     runs-on: ubuntu-latest
     outputs:
       lambda_cost_explorer_name: ${{ steps.get_jobs_vars.outputs.lambda_cost_explorer_name}}

@@ -70,6 +70,20 @@ jobs:
           tg_directory: infra/live/${{inputs.environment}}/aws/jobs
           tg_action: destroy
 
+  state:
+    environment:
+      name: ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Destroy state
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{inputs.environment}}/aws/state
+          tg_action: destroy
+
   security:
     environment:
       name: ${{ inputs.environment }}
