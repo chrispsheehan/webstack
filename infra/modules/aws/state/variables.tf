@@ -5,12 +5,12 @@ variable "aws_account_id" {
 
 variable "lambda_api_name" {
   description = "Name of API lambda"
-  type = string
+  type        = string
 }
 
 variable "lambda_cost_explorer_name" {
   description = "Name of cost explorer lambda"
-  type = string
+  type        = string
 }
 
 variable "jobs_state_bucket" {

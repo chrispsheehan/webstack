@@ -26,7 +26,7 @@ variable "cost_explorer_lambda_zip" {
 
 variable "lambda_cost_explorer_name" {
   description = "Name of cost explorer lambda"
-  type = string
+  type        = string
 }
 
 variable "jobs_state_bucket" {
