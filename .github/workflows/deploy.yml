@@ -129,7 +129,7 @@ jobs:
       - name: Trigger cost explorer lambda
         uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
-          LAMBDA_NAME: ${{ needs.jobs.outputs.lambda_cost_explorer_name }}
+          LAMBDA_NAME: ${{ steps.get_jobs_vars.outputs.lambda_cost_explorer_name }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: lambda-invoke
