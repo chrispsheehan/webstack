@@ -126,9 +126,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Destroy code_bucket
+      - name: Destroy code
         uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{inputs.environment}}/aws/code_bucket
+          tg_directory: infra/live/${{inputs.environment}}/aws/code
           tg_action: destroy
