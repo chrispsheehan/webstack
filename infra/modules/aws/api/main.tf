@@ -1,5 +1,5 @@
 resource "aws_iam_role" "lambda_auth_role" {
-  name               = "${var.lambda_auth_name}-lambda-role"
+  name               = var.lambda_auth_name
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 
@@ -49,7 +49,7 @@ resource "aws_cloudwatch_log_group" "lambda_auth_group" {
 }
 
 resource "aws_iam_role" "lambda_api_role" {
-  name               = "${var.lambda_api_name}-lambda-role"
+  name               = var.lambda_api_name
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
 }
 

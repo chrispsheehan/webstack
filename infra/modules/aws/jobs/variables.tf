@@ -1,13 +1,3 @@
-variable "aws_account_id" {
-  description = "AWS account id resources are deployed to"
-  type        = string
-}
-
-variable "aws_region" {
-  description = "AWS region resources are deployed to"
-  type        = string
-}
-
 variable "environment" {
   description = "Name of environment i.e. dev, prod etc"
   type        = string
@@ -34,12 +24,9 @@ variable "cost_explorer_lambda_zip" {
   default     = "cost_explorer.zip"
 }
 
-variable "lambda_api_name" {
-  type = string
-}
-
 variable "lambda_cost_explorer_name" {
-  type = string
+  description = "Name of cost explorer lambda"
+  type        = string
 }
 
 variable "jobs_state_bucket" {

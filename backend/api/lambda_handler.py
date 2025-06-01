@@ -12,7 +12,7 @@ def handler(event, context):
         return respond(200, {"message": "healthy"})
 
     if path == '/render':
-        return respond(200, {"ok": False})
+        return respond(200, {"ok": True})
 
     if path == '/cost-report':
         try:

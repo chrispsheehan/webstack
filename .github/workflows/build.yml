@@ -41,15 +41,15 @@ jobs:
 
       - name: Deploy code buckets
         uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
-        id: code_bucket_action
+        id: code_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{ inputs.environment }}/aws/code_bucket
+          tg_directory: infra/live/${{ inputs.environment }}/aws/code
 
       - name: Get bucket names
         id: get_bucket_names
         env:
-          TG_OUTPUTS: ${{ steps.code_bucket_action.outputs.tg_outputs  }}
+          TG_OUTPUTS: ${{ steps.code_action.outputs.tg_outputs  }}
         run: |
           echo "bucket_web=$(echo $TG_OUTPUTS | jq -r '.bucket_web.value')" >> $GITHUB_OUTPUT
           echo "bucket_lambda=$(echo $TG_OUTPUTS | jq -r '.bucket_lambda.value')" >> $GITHUB_OUTPUT
