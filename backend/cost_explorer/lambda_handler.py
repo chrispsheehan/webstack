@@ -54,12 +54,20 @@ def handler(event, context):
             Filter=cost_filter,
         )
 
-        monthly_resp = ce.get_cost_and_usage(
-            TimePeriod={"Start": str(month_start), "End": str(today)},
-            Granularity="MONTHLY",
-            Metrics=metrics,
-            Filter=cost_filter,
-        )
+        if month_start < today:
+            # Safe to query
+            monthly_resp = ce.get_cost_and_usage(
+                TimePeriod={
+                    'Start': str(month_start),
+                    'End': str(today)
+                },
+                Granularity='MONTHLY',
+                Metrics=metrics,
+                Filter=cost_filter
+            )
+        else:
+            # First day of month — nothing to report yet
+            monthly_resp = {"ResultsByTime": [{"Total": {m: {"Amount": "0", "Unit": "USD"} for m in metrics}}]}
 
         prev_month_resp = ce.get_cost_and_usage(
             TimePeriod={
