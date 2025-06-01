@@ -28,6 +28,15 @@ lambda-invoke:
         echo "Lambda function failed with return code: $LAMBDA_RETURN_CODE"
     fi
     cat $OUTPUT_FILE
+    LAMBDA_STATUS_CODE=$(jq -r '.statusCode // empty' "$OUTPUT_FILE")
+
+    if [ "$LAMBDA_STATUS_CODE" = "200" ]; then
+        echo "✅ Lambda function completed successfully."
+        exit 0
+    else
+        echo "❌ Lambda function failed or returned non-200 status code: $LAMBDA_STATUS_CODE"
+        exit 1
+    fi
 
 
 get-initial-deploy-var:
