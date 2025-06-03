@@ -76,7 +76,7 @@ resource "aws_wafv2_web_acl" "dist_waf" {
 
 resource "aws_s3_bucket" "state_results" {
   bucket        = var.jobs_state_bucket
-  force_destroy = false
+  force_destroy = true
 }
 
 resource "aws_s3_bucket_public_access_block" "this" {
