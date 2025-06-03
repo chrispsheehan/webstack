@@ -6,10 +6,6 @@ data "aws_s3_bucket" "website_files" {
   bucket = var.web_bucket
 }
 
-data "aws_s3_bucket" "data_files" {
-  bucket = var.jobs_state_bucket
-}
-
 data "aws_ssm_parameter" "api_key" {
   name = var.api_key_ssm
 }
