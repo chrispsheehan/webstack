@@ -124,8 +124,8 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   origin {
-    domain_name              = data.aws_s3_bucket.data_files.bucket_regional_domain_name
-    origin_id                = data.aws_s3_bucket.data_files.bucket_regional_domain_name
+    domain_name              = aws_s3_bucket.state_results.bucket_regional_domain_name
+    origin_id                = aws_s3_bucket.state_results.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
 
@@ -171,7 +171,7 @@ resource "aws_cloudfront_distribution" "this" {
 
   ordered_cache_behavior {
     path_pattern           = "/data/*"
-    target_origin_id       = data.aws_s3_bucket.data_files.bucket_regional_domain_name
+    target_origin_id       = aws_s3_bucket.state_results.bucket_regional_domain_name
     viewer_protocol_policy = "redirect-to-https"
 
     allowed_methods = ["GET", "HEAD"]
