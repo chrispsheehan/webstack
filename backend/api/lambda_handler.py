@@ -28,9 +28,7 @@ def get_latest_cost_report():
     if not bucket_name:
         raise ValueError("❌ REPORT_BUCKET environment variable is not set.")
 
-    # Yesterday's date (since the report is saved daily)
-    yesterday = datetime.now(timezone.utc).date() - timedelta(days=1)
-    key = f"cost-explorer/reports/{yesterday.strftime('%Y-%m-%d')}.json"
+    key = f"cost-explorer/data.json"
 
     obj = s3.get_object(Bucket=bucket_name, Key=key)
     body = obj["Body"].read().decode("utf-8")
