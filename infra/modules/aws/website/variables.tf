@@ -59,3 +59,8 @@ variable "jobs_state_bucket" {
   description = "S3 bucket store results state"
   type        = string
 }
+
+variable "lambda_cost_explorer_name" {
+  description = "Name of cost explorer lambda"
+  type        = string
+}
