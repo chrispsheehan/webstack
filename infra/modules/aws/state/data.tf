@@ -63,7 +63,7 @@ data "aws_iam_policy_document" "s3_state_access_policy" {
     condition {
       test     = "StringLike"
       variable = "AWS:SourceArn"
-      values   = [
+      values = [
         "arn:aws:cloudfront::${var.aws_account_id}:distribution/*"
       ]
     }
