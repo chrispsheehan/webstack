@@ -34,29 +34,13 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
           tg_directory: infra/live/${{inputs.environment}}/aws/oidc
 
-  security:
-    environment:
-      name: ${{ inputs.environment }}
-    needs: oidc
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.version }}
-
-      - name: Deploy security
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{inputs.environment}}/aws/security
-
   backend:
     environment:
       name: ${{ inputs.environment }}
     outputs:
       api_invoke_domain: ${{ steps.get_vars.outputs.api_invoke_domain }}
     needs:
-      - security
+      - oidc
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
