@@ -175,12 +175,6 @@ check-version:
     fi
 
 
-s3-clear-bucket:
-    #!/usr/bin/env bash
-    set -euo pipefail
-    aws s3 rm s3://$BUCKET_NAME --recursive
-
-
 frontend-upload:
     #!/usr/bin/env bash
     set -euo pipefail
