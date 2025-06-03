@@ -1,3 +1,15 @@
+resource "random_string" "api_key" {
+  length  = 32
+  special = false
+}
+
+resource "aws_ssm_parameter" "api_key_ssm" {
+  name        = var.api_key_ssm
+  description = "API key for ${var.project_name}"
+  type        = "SecureString"
+  value       = random_string.api_key.result
+}
+
 resource "aws_iam_role" "lambda_auth_role" {
   name               = var.lambda_auth_name
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
