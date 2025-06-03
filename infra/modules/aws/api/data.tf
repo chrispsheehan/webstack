@@ -4,10 +4,6 @@ data "aws_route53_zone" "this" {
   name = var.root_domain
 }
 
-data "aws_ssm_parameter" "api_key_ssm" {
-  name = var.api_key_ssm
-}
-
 data "aws_iam_policy_document" "assume_role" {
   statement {
     effect = "Allow"
@@ -27,7 +23,7 @@ data "aws_iam_policy_document" "apikey_policy" {
       "ssm:GetParameter"
     ]
     resources = [
-      data.aws_ssm_parameter.api_key_ssm.arn
+      aws_ssm_parameter.api_key_ssm.arn
     ]
   }
 }

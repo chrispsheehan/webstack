@@ -3,5 +3,5 @@ include {
 }
 
 terraform {
-  source = "../../../../modules/aws/code_bucket"
+  source = "../../../../modules/aws/code_buckets"
 }

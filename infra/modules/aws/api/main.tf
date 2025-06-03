@@ -1,3 +1,15 @@
+resource "random_string" "api_key" {
+  length  = 32
+  special = false
+}
+
+resource "aws_ssm_parameter" "api_key_ssm" {
+  name        = var.api_key_ssm
+  description = "API key for ${var.project_name}"
+  type        = "SecureString"
+  value       = random_string.api_key.result
+}
+
 resource "aws_iam_role" "lambda_auth_role" {
   name               = var.lambda_auth_name
   assume_role_policy = data.aws_iam_policy_document.assume_role.json
@@ -37,7 +49,7 @@ resource "aws_lambda_function" "auth" {
 
   environment {
     variables = {
-      API_KEY_SSM_PARAM = data.aws_ssm_parameter.api_key_ssm.name
+      API_KEY_SSM_PARAM = aws_ssm_parameter.api_key_ssm.name
       API_RESOURCE      = "arn:aws:execute-api:${var.aws_region}:${data.aws_caller_identity.current.account_id}:${aws_apigatewayv2_stage.this.api_id}/${aws_apigatewayv2_stage.this.name}/GET/*"
     }
   }
