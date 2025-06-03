@@ -69,13 +69,6 @@ jobs:
           tg_directory: infra/live/${{inputs.environment}}/aws/jobs
           tg_action: destroy
 
-      - name: Destroy state
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{inputs.environment}}/aws/state
-          tg_action: destroy
-
   build:
     environment:
       name: ${{ inputs.environment }}
