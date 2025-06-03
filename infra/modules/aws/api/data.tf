@@ -23,7 +23,7 @@ data "aws_iam_policy_document" "apikey_policy" {
       "ssm:GetParameter"
     ]
     resources = [
-      data.aws_ssm_parameter.api_key_ssm.arn
+      aws_ssm_parameter.api_key_ssm.arn
     ]
   }
 }
