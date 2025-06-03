@@ -70,54 +70,6 @@ jobs:
         run: |
           echo "api_invoke_domain=$(echo $TG_OUTPUTS | jq -r '.api_invoke_domain.value')" >> $GITHUB_OUTPUT
 
-  background-jobs:
-    environment:
-      name: ${{ inputs.environment }}
-    needs:
-      - backend
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.version }}
-
-      - name: Check Lambda version exists
-        uses: chrispsheehan/just-aws-oidc-action@0.1.1
-        env:
-          BUCKET_NAME: ${{ vars.LAMBDA_S3_BUCKET }}
-          VERSION: ${{ inputs.version }}
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: check-version
-
-      - name: Deploy jobs
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
-        id: jobs_action
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{inputs.environment}}/aws/jobs
-
-      - name: Deploy state
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{inputs.environment}}/aws/state
-
-      - name: Get jobs function names
-        id: get_jobs_vars
-        env:
-          TG_OUTPUTS: ${{ steps.jobs_action.outputs.tg_outputs  }}
-        run: |
-          echo "lambda_cost_explorer_name=$(echo $TG_OUTPUTS | jq -r '.lambda_cost_explorer_name.value')" >> $GITHUB_OUTPUT
-
-      - name: Trigger cost explorer lambda
-        uses: chrispsheehan/just-aws-oidc-action@0.1.1
-        env:
-          LAMBDA_NAME: ${{ steps.get_jobs_vars.outputs.lambda_cost_explorer_name }}
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: lambda-invoke
-
   frontend:
     environment:
       name: ${{ inputs.environment }}
@@ -176,3 +128,46 @@ jobs:
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: frontend-refresh
+
+  jobs:
+    environment:
+      name: ${{ inputs.environment }}
+    needs:
+      - frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
+
+      - name: Check Lambda version exists
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
+        env:
+          BUCKET_NAME: ${{ vars.LAMBDA_S3_BUCKET }}
+          VERSION: ${{ inputs.version }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: check-version
+
+      - name: Deploy jobs
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        id: jobs_action
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          tg_directory: infra/live/${{inputs.environment}}/aws/jobs
+
+      - name: Get jobs function names
+        id: get_jobs_vars
+        env:
+          TG_OUTPUTS: ${{ steps.jobs_action.outputs.tg_outputs  }}
+        run: |
+          echo "lambda_cost_explorer_name=$(echo $TG_OUTPUTS | jq -r '.lambda_cost_explorer_name.value')" >> $GITHUB_OUTPUT
+
+      - name: Trigger cost explorer lambda
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
+        env:
+          LAMBDA_NAME: ${{ steps.get_jobs_vars.outputs.lambda_cost_explorer_name }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: lambda-invoke
+        
