@@ -76,7 +76,7 @@ resource "aws_wafv2_web_acl" "dist_waf" {
 
 resource "aws_cloudfront_origin_access_control" "oac" {
   name                              = "oac-${local.reference}"
-  description                       = "OAC Policy for ${local.reference}"
+  description                       = "OAC Policy for ${local.reference} static web files"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
