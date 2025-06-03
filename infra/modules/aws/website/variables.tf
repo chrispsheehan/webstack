@@ -54,3 +54,8 @@ variable "web_bucket" {
   description = "The name of the s3 bucket hosting static web files"
   type        = string
 }
+
+variable "jobs_state_bucket" {
+  description = "S3 bucket store results state"
+  type        = string
+}

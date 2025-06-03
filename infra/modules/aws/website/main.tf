@@ -106,6 +106,12 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   origin {
+    domain_name              = data.aws_s3_bucket.data_files.bucket_regional_domain_name
+    origin_id                = data.aws_s3_bucket.data_files.bucket_regional_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
+  }
+
+  origin {
     domain_name = var.api_invoke_domain
     origin_id   = local.api_origin
     origin_path = "/${var.environment}"
@@ -143,6 +149,27 @@ resource "aws_cloudfront_distribution" "this" {
       restriction_type = "none"
       locations        = []
     }
+  }
+
+  ordered_cache_behavior {
+    path_pattern           = "/data/*"
+    target_origin_id       = data.aws_s3_bucket.data_files.bucket_regional_domain_name
+    viewer_protocol_policy = "redirect-to-https"
+
+    allowed_methods = ["GET", "HEAD"]
+    cached_methods  = ["GET", "HEAD"]
+
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
+
+    min_ttl     = 0
+    default_ttl = 60
+    max_ttl     = 60
+    compress    = true
   }
 
   ordered_cache_behavior {
