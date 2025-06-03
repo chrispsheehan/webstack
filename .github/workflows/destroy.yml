@@ -62,34 +62,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Deploy state
-        id: state_action
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{inputs.environment}}/aws/state
-
-      - name: Get state bucket name
-        id: get_state_bucket_name
-        env:
-          TG_OUTPUTS: ${{ steps.state_action.outputs.tg_outputs  }}
-        run: |
-          echo "jobs_state_bucket=$(echo $TG_OUTPUTS | jq -r '.jobs_state_bucket.value')" >> $GITHUB_OUTPUT
-
       - name: Destroy jobs
         uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/jobs
           tg_action: destroy
-
-      - name: Remove state bucket files
-        uses: chrispsheehan/just-aws-oidc-action@0.1.1
-        env:
-          BUCKET_NAME: ${{ steps.get_state_bucket_name.outputs.jobs_state_bucket }}
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: s3-clear-bucket
 
       - name: Destroy state
         uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
