@@ -26,7 +26,7 @@ export default function RenderCostData() {
 
     async function fetchCosts() {
       try {
-        const res = await fetch("/api/cost-report");
+        const res = await fetch("/data/cost-explorer/data.json");
         if (!res.ok) {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
