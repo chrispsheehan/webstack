@@ -36,13 +36,16 @@ export default function RenderCostData() {
       <h3>💰 AWS Running cost</h3>
       <ul>
         <li>
-          <strong>Daily:</strong> {formatUSD(costs.daily.Total.UnblendedCost.Amount)}
+          <strong>Daily:</strong>{" "}
+          {formatUSD(costs.daily.Total.UnblendedCost.Amount)}
         </li>
         <li>
-          <strong>Month to Date:</strong> {formatUSD(costs.month_to_date.Total.UnblendedCost.Amount)}
+          <strong>Month to Date:</strong>{" "}
+          {formatUSD(costs.month_to_date.Total.UnblendedCost.Amount)}
         </li>
         <li>
-          <strong>Previous Month:</strong> {formatUSD(costs.previous_month.data.Total.UnblendedCost.Amount)}
+          <strong>Previous Month:</strong>{" "}
+          {formatUSD(costs.previous_month.data.Total.UnblendedCost.Amount)}
         </li>
       </ul>
     </section>
