@@ -13,4 +13,4 @@ jobs:
     secrets: inherit
     with:
       environment: prod
-      version: 0.7.1
+      version: 0.8.0
