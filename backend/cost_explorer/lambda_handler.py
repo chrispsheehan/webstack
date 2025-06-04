@@ -90,7 +90,7 @@ def handler(event, context):
             },
         }
 
-        key_name = f"cost-explorer/data.json"
+        key_name = f"data/cost-explorer/data.json"
 
         s3.put_object(
             Bucket=bucket_name,
