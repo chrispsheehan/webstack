@@ -75,6 +75,7 @@ jobs:
       name: ${{ inputs.environment }}
     needs:
       - backend
+      - jobs
     runs-on: ubuntu-latest
     outputs:
       domain: ${{ steps.get_vars.outputs.domain }}
@@ -132,8 +133,10 @@ jobs:
   jobs:
     environment:
       name: ${{ inputs.environment }}
+    # needs:
+    #   - frontend
     needs:
-      - frontend
+      - oidc
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -163,10 +166,10 @@ jobs:
         run: |
           echo "lambda_cost_explorer_name=$(echo $TG_OUTPUTS | jq -r '.lambda_cost_explorer_name.value')" >> $GITHUB_OUTPUT
 
-      - name: Trigger cost explorer lambda
-        uses: chrispsheehan/just-aws-oidc-action@0.1.1
-        env:
-          LAMBDA_NAME: ${{ steps.get_jobs_vars.outputs.lambda_cost_explorer_name }}
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: lambda-invoke
+      # - name: Trigger cost explorer lambda
+      #   uses: chrispsheehan/just-aws-oidc-action@0.1.1
+      #   env:
+      #     LAMBDA_NAME: ${{ steps.get_jobs_vars.outputs.lambda_cost_explorer_name }}
+      #   with:
+      #     aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+      #     just_action: lambda-invoke
