@@ -121,25 +121,7 @@ jobs:
           echo "domain=$(echo $TG_OUTPUTS | jq -r '.domain.value')" >> $GITHUB_OUTPUT
           echo "distribution_id=$(echo $TG_OUTPUTS | jq -r '.distribution_id.value')" >> $GITHUB_OUTPUT
 
-  frontend-refresh:
-    environment:
-      name: ${{ inputs.environment }}
-    needs:
-      - frontend
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.version }}
-      - name: Run cloudfront invalidation
-        uses: chrispsheehan/just-aws-oidc-action@0.1.1
-        env:
-          DISTRIBUTION_ID: ${{ needs.frontend.outputs.distribution_id }}
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: frontend-refresh
-
-  data-refresh:
+  refresh:
     environment:
       name: ${{ inputs.environment }}
     needs:
@@ -150,6 +132,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ inputs.version }}
+
       - name: Trigger cost explorer lambda
         uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
@@ -157,3 +140,11 @@ jobs:
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: lambda-invoke
+
+      - name: Run cloudfront invalidation
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
+        env:
+          DISTRIBUTION_ID: ${{ needs.frontend.outputs.distribution_id }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: frontend-refresh
