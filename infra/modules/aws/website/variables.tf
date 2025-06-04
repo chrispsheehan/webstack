@@ -23,16 +23,6 @@ variable "domain" {
   type        = string
 }
 
-variable "api_invoke_domain" {
-  description = "Url to forward /api traffic to"
-  type        = string
-}
-
-variable "api_key_ssm" {
-  description = "Name of ssm param used to store api key"
-  type        = string
-}
-
 variable "log_retention_days" {
   description = "How long to keep cloudfront s3 logs before deletion"
   type        = number

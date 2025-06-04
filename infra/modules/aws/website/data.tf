@@ -6,10 +6,6 @@ data "aws_s3_bucket" "website_files" {
   bucket = var.web_bucket
 }
 
-data "aws_ssm_parameter" "api_key" {
-  name = var.api_key_ssm
-}
-
 data "aws_iam_policy_document" "website_files_policy" {
 
   version = "2012-10-17"
