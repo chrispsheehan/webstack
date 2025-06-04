@@ -26,8 +26,6 @@ jobs:
     environment:
       name: ${{ inputs.environment }}
     runs-on: ubuntu-latest
-    env:
-      TF_VAR_api_invoke_domain: "does.not.exist"
     steps:
       - uses: actions/checkout@v4
 
