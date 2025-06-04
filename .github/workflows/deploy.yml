@@ -37,45 +37,11 @@ jobs:
   backend:
     environment:
       name: ${{ inputs.environment }}
-    outputs:
-      api_invoke_domain: ${{ steps.get_vars.outputs.api_invoke_domain }}
     needs:
       - oidc
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.version }}
-
-      - name: Check Lambda version exists
-        uses: chrispsheehan/just-aws-oidc-action@0.1.1
-        env:
-          BUCKET_NAME: ${{ vars.LAMBDA_S3_BUCKET }}
-          VERSION: ${{ inputs.version }}
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: check-version
-
-      - name: Deploy api
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
-        id: api_action
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{inputs.environment}}/aws/api
-
-      - name: Get API invoke url
-        id: get_vars
-        env:
-          TG_OUTPUTS: ${{ steps.api_action.outputs.tg_outputs  }}
-        run: |
-          echo "api_invoke_domain=$(echo $TG_OUTPUTS | jq -r '.api_invoke_domain.value')" >> $GITHUB_OUTPUT
-
-  background-jobs:
-    environment:
-      name: ${{ inputs.environment }}
-    needs:
-      - backend
-    runs-on: ubuntu-latest
+    outputs:
+      lambda_cost_explorer_name: ${{ steps.get_jobs_vars.outputs.lambda_cost_explorer_name }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -97,26 +63,12 @@ jobs:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/jobs
 
-      - name: Deploy state
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          tg_directory: infra/live/${{inputs.environment}}/aws/state
-
       - name: Get jobs function names
         id: get_jobs_vars
         env:
           TG_OUTPUTS: ${{ steps.jobs_action.outputs.tg_outputs  }}
         run: |
           echo "lambda_cost_explorer_name=$(echo $TG_OUTPUTS | jq -r '.lambda_cost_explorer_name.value')" >> $GITHUB_OUTPUT
-
-      - name: Trigger cost explorer lambda
-        uses: chrispsheehan/just-aws-oidc-action@0.1.1
-        env:
-          LAMBDA_NAME: ${{ steps.get_jobs_vars.outputs.lambda_cost_explorer_name }}
-        with:
-          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-          just_action: lambda-invoke
 
   frontend:
     environment:
@@ -154,7 +106,6 @@ jobs:
         uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
         id: terragrunt_action
         env:
-          TF_VAR_api_invoke_domain: ${{ needs.backend.outputs.api_invoke_domain }}
           TF_VAR_initial_deploy: ${{ steps.get-init-deployment.outputs.just_outputs }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
@@ -169,10 +120,30 @@ jobs:
           echo "domain=$(echo $TG_OUTPUTS | jq -r '.domain.value')" >> $GITHUB_OUTPUT
           echo "distribution_id=$(echo $TG_OUTPUTS | jq -r '.distribution_id.value')" >> $GITHUB_OUTPUT
 
+  refresh:
+    environment:
+      name: ${{ inputs.environment }}
+    needs:
+      - frontend
+      - backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
+
+      - name: Trigger cost explorer lambda
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
+        env:
+          LAMBDA_NAME: ${{ needs.backend.outputs.lambda_cost_explorer_name }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: lambda-invoke
+
       - name: Run cloudfront invalidation
         uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
-          DISTRIBUTION_ID: ${{ steps.get_vars.outputs.distribution_id }}
+          DISTRIBUTION_ID: ${{ needs.frontend.outputs.distribution_id }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: frontend-refresh

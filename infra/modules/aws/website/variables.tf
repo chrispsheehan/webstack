@@ -23,16 +23,6 @@ variable "domain" {
   type        = string
 }
 
-variable "api_invoke_domain" {
-  description = "Url to forward /api traffic to"
-  type        = string
-}
-
-variable "api_key_ssm" {
-  description = "Name of ssm param used to store api key"
-  type        = string
-}
-
 variable "log_retention_days" {
   description = "How long to keep cloudfront s3 logs before deletion"
   type        = number
@@ -52,5 +42,15 @@ variable "deploy_version" {
 
 variable "web_bucket" {
   description = "The name of the s3 bucket hosting static web files"
+  type        = string
+}
+
+variable "jobs_state_bucket" {
+  description = "S3 bucket store results state"
+  type        = string
+}
+
+variable "lambda_cost_explorer_name" {
+  description = "Name of cost explorer lambda"
   type        = string
 }

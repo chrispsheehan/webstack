@@ -74,9 +74,27 @@ resource "aws_wafv2_web_acl" "dist_waf" {
   }
 }
 
+resource "aws_s3_bucket" "state_results" {
+  bucket        = var.jobs_state_bucket
+  force_destroy = true
+}
+
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket                  = aws_s3_bucket.state_results.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_policy" "this" {
+  bucket = aws_s3_bucket.state_results.id
+  policy = data.aws_iam_policy_document.s3_state_access_policy.json
+}
+
 resource "aws_cloudfront_origin_access_control" "oac" {
   name                              = "oac-${local.reference}"
-  description                       = "OAC Policy for ${local.reference}"
+  description                       = "OAC Policy for ${local.reference} static web files"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
@@ -106,23 +124,9 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   origin {
-    domain_name = var.api_invoke_domain
-    origin_id   = local.api_origin
-    origin_path = "/${var.environment}"
-
-    custom_header {
-      name  = "Authorization"
-      value = data.aws_ssm_parameter.api_key.value
-    }
-
-    custom_origin_config {
-      http_port                = 80
-      https_port               = 443
-      origin_protocol_policy   = "https-only"
-      origin_ssl_protocols     = ["TLSv1.2"]
-      origin_keepalive_timeout = 5
-      origin_read_timeout      = 30
-    }
+    domain_name              = aws_s3_bucket.state_results.bucket_regional_domain_name
+    origin_id                = aws_s3_bucket.state_results.bucket_regional_domain_name
+    origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
 
   custom_error_response {
@@ -146,24 +150,23 @@ resource "aws_cloudfront_distribution" "this" {
   }
 
   ordered_cache_behavior {
-    path_pattern           = "/api/*"
-    target_origin_id       = local.api_origin
+    path_pattern           = "/data/*"
+    target_origin_id       = aws_s3_bucket.state_results.bucket_regional_domain_name
     viewer_protocol_policy = "redirect-to-https"
 
-    allowed_methods = ["GET", "HEAD", "OPTIONS"]
+    allowed_methods = ["GET", "HEAD"]
     cached_methods  = ["GET", "HEAD"]
 
     forwarded_values {
-      query_string = true
+      query_string = false
       cookies {
         forward = "none"
       }
-      headers = ["Origin"]
     }
 
     min_ttl     = 0
-    default_ttl = 0
-    max_ttl     = 0
+    default_ttl = 60
+    max_ttl     = 60
     compress    = true
   }
 
