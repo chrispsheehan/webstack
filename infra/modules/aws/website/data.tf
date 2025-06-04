@@ -1,3 +1,7 @@
+data "aws_iam_role" "lambda_cost_explorer_role" {
+  name = var.lambda_cost_explorer_name
+}
+
 data "aws_route53_zone" "this" {
   name = var.root_domain
 }
@@ -60,7 +64,7 @@ data "aws_iam_policy_document" "s3_state_access_policy" {
     principals {
       type = "AWS"
       identifiers = [
-        "arn:aws:iam::${var.aws_account_id}:role/${var.lambda_cost_explorer_name}"
+        data.aws_iam_role.lambda_cost_explorer_role.arn
       ]
     }
 

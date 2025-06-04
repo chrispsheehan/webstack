@@ -42,6 +42,7 @@ jobs:
     environment:
       name: ${{ inputs.environment }}
     runs-on: ubuntu-latest
+    needs: frontend
     steps:
       - uses: actions/checkout@v4
 
