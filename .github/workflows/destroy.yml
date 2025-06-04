@@ -31,8 +31,6 @@ jobs:
 
       - name: Destroy frontend
         uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
-        env:
-          TF_VAR_api_invoke_domain: no.com
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website

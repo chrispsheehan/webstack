@@ -106,7 +106,6 @@ jobs:
         uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
         id: terragrunt_action
         env:
-          TF_VAR_api_invoke_domain: ${{ needs.backend.outputs.api_invoke_domain }}
           TF_VAR_initial_deploy: ${{ steps.get-init-deployment.outputs.just_outputs }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
