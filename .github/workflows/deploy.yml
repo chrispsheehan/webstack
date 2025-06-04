@@ -37,11 +37,11 @@ jobs:
   backend:
     environment:
       name: ${{ inputs.environment }}
-    # needs:
-    #   - frontend
     needs:
       - oidc
     runs-on: ubuntu-latest
+    outputs:
+      lambda_cost_explorer_name: ${{ steps.get_jobs_vars.outputs.lambda_cost_explorer_name }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -69,14 +69,6 @@ jobs:
           TG_OUTPUTS: ${{ steps.jobs_action.outputs.tg_outputs  }}
         run: |
           echo "lambda_cost_explorer_name=$(echo $TG_OUTPUTS | jq -r '.lambda_cost_explorer_name.value')" >> $GITHUB_OUTPUT
-
-      # - name: Trigger cost explorer lambda
-      #   uses: chrispsheehan/just-aws-oidc-action@0.1.1
-      #   env:
-      #     LAMBDA_NAME: ${{ steps.get_jobs_vars.outputs.lambda_cost_explorer_name }}
-      #   with:
-      #     aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
-      #     just_action: lambda-invoke
 
   frontend:
     environment:
@@ -129,10 +121,40 @@ jobs:
           echo "domain=$(echo $TG_OUTPUTS | jq -r '.domain.value')" >> $GITHUB_OUTPUT
           echo "distribution_id=$(echo $TG_OUTPUTS | jq -r '.distribution_id.value')" >> $GITHUB_OUTPUT
 
+  frontend-refresh:
+    environment:
+      name: ${{ inputs.environment }}
+    needs:
+      - frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
       - name: Run cloudfront invalidation
         uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
-          DISTRIBUTION_ID: ${{ steps.get_vars.outputs.distribution_id }}
+          DISTRIBUTION_ID: ${{ needs.frontend.outputs.distribution_id }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: frontend-refresh
+
+
+  data-refresh:
+    environment:
+      name: ${{ inputs.environment }}
+    needs:
+      - frontend
+      - backend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.version }}
+      - name: Trigger cost explorer lambda
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
+        env:
+          LAMBDA_NAME: ${{ needs.backend.outputs.lambda_cost_explorer_name }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: lambda-invoke
