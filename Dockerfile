@@ -5,5 +5,4 @@ COPY . .
 
 RUN pip install --no-cache-dir boto3 python-dotenv
 
-# CMD ["python", "local_runner.py"]
-# CMD ["ls", "-r"]
+CMD ["python", "local_runner.py"]
