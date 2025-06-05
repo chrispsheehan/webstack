@@ -283,7 +283,7 @@ start:
     source venv/bin/activate
     pip install python-dotenv boto3
 
-    ENVIRONMENT_NAME=prod PROJECT_NAME=chrispsheehan-webstack python backend/local_runner.py
+    ENVIRONMENT_NAME=prod PROJECT_NAME=chrispsheehan-webstack PUBLIC_DIR=${PWD}/frontend/public python backend/local_runner.py
 
     # npm i --prefix frontend
     # docker compose up -d

@@ -1,6 +1,6 @@
 services:
-  api:
-    container_name: api
+  backend:
+    container_name: backend
     build:
       context: ./backend
       dockerfile: ../Dockerfile
