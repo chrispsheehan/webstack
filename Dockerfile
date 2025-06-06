@@ -1,7 +1,7 @@
 FROM python:3.13-slim
 
 WORKDIR /app
-COPY . .
+COPY ./backend .
 
 RUN pip install --no-cache-dir boto3 python-dotenv watchdog
 
