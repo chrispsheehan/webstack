@@ -35,27 +35,48 @@ resource "aws_acm_certificate_validation" "web" {
   validation_record_fqdns = [for record in aws_route53_record.web_validatation : record.fqdn]
 }
 
-resource "aws_s3_bucket" "state_results" {
-  bucket        = var.jobs_state_bucket
-  force_destroy = true
-}
+resource "aws_wafv2_web_acl" "dist_waf" {
+  provider = aws.domain_aws_region
 
-resource "aws_s3_bucket_public_access_block" "this" {
-  bucket                  = aws_s3_bucket.state_results.id
-  block_public_acls       = true
-  block_public_policy     = true
-  ignore_public_acls      = true
-  restrict_public_buckets = true
-}
+  name  = "acl-waf-${local.reference}"
+  scope = "CLOUDFRONT"
 
-resource "aws_s3_bucket_policy" "this" {
-  bucket = aws_s3_bucket.state_results.id
-  policy = data.aws_iam_policy_document.s3_state_access_policy.json
+  default_action {
+    allow {}
+  }
+
+  rule {
+    name     = "rate-1k"
+    priority = 1
+
+    action {
+      block {}
+    }
+
+    statement {
+      # Rate-limit clients to 1000 requests for every 5 minutes.
+      rate_based_statement {
+        limit              = 1000
+        aggregate_key_type = "IP"
+      }
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = false
+      metric_name                = "rate-limit"
+      sampled_requests_enabled   = false
+    }
+  }
+
+  visibility_config {
+    cloudwatch_metrics_enabled = false
+    metric_name                = "default"
+    sampled_requests_enabled   = false
+  }
 }
 
 resource "aws_cloudfront_origin_access_control" "oac" {
   name                              = "oac-${local.reference}"
-  description                       = "OAC Policy for ${local.reference} static web files"
+  description                       = "OAC Policy for ${local.reference}"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
@@ -63,12 +84,13 @@ resource "aws_cloudfront_origin_access_control" "oac" {
 
 resource "aws_cloudfront_distribution" "this" {
   provider   = aws.domain_aws_region
-  depends_on = [aws_s3_bucket.website_logs]
+  depends_on = [aws_wafv2_web_acl.dist_waf, aws_s3_bucket.website_logs]
 
   enabled         = true
   is_ipv6_enabled = true
   aliases         = local.domain_records
 
+  web_acl_id          = aws_wafv2_web_acl.dist_waf.arn
   default_root_object = local.root_file
 
   logging_config {
@@ -88,6 +110,7 @@ resource "aws_cloudfront_distribution" "this" {
     origin_id                = aws_s3_bucket.state_results.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
+
 
   custom_error_response {
     //needs to be better
@@ -129,6 +152,7 @@ resource "aws_cloudfront_distribution" "this" {
     max_ttl     = 60
     compress    = true
   }
+
 
   default_cache_behavior {
     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
