@@ -3,7 +3,7 @@ import sys
 import boto3
 import json
 
-from cost_explorer.cost_report import generate_cost_report
+from cost_report import generate_cost_report
 
 ce = boto3.client("ce")
 s3 = boto3.client("s3")
