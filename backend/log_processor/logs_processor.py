@@ -6,7 +6,7 @@ ce = boto3.client("ce")
 
 logs_bucket_name = os.environ["S3_LOGS_BUCKET"]
 
-def logs_report(project_name: str, environment_name: str):
+def logs_report():
 
     return {
         "this": 1

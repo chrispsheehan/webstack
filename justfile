@@ -300,3 +300,12 @@ start:
     docker compose up -d
     docker compose logs -f &
     npm run dev --prefix frontend
+
+
+run-log-proc:
+    #!/usr/bin/env bash
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install python-dotenv boto3
+    export S3_LOGS_BUCKET=chrispsheehan.com.logs
+    python backend/temp.py
