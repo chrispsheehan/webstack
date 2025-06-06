@@ -14,20 +14,25 @@ def logs_report():
     paginator = s3.get_paginator('list_objects_v2')
     page_iterator = paginator.paginate(Bucket=logs_bucket_name)
 
+    first_file_downloaded = False
+
     for page in page_iterator:
         contents = page.get('Contents', [])
-        if contents:
-            # Get the first file (top file in current listing)
-            obj = contents[0]
+        for i, obj in enumerate(contents):
             key = obj['Key']
             local_path = os.path.join(tmp_dir, os.path.basename(key))
 
-            # Download the file to the temporary directory
-            s3.download_file(logs_bucket_name, key, local_path)
-            downloaded_files.append(local_path)
-        break  # Only process the first page and first file
+            if not first_file_downloaded:
+                s3.download_file(logs_bucket_name, key, local_path)
+                downloaded_files.append(local_path)
+                first_file_downloaded = True
+                print(f"Downloaded top file: {key}")
+            else:
+                s3.download_file(logs_bucket_name, key, local_path)
+                downloaded_files.append(local_path)
+                print(f"Downloaded: {key}")
 
     return {
-        "downloaded_files": downloaded_files,
+        "downloaded_files": downloaded_files, # this it array of ['/Users/chrissheehan/git/chrispsheehan/webstack/backend/tmp/E2O3LP7E8DA6KI.2025-05-22-00.e97db493.gz']
         "total_files": len(downloaded_files)
     }
