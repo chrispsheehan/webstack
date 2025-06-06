@@ -14,3 +14,4 @@ package/
 build/
 venv
 __pycache__
+frontend/public/data/*/*.json

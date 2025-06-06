@@ -1,13 +1,12 @@
 FROM python:3.13-slim
 
 WORKDIR /app
+COPY ./backend .
 
-COPY . .
+RUN pip install --no-cache-dir boto3 python-dotenv watchdog
 
-RUN pip install Flask boto3
+CMD ["watchmedo", "auto-restart", "--patterns=cost_report.py;local_runner.py", "--", "python", "local_runner.py"]
 
-RUN pip install -r api/requirements.txt
+# watchmedo auto-restart --patterns=cost_report.py;local_runner.py -- python local_runner.py
 
-EXPOSE 8080
-
-CMD ["python", "local_adaptor.py"]
+# watchmedo auto-restart --patterns="backend/*.py" -- python backend/local_runner.py

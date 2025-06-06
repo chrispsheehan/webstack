@@ -271,13 +271,31 @@ backend-build:
         echo "✅ Done: backend/$app_name.zip"
     done
 
+seed:
+    #!/usr/bin/env bash
+    set -e
+
+    RED='\033[0;31m'
+    NC='\033[0m' # No Color
+
+    echo -e "${RED}⚠️  WARNING: This operation will call the AWS Cost Explorer API and may incur charges beyond the free tier.${NC}"
+    read -p "Do you want to continue? (y/n): " confirm
+    if [[ "$confirm" != "y" ]]; then
+      echo "❌ Aborted."
+      exit 1
+    fi
+
+    python3 -m venv venv
+    source venv/bin/activate
+    pip install python-dotenv boto3
+    export ENVIRONMENT_NAME=prod
+    export PROJECT_NAME=chrispsheehan-webstack 
+    export PUBLIC_DIR=${PWD}/frontend/public 
+    python backend/local_runner.py
+
 
 start:
     #!/usr/bin/env bash
-    if ! docker info > /dev/null 2>&1; then
-      echo "Error: Docker daemon is not running. Please start Docker and try again." >&2
-      exit 1
-    fi
     npm i --prefix frontend
     docker compose up -d
     docker compose logs -f &
