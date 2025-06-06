@@ -79,9 +79,22 @@ resource "aws_s3_bucket" "state_results" {
   force_destroy = true
 }
 
+resource "aws_s3_bucket_public_access_block" "this" {
+  bucket                  = aws_s3_bucket.state_results.id
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket_policy" "this" {
+  bucket = aws_s3_bucket.state_results.id
+  policy = data.aws_iam_policy_document.s3_state_access_policy.json
+}
+
 resource "aws_cloudfront_origin_access_control" "oac" {
   name                              = "oac-${local.reference}"
-  description                       = "OAC Policy for ${local.reference}"
+  description                       = "OAC Policy for ${local.reference} static web files"
   origin_access_control_origin_type = "s3"
   signing_behavior                  = "always"
   signing_protocol                  = "sigv4"
@@ -115,7 +128,6 @@ resource "aws_cloudfront_distribution" "this" {
     origin_id                = aws_s3_bucket.state_results.bucket_regional_domain_name
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
-
 
   custom_error_response {
     //needs to be better
@@ -157,7 +169,6 @@ resource "aws_cloudfront_distribution" "this" {
     max_ttl     = 60
     compress    = true
   }
-
 
   default_cache_behavior {
     cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6"
