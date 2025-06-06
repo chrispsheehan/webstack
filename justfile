@@ -308,4 +308,5 @@ run-log-proc:
     source venv/bin/activate
     pip install python-dotenv boto3
     export S3_LOGS_BUCKET=chrispsheehan.com.logs
+    export LOG_PROCESSOR_OUT=${PWD}/tmp
     python backend/temp.py
