@@ -5,5 +5,3 @@ load_dotenv()
 
 if __name__ == "__main__":
     report = logs_report()
-
-    print(report)
