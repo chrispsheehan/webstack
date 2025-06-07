@@ -37,10 +37,8 @@ def download_logs(bucket_name: str, destination_dir: str, max_files: int = None)
 
             s3.download_file(bucket_name, key, local_path)
             downloaded_files.append(local_path)
-            print(f"✔️ Downloaded: {key}")
 
             if max_files and len(downloaded_files) >= max_files:
-                print(f"✅ Download complete: {len(downloaded_files)} files")
                 return downloaded_files
 
     print(f"✅ Download complete: {len(downloaded_files)} files")
@@ -62,7 +60,6 @@ def unzip_logs(gz_files: list[str], destination_dir: str):
             shutil.copyfileobj(f_in, f_out)
 
         unzipped_files.append(output_path)
-        print(f"✔️ Unzipped: {gz_file} → {output_path}")
 
     print(f"✅ Unzip complete: {len(unzipped_files)} files")
     return unzipped_files
