@@ -13,10 +13,8 @@ def handler(event, context):
     try:
         # ─── ENV VARS ────────────────────────────────────────────────────────────
         bucket_name = os.environ["REPORT_BUCKET"]
-        project_name = os.environ["PROJECT_NAME"]
-        environment_name = os.environ["ENVIRONMENT_NAME"]
 
-        combined = generate_cost_report(project_name, environment_name)
+        combined = generate_cost_report()
 
         key_name = f"data/cost-explorer/data.json"
 

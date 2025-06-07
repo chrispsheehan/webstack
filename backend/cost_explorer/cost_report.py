@@ -5,7 +5,15 @@ from datetime import datetime, timedelta
 ce = boto3.client("ce")
 
 
-def generate_cost_report(project_name: str, environment_name: str):
+project_name = os.environ["PROJECT_NAME"]
+environment_name = os.environ["ENVIRONMENT_NAME"]
+
+if not project_name:
+    raise ValueError("PROJECT_NAME must be set")
+if not environment_name:
+    raise ValueError("ENVIRONMENT_NAME must be set")
+
+def generate_cost_report():
     metrics = ["BlendedCost", "UnblendedCost"]
     today = datetime.utcnow().date()
     yesterday = today - timedelta(days=1)

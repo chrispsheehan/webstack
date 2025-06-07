@@ -290,7 +290,9 @@ seed:
     pip install python-dotenv boto3
     export ENVIRONMENT_NAME=prod
     export PROJECT_NAME=chrispsheehan-webstack 
-    export PUBLIC_DIR=${PWD}/frontend/public 
+    export PUBLIC_DIR=${PWD}/frontend/public
+    export S3_LOGS_BUCKET=chrispsheehan.com.logs
+    export LOG_PROCESSOR_OUT=${PWD}/tmp
     python backend/local_runner.py
 
 

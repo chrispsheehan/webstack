@@ -4,17 +4,14 @@ import gzip
 import re
 from collections import defaultdict
 
-# Environment variables
 logs_bucket_name = os.environ["S3_LOGS_BUCKET"]
 out_path = os.environ.get("LOG_PROCESSOR_OUT", "/tmp")
 
-# Safety checks
 if not logs_bucket_name:
     raise ValueError("S3_LOGS_BUCKET must be set")
 if not out_path:
     raise ValueError("LOG_PROCESSOR_OUT must be set")
 
-# AWS S3 client
 s3 = boto3.client('s3')
 
 # Simple bot pattern
