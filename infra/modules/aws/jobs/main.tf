@@ -88,6 +88,7 @@ resource "aws_lambda_function" "log_processor" {
 
   environment {
     variables = {
+      REPORT_BUCKET  = var.jobs_state_bucket
       S3_LOGS_BUCKET = var.web_logs_bucket
     }
   }

@@ -74,6 +74,21 @@ data "aws_iam_policy_document" "log_processor_iam_policy" {
   }
 
   statement {
+    sid = "AllowLambdaLogProcessorS3Put"
+
+    effect = "Allow"
+
+    actions = [
+      "s3:PutObject",
+      "s3:PutObjectAcl"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.jobs_state_bucket}/*"
+    ]
+  }
+
+  statement {
     sid = "AllowLambdaCloudfrontLogS3List"
 
     effect = "Allow"
