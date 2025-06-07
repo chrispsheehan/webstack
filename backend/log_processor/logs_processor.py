@@ -2,6 +2,8 @@ import os
 import boto3
 import gzip
 import shutil
+import re
+from collections import defaultdict
 
 logs_bucket_name = os.environ["S3_LOGS_BUCKET"]
 out_path = os.environ["LOG_PROCESSOR_OUT"]
@@ -16,10 +18,12 @@ unzip_dir = os.path.join(out_path, "unzip")
 
 s3 = boto3.client('s3')
 
+
 def download_logs(bucket_name: str, destination_dir: str, max_files: int = None):
     """Downloads CloudFront log files from S3 to local directory."""
     os.makedirs(destination_dir, exist_ok=True)
 
+    print(f"📥 Starting download from bucket: {bucket_name}")
     downloaded_files = []
 
     paginator = s3.get_paginator('list_objects_v2')
@@ -33,11 +37,13 @@ def download_logs(bucket_name: str, destination_dir: str, max_files: int = None)
 
             s3.download_file(bucket_name, key, local_path)
             downloaded_files.append(local_path)
-            print(f"Downloaded: {key}")
+            print(f"✔️ Downloaded: {key}")
 
             if max_files and len(downloaded_files) >= max_files:
+                print(f"✅ Download complete: {len(downloaded_files)} files")
                 return downloaded_files
 
+    print(f"✅ Download complete: {len(downloaded_files)} files")
     return downloaded_files
 
 
@@ -45,6 +51,7 @@ def unzip_logs(gz_files: list[str], destination_dir: str):
     """Unzips .gz log files to a subdirectory under the given destination."""
     os.makedirs(destination_dir, exist_ok=True)
 
+    print(f"📂 Starting unzip of {len(gz_files)} files...")
     unzipped_files = []
 
     for gz_file in gz_files:
@@ -55,15 +62,13 @@ def unzip_logs(gz_files: list[str], destination_dir: str):
             shutil.copyfileobj(f_in, f_out)
 
         unzipped_files.append(output_path)
-        print(f"Unzipped: {gz_file} → {output_path}")
+        print(f"✔️ Unzipped: {gz_file} → {output_path}")
 
+    print(f"✅ Unzip complete: {len(unzipped_files)} files")
     return unzipped_files
 
 
-import re
-from collections import defaultdict
-
-# Simple regex pattern for common bot substrings in user agents (case-insensitive)
+# Regex pattern for bots (simple heuristic)
 BOT_PATTERN = re.compile(r"bot|spider|crawl|slurp|fetch|python-requests|curl|wget|monitor", re.I)
 
 def collate_unique_visitors_filtered(unzipped_files: list[str]) -> dict:
@@ -73,13 +78,15 @@ def collate_unique_visitors_filtered(unzipped_files: list[str]) -> dict:
     """
     visitors_by_date = defaultdict(set)
 
+    print(f"📊 Starting log collation across {len(unzipped_files)} files...")
+
     for file_path in unzipped_files:
         with open(file_path, 'r') as f:
             for line in f:
                 if line.startswith('#'):
                     continue
                 parts = line.strip().split('\t')
-                if len(parts) < 12:  # Ensure User-Agent field exists
+                if len(parts) < 12:
                     continue
 
                 date = parts[0]
@@ -87,20 +94,18 @@ def collate_unique_visitors_filtered(unzipped_files: list[str]) -> dict:
                 user_agent = parts[11]
 
                 if BOT_PATTERN.search(user_agent):
-                    # Skip bots
-                    continue
+                    continue  # Skip bots
 
                 visitors_by_date[date].add(visitor_id)
 
-    return {date: len(visitors) for date, visitors in visitors_by_date.items()}
+    result = {date: len(visitors) for date, visitors in visitors_by_date.items()}
+    print(f"✅ Collation complete. Days found: {len(result)}")
+    return result
 
 
 def logs_report():
     downloaded_files = download_logs(logs_bucket_name, out_path)
     unzipped_files = unzip_logs(downloaded_files, unzip_dir)
     unique_visitors = collate_unique_visitors_filtered(unzipped_files)
-    print(unique_visitors)
+    print(f"\n📈 Unique visitors summary:\n{unique_visitors}")
     return unique_visitors
-
-
-# {'2025-05-23': 64, '2025-05-24': 33, '2025-05-25': 51, '2025-05-26': 43, '2025-05-27': 58, '2025-05-28': 67, '2025-05-29': 81, '2025-05-30': 53, '2025-05-31': 63, '2025-06-01': 80, '2025-06-02': 87, '2025-06-03': 55, '2025-06-04': 63, '2025-06-05': 51, '2025-06-06': 58}
