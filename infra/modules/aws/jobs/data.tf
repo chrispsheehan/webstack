@@ -74,6 +74,20 @@ data "aws_iam_policy_document" "log_processor_iam_policy" {
   }
 
   statement {
+    sid = "AllowLambdaCloudfrontLogS3List"
+
+    effect = "Allow"
+
+    actions = [
+      "s3:ListBucket"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.web_logs_bucket}"
+    ]
+  }
+
+  statement {
     sid = "AllowLambdaCloudfrontLogS3Get"
 
     effect = "Allow"
