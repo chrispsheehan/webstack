@@ -146,7 +146,7 @@ resource "aws_s3_bucket_policy" "website_files_policy" {
 }
 
 resource "aws_s3_bucket" "website_logs" {
-  bucket        = "${var.domain}.logs"
+  bucket        = var.web_logs_bucket
   force_destroy = true
 
   lifecycle {

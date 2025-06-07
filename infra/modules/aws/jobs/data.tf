@@ -55,3 +55,35 @@ data "aws_iam_policy_document" "cost_explorer_iam_policy" {
     ]
   }
 }
+
+data "aws_iam_policy_document" "log_processor_iam_policy" {
+  statement {
+    sid = "AllowLambdaCloudwatchLogGroupPut"
+
+    actions = [
+      "logs:CreateLogStream",
+      "logs:PutLogEvents"
+    ]
+
+    effect = "Allow"
+
+    resources = [
+      "${aws_cloudwatch_log_group.lambda_log_processor_group.arn}",
+      "${aws_cloudwatch_log_group.lambda_log_processor_group.arn}:*"
+    ]
+  }
+
+  statement {
+    sid = "AllowLambdaCloudfrontLogS3Get"
+
+    effect = "Allow"
+
+    actions = [
+      "s3:GetObject"
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.web_logs_bucket}/*"
+    ]
+  }
+}

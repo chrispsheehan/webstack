@@ -31,12 +31,12 @@ locals {
   s3_bucket_base    = local.environment == "dev" ? "${local.base_reference}-${local.environment}" : "${local.base_reference}-ci"
   lambda_bucket     = "${local.s3_bucket_base}-lambda"
   web_bucket        = "${local.s3_bucket_base}-web"
+  web_logs_bucket   = "${local.domain}.logs"
   jobs_state_bucket = "${local.s3_bucket_base}-jobs-state"
 
   lambda_name               = local.environment == "prod" ? local.project_name : "${local.environment}-${local.project_name}"
-  lambda_api_name           = "${local.lambda_name}-api"
-  lambda_auth_name          = "${local.lambda_name}-auth"
   lambda_cost_explorer_name = "${local.lambda_name}-cost-explorer"
+  lambda_log_processor_name = "${local.lambda_name}-log-processor"
 }
 
 terraform {
@@ -135,9 +135,9 @@ inputs = merge(
     state_lock_table          = local.state_lock_table
     lambda_bucket             = local.lambda_bucket
     web_bucket                = local.web_bucket
+    web_logs_bucket           = local.web_logs_bucket
     jobs_state_bucket         = local.jobs_state_bucket
-    lambda_api_name           = local.lambda_api_name
-    lambda_auth_name          = local.lambda_auth_name
     lambda_cost_explorer_name = local.lambda_cost_explorer_name
+    lambda_log_processor_name = local.lambda_log_processor_name
   }
 )
