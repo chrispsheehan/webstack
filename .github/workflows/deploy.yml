@@ -42,6 +42,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       lambda_cost_explorer_name: ${{ steps.get_jobs_vars.outputs.lambda_cost_explorer_name }}
+      lambda_log_processor_name: ${{ steps.get_jobs_vars.outputs.lambda_log_processor_name }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -136,6 +137,14 @@ jobs:
         uses: chrispsheehan/just-aws-oidc-action@0.1.1
         env:
           LAMBDA_NAME: ${{ needs.backend.outputs.lambda_cost_explorer_name }}
+        with:
+          aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
+          just_action: lambda-invoke
+
+      - name: Trigger log processor lambda
+        uses: chrispsheehan/just-aws-oidc-action@0.1.1
+        env:
+          LAMBDA_NAME: ${{ needs.backend.outputs.lambda_log_processor_name }}
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           just_action: lambda-invoke
