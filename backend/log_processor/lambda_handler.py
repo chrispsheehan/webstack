@@ -1,3 +1,4 @@
+import os
 import sys
 import boto3
 import json
@@ -9,9 +10,21 @@ s3 = boto3.client("s3")
 
 def handler(event, context):
     try:
+        bucket_name = os.environ["REPORT_BUCKET"]
+
         combined = logs_report()
 
-        return {"statusCode": 200, "body": json.dumps(combined)}
+        key_name = f"data/log-processor/data.json"
+
+        s3.put_object(
+            Bucket=bucket_name,
+            Key=key_name,
+            Body=json.dumps(combined, indent=2),
+            ContentType="application/json",
+        )
+
+        print(f"✅ Log processed and saved to s3://{bucket_name}/{key_name}")
+        return {"statusCode": 200, "body": json.dumps({"s3_path": f"s3://{bucket_name}/{key_name}"})}
 
     # ─── ERROR HANDLING ────────────────────────────────────────────────────────
     except Exception as exc:
