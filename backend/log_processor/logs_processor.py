@@ -1,37 +1,38 @@
 import os
 import boto3
 import gzip
-import shutil
 import re
 from collections import defaultdict
 
+# Environment variables
 logs_bucket_name = os.environ["S3_LOGS_BUCKET"]
-out_path = os.environ["LOG_PROCESSOR_OUT"]
+out_path = os.environ.get("LOG_PROCESSOR_OUT", "/tmp")
 
+# Safety checks
 if not logs_bucket_name:
-    raise ValueError("S3_LOGS_BUCKET must be set as an environment variable")
-
+    raise ValueError("S3_LOGS_BUCKET must be set")
 if not out_path:
-    raise ValueError("LOG_PROCESSOR_OUT must be set as an environment variable")
+    raise ValueError("LOG_PROCESSOR_OUT must be set")
 
-unzip_dir = os.path.join(out_path, "unzip")
-
+# AWS S3 client
 s3 = boto3.client('s3')
 
+# Simple bot pattern
+BOT_PATTERN = re.compile(r"bot|spider|crawl|slurp|fetch|python-requests|curl|wget|monitor", re.I)
 
-def download_logs(bucket_name: str, destination_dir: str, max_files: int = None):
-    """Downloads CloudFront log files from S3 to local directory."""
+
+def download_logs(bucket_name: str, destination_dir: str, max_files: int = None) -> list[str]:
+    """Download CloudFront log .gz files to a local directory."""
     os.makedirs(destination_dir, exist_ok=True)
+    downloaded_files = []
 
     print(f"📥 Starting download from bucket: {bucket_name}")
-    downloaded_files = []
 
     paginator = s3.get_paginator('list_objects_v2')
     page_iterator = paginator.paginate(Bucket=bucket_name)
 
     for page in page_iterator:
-        contents = page.get('Contents', [])
-        for obj in contents:
+        for obj in page.get('Contents', []):
             key = obj['Key']
             local_path = os.path.join(destination_dir, os.path.basename(key))
 
@@ -39,70 +40,44 @@ def download_logs(bucket_name: str, destination_dir: str, max_files: int = None)
             downloaded_files.append(local_path)
 
             if max_files and len(downloaded_files) >= max_files:
+                print(f"✅ Downloaded {len(downloaded_files)} files (max limit reached)")
                 return downloaded_files
 
     print(f"✅ Download complete: {len(downloaded_files)} files")
     return downloaded_files
 
 
-def unzip_logs(gz_files: list[str], destination_dir: str):
-    """Unzips .gz log files to a subdirectory under the given destination."""
-    os.makedirs(destination_dir, exist_ok=True)
+def parse_gz_file_stream(file_path: str, visitor_tracker: defaultdict):
+    """Parse a single .gz log file and update visitor tracker."""
+    with gzip.open(file_path, 'rt') as f:  # 'rt' = read text mode
+        for line in f:
+            if line.startswith('#'):
+                continue
+            parts = line.strip().split('\t')
+            if len(parts) < 12:
+                continue
 
-    print(f"📂 Starting unzip of {len(gz_files)} files...")
-    unzipped_files = []
+            date = parts[0]
+            visitor_id = parts[4]
+            user_agent = parts[11]
 
-    for gz_file in gz_files:
-        filename = os.path.basename(gz_file).replace('.gz', '')
-        output_path = os.path.join(destination_dir, filename)
+            if BOT_PATTERN.search(user_agent):
+                continue  # Skip bots
 
-        with gzip.open(gz_file, 'rb') as f_in, open(output_path, 'wb') as f_out:
-            shutil.copyfileobj(f_in, f_out)
-
-        unzipped_files.append(output_path)
-
-    print(f"✅ Unzip complete: {len(unzipped_files)} files")
-    return unzipped_files
+            visitor_tracker[date].add(visitor_id)
 
 
-# Regex pattern for bots (simple heuristic)
-BOT_PATTERN = re.compile(r"bot|spider|crawl|slurp|fetch|python-requests|curl|wget|monitor", re.I)
+def logs_report(max_files: int = None):
+    """Main function: download logs, parse, and report unique visitors."""
+    downloaded_files = download_logs(logs_bucket_name, out_path, max_files=max_files)
+    visitor_tracker = defaultdict(set)
 
-def collate_unique_visitors_filtered(unzipped_files: list[str]) -> dict:
-    """
-    Parses unzipped CloudFront logs, collates unique visitors per day,
-    ignoring visits from bots (based on User-Agent).
-    """
-    visitors_by_date = defaultdict(set)
+    print(f"📊 Starting log collation...")
 
-    print(f"📊 Starting log collation across {len(unzipped_files)} files...")
+    for gz_file in downloaded_files:
+        parse_gz_file_stream(gz_file, visitor_tracker)
+        os.remove(gz_file)  # Clean up
 
-    for file_path in unzipped_files:
-        with open(file_path, 'r') as f:
-            for line in f:
-                if line.startswith('#'):
-                    continue
-                parts = line.strip().split('\t')
-                if len(parts) < 12:
-                    continue
-
-                date = parts[0]
-                visitor_id = parts[4]
-                user_agent = parts[11]
-
-                if BOT_PATTERN.search(user_agent):
-                    continue  # Skip bots
-
-                visitors_by_date[date].add(visitor_id)
-
-    result = {date: len(visitors) for date, visitors in visitors_by_date.items()}
-    print(f"✅ Collation complete. Days found: {len(result)}")
+    result = {date: len(visitors) for date, visitors in visitor_tracker.items()}
+    print(f"\n📈 Unique visitors summary:\n{result}")
     return result
-
-
-def logs_report():
-    downloaded_files = download_logs(logs_bucket_name, out_path)
-    unzipped_files = unzip_logs(downloaded_files, unzip_dir)
-    unique_visitors = collate_unique_visitors_filtered(unzipped_files)
-    print(f"\n📈 Unique visitors summary:\n{unique_visitors}")
-    return unique_visitors
