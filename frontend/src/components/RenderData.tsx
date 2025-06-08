@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+// import "./UsageSummary.css"; // 👈 CSS in JS or regular CSS file
 
 export default function RenderUsageSummary({ visitDays = 7 }) {
   const [costs, setCosts] = useState(null);
@@ -33,7 +34,7 @@ export default function RenderUsageSummary({ visitDays = 7 }) {
     fetchData();
   }, []);
 
-  if (error) return <p>{error}</p>;
+  if (error) return <p className="error">{error}</p>;
   if (!costs || !visits) return <p>Loading usage data...</p>;
 
   const formatUSD = (amount) =>
@@ -52,30 +53,32 @@ export default function RenderUsageSummary({ visitDays = 7 }) {
     .reduce((sum, [, val]) => sum + val, 0);
 
   return (
-    <section id="usage-summary">
+    <section id="usage-summary" className="usage-summary">
       <h3>📊 Usage Summary</h3>
-      <ul>
-        <li>
-          <strong>Daily Cost:</strong>{" "}
-          {formatUSD(costs.daily.Total.UnblendedCost.Amount)}
-        </li>
-        <li>
-          <strong>Month to Date:</strong>{" "}
-          {formatUSD(costs.month_to_date.Total.UnblendedCost.Amount)}
-        </li>
-        <li>
-          <strong>Previous Month:</strong>{" "}
-          {formatUSD(costs.previous_month.data.Total.UnblendedCost.Amount)}
-        </li>
-        <li>
-          <strong>Latest Visitors ({latestVisit[0]}):</strong>{" "}
-          {latestVisit[1]}
-        </li>
-        <li>
-          <strong>Last {visitDays} Days Total Visitors:</strong>{" "}
-          {recentVisitTotal}
-        </li>
-      </ul>
+      <div className="card-grid">
+        <div className="card">
+          <h4>💰 Daily Cost</h4>
+          <p>{formatUSD(costs.daily.Total.UnblendedCost.Amount)}</p>
+        </div>
+        <div className="card">
+          <h4>📆 Month to Date</h4>
+          <p>{formatUSD(costs.month_to_date.Total.UnblendedCost.Amount)}</p>
+        </div>
+        <div className="card">
+          <h4>📅 Previous Month</h4>
+          <p>{formatUSD(costs.previous_month.data.Total.UnblendedCost.Amount)}</p>
+        </div>
+        <div className="card">
+          <h4>👥 Latest Visitors</h4>
+          <p>
+            {latestVisit[1]} on {latestVisit[0]}
+          </p>
+        </div>
+        <div className="card">
+          <h4>📈 Last {visitDays} Days</h4>
+          <p>{recentVisitTotal} total visitors</p>
+        </div>
+      </div>
     </section>
   );
 }
