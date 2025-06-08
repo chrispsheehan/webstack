@@ -18,6 +18,12 @@ get-git-repo:
 
 lambda-invoke:
     #!/bin/bash
+    set -euo pipefail
+    if [[ -z "$LAMBDA_NAME" ]]; then
+        echo "Error: LAMBDA_NAME environment variable is not set."
+        exit 1
+    fi
+
     OUTPUT_FILE=output.json
     rm -f $OUTPUT_FILE
     RESPONSE=$(aws lambda invoke --function-name $LAMBDA_NAME --region $AWS_REGION --payload "$PAYLOAD" $OUTPUT_FILE)
