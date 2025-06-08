@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
     cost_report_output_path = os.environ.get(
         "OUTPUT_PATH",
-        os.path.join(public_dir, "data", "cost-report", "data.json")
+        os.path.join(public_dir, "data", "cost-explorer", "data.json")
     )
 
     Path(cost_report_output_path).parent.mkdir(parents=True, exist_ok=True)
