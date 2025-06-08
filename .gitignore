@@ -16,3 +16,4 @@ venv
 __pycache__
 frontend/public/data/*/*.json
 tmp
+data
