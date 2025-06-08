@@ -17,3 +17,4 @@ __pycache__
 frontend/public/data/*/*.json
 tmp
 data
+output.json

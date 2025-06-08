@@ -25,6 +25,7 @@ lambda-invoke:
     fi
 
     OUTPUT_FILE=output.json
+    PAYLOAD="{}"
     rm -f $OUTPUT_FILE
     RESPONSE=$(aws lambda invoke --function-name $LAMBDA_NAME --region $AWS_REGION --payload "$PAYLOAD" $OUTPUT_FILE)
     LAMBDA_RETURN_CODE=$(jq -r '.StatusCode' <<< "$RESPONSE")
