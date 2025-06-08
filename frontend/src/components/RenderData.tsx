@@ -16,7 +16,7 @@ export default function RenderUsageSummary({ visitDays = 7 }) {
 
         if (!costRes.ok || !visitRes.ok) {
           throw new Error(
-            `Error fetching data: cost ${costRes.status}, visits ${visitRes.status}`
+            `Error fetching data: cost ${costRes.status}, visits ${visitRes.status}`,
           );
         }
 
@@ -44,7 +44,7 @@ export default function RenderUsageSummary({ visitDays = 7 }) {
     }).format(parseFloat(amount));
 
   const sortedVisits = Object.entries(visits).sort(
-    ([a], [b]) => new Date(b) - new Date(a)
+    ([a], [b]) => new Date(b) - new Date(a),
   );
 
   const latestVisit = sortedVisits[0];
@@ -66,7 +66,9 @@ export default function RenderUsageSummary({ visitDays = 7 }) {
         </div>
         <div className="card">
           <h4>📅 Previous Month</h4>
-          <p>{formatUSD(costs.previous_month.data.Total.UnblendedCost.Amount)}</p>
+          <p>
+            {formatUSD(costs.previous_month.data.Total.UnblendedCost.Amount)}
+          </p>
         </div>
         <div className="card">
           <h4>👥 Latest Visitors</h4>

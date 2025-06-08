@@ -7,9 +7,9 @@ export default defineConfig({
   vite: {
     server: {
       proxy: {
-        '/data': {
-          target: 'http://localhost:4321',
-          rewrite: path => path.replace(/^\/data/, '/public/data'),
+        "/data": {
+          target: "http://localhost:4321",
+          rewrite: (path) => path.replace(/^\/data/, "/public/data"),
         },
       },
     },
