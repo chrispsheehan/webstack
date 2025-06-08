@@ -70,6 +70,7 @@ jobs:
           TG_OUTPUTS: ${{ steps.jobs_action.outputs.tg_outputs  }}
         run: |
           echo "lambda_cost_explorer_name=$(echo $TG_OUTPUTS | jq -r '.lambda_cost_explorer_name.value')" >> $GITHUB_OUTPUT
+          echo "lambda_log_processor_name=$(echo $TG_OUTPUTS | jq -r '.lambda_log_processor_name.value')" >> $GITHUB_OUTPUT
 
   frontend:
     environment:
