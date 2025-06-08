@@ -13,7 +13,7 @@ if __name__ == "__main__":
     if not public_dir:
         raise ValueError("PUBLIC_DIR must be set as an environment variable")
 
-    report = generate_cost_report()
+    cost_report_json = generate_cost_report()
 
     cost_report_output_path = os.environ.get(
         "OUTPUT_PATH",
@@ -23,7 +23,7 @@ if __name__ == "__main__":
     Path(cost_report_output_path).parent.mkdir(parents=True, exist_ok=True)
 
     with open(cost_report_output_path, "w") as f:
-        json.dump(report, f, indent=2)
+        json.dump(cost_report_json, f, indent=2)
 
     print(f"✅ Cost report saved to {cost_report_output_path}")
 
@@ -37,6 +37,6 @@ if __name__ == "__main__":
     Path(log_processor_output_path).parent.mkdir(parents=True, exist_ok=True)
 
     with open(log_processor_output_path, "w") as f:
-        json.dump(report, f, indent=2)
+        json.dump(logs_report_json, f, indent=2)
 
     print(f"✅ Log processor report saved to {log_processor_output_path}")
