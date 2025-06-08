@@ -18,7 +18,14 @@ get-git-repo:
 
 lambda-invoke:
     #!/bin/bash
+    set -euo pipefail
+    if [[ -z "$LAMBDA_NAME" ]]; then
+        echo "Error: LAMBDA_NAME environment variable is not set."
+        exit 1
+    fi
+
     OUTPUT_FILE=output.json
+    PAYLOAD="{}"
     rm -f $OUTPUT_FILE
     RESPONSE=$(aws lambda invoke --function-name $LAMBDA_NAME --region $AWS_REGION --payload "$PAYLOAD" $OUTPUT_FILE)
     LAMBDA_RETURN_CODE=$(jq -r '.StatusCode' <<< "$RESPONSE")
@@ -290,7 +297,9 @@ seed:
     pip install python-dotenv boto3
     export ENVIRONMENT_NAME=prod
     export PROJECT_NAME=chrispsheehan-webstack 
-    export PUBLIC_DIR=${PWD}/frontend/public 
+    export PUBLIC_DIR=${PWD}/frontend/public
+    export S3_LOGS_BUCKET=chrispsheehan.com.logs
+    export LOG_PROCESSOR_OUT=${PWD}/tmp
     python backend/local_runner.py
 
 

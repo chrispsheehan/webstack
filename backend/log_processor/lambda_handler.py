@@ -3,20 +3,18 @@ import sys
 import boto3
 import json
 
-from cost_report import generate_cost_report
+from logs_processor import logs_report
 
-ce = boto3.client("ce")
 s3 = boto3.client("s3")
 
 
 def handler(event, context):
     try:
-        # ─── ENV VARS ────────────────────────────────────────────────────────────
         bucket_name = os.environ["REPORT_BUCKET"]
 
-        combined = generate_cost_report()
+        combined = logs_report()
 
-        key_name = f"data/cost-explorer/data.json"
+        key_name = f"data/log-processor/data.json"
 
         s3.put_object(
             Bucket=bucket_name,
@@ -25,12 +23,12 @@ def handler(event, context):
             ContentType="application/json",
         )
 
-        print(f"✅ Cost report saved to s3://{bucket_name}/{key_name}")
+        print(f"✅ Log processed and saved to s3://{bucket_name}/{key_name}")
         return {"statusCode": 200, "body": json.dumps({"s3_path": f"s3://{bucket_name}/{key_name}"})}
 
     # ─── ERROR HANDLING ────────────────────────────────────────────────────────
     except Exception as exc:
-        error_msg = f"❌ Cost-report Lambda failed: {exc}"
+        error_msg = f"❌ Logs processor Lambda failed: {exc}"
         print(error_msg, file=sys.stderr)
 
         # Return 500 JSON for API Gateway / test invocations

@@ -23,6 +23,11 @@ variable "domain" {
   type        = string
 }
 
+variable "web_logs_bucket" {
+  description = "Web logs bucket name"
+  type        = string
+}
+
 variable "log_retention_days" {
   description = "How long to keep cloudfront s3 logs before deletion"
   type        = number

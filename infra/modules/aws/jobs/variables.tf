@@ -24,6 +24,12 @@ variable "cost_explorer_lambda_zip" {
   default     = "cost_explorer.zip"
 }
 
+variable "log_processor_lambda_zip" {
+  description = "Lambda code (zipped) to be deployed"
+  type        = string
+  default     = "log_processor.zip"
+}
+
 variable "lambda_cost_explorer_name" {
   description = "Name of cost explorer lambda"
   type        = string
@@ -31,5 +37,15 @@ variable "lambda_cost_explorer_name" {
 
 variable "jobs_state_bucket" {
   description = "S3 bucket store results state"
+  type        = string
+}
+
+variable "lambda_log_processor_name" {
+  description = "Name of cost explorer lambda"
+  type        = string
+}
+
+variable "web_logs_bucket" {
+  description = "Web logs bucket name"
   type        = string
 }
