@@ -1,22 +1,30 @@
 ---
-import RenderData from "./RenderData";
-
 const githubRepo =
   import.meta.env.PUBLIC_GITHUB_REPO ?? "chrispsheehan/webstack";
+
+import CostExplorer from "../components/CostExplorer.jsx";
+import Visits from "../components/Visits.jsx";
 ---
 
 <section id="this-site">
   <h2>This Site</h2>
   <p>Built with Astro, deployed to AWS using Terragrunt and Serverless.</p>
+  <CostExplorer costs={costs} />
+  <Visits visits={visits} visitDays={7} />
+</section>
+
+
+
+
+
+
   <!-- <a
-    href={`https://github.com/${githubRepo}/actions/workflows/push_main.yml`}
+    href={`https://github.com/${githubRepo}/actions/workflows/prod_deploy.yml`}
     target="_blank"
     rel="noopener noreferrer"
   >
     <img
-      src={`https://github.com/${githubRepo}/actions/workflows/push_main.yml/badge.svg?`}
+      src={`https://github.com/${githubRepo}/actions/workflows/prod_deploy/badge.svg?`}
       alt="Webstack Workflow Status"
     />
   </a> -->
-  <RenderData client:load />
-</section>
