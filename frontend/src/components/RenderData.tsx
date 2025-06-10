@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 // import "./UsageSummary.css"; // 👈 CSS in JS or regular CSS file
 
+
 export default function RenderUsageSummary({ visitDays = 7 }) {
   const [costs, setCosts] = useState(null);
   const [visits, setVisits] = useState(null);
