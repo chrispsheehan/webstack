@@ -7,6 +7,29 @@ import CostExplorer from "./CostExplorer";
   <h2>This Site</h2>
   <p>Built with Astro, deployed to AWS using Terragrunt and Serverless.</p>
 
-  <Visits client:load />
-  <CostExplorer client:load />
+  <div class="dashboard-row">
+    <Visits client:load />
+    <CostExplorer client:load />
+  </div>
 </section>
+
+<style>
+  .dashboard-row {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+    align-items: flex-start;
+  }
+
+  .dashboard-row > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  @media (max-width: 700px) {
+    .dashboard-row {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  }
+</style>
