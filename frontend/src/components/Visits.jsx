@@ -27,7 +27,7 @@ export default function Visits({ visitDays = 7 }) {
 
   // Convert visits object to sorted array (most recent first)
   const sortedVisits = Object.entries(visits).sort(
-    ([a], [b]) => new Date(b) - new Date(a)
+    ([a], [b]) => new Date(b) - new Date(a),
   );
 
   const latestVisit = sortedVisits[0];
@@ -44,7 +44,8 @@ export default function Visits({ visitDays = 7 }) {
           {latestVisit ? `${latestVisit[1]} on ${latestVisit[0]}` : "N/A"}
         </li>
         <li>
-          <strong>Total Visits (last {visitDays} days):</strong> {recentVisitTotal}
+          <strong>Total Visits (last {visitDays} days):</strong>{" "}
+          {recentVisitTotal}
         </li>
       </ul>
     </div>
