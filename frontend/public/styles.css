@@ -84,18 +84,6 @@ nav a {
   margin-left: 20px;
 }
 
-/* Button */
-.button {
-  padding: 12px 24px;
-  color: var(--color-btn-text);
-  background: var(--color-link);
-  text-decoration: none;
-  border-radius: 6px;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-}
-
 /* Section styling */
 section {
   padding: 24px 24px;
@@ -130,6 +118,3 @@ a {
 a:hover {
   color: var(--vt-c-text-1);
 }
-
-
-
