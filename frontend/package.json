@@ -3,7 +3,7 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "concurrently \"astro dev --port 4321\" \"sleep 2 && open-cli http://localhost:4321\"",
+    "dev": "concurrently \"astro dev --port 4321 --verbose\" \"sleep 2 && open-cli http://localhost:4321\"",
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
