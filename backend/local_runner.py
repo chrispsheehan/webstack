@@ -7,36 +7,37 @@ from cost_explorer.cost_report import generate_cost_report
 
 load_dotenv()
 
-if __name__ == "__main__":
+import os
+import json
+from pathlib import Path
+from dotenv import load_dotenv
+from log_processor.logs_processor import logs_report
+from cost_explorer.cost_report import generate_cost_report
+
+load_dotenv()
+
+
+def write_json_report(report_fn, default_rel_path: str, label: str) -> None:
+    """Generate and write a JSON report to the appropriate output path."""
     public_dir = os.environ.get("PUBLIC_DIR")
-    
     if not public_dir:
         raise ValueError("PUBLIC_DIR must be set as an environment variable")
 
-    cost_report_json = generate_cost_report()
-
-    cost_report_output_path = os.environ.get(
+    output_path = os.environ.get(
         "OUTPUT_PATH",
-        os.path.join(public_dir, "data", "cost-explorer", "data.json")
+        os.path.join(public_dir, "data", default_rel_path, "data.json")
     )
 
-    Path(cost_report_output_path).parent.mkdir(parents=True, exist_ok=True)
+    Path(output_path).parent.mkdir(parents=True, exist_ok=True)
 
-    with open(cost_report_output_path, "w") as f:
-        json.dump(cost_report_json, f, indent=2)
+    report_data = report_fn()
 
-    print(f"✅ Cost report saved to {cost_report_output_path}")
+    with open(output_path, "w") as f:
+        json.dump(report_data, f, indent=2)
 
-    logs_report_json = logs_report()
+    print(f"✅ {label} report saved to {output_path}")
 
-    log_processor_output_path = os.environ.get(
-        "OUTPUT_PATH",
-        os.path.join(public_dir, "data", "log-processor", "data.json")
-    )
 
-    Path(log_processor_output_path).parent.mkdir(parents=True, exist_ok=True)
-
-    with open(log_processor_output_path, "w") as f:
-        json.dump(logs_report_json, f, indent=2)
-
-    print(f"✅ Log processor report saved to {log_processor_output_path}")
+if __name__ == "__main__":
+    write_json_report(generate_cost_report, "cost-explorer", "Cost")
+    write_json_report(logs_report, "log-processor", "Log processor")

@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import os
 import boto3
 import gzip
@@ -18,8 +19,8 @@ s3 = boto3.client('s3')
 BOT_PATTERN = re.compile(r"bot|spider|crawl|slurp|fetch|python-requests|curl|wget|monitor", re.I)
 
 
-def download_logs(bucket_name: str, destination_dir: str, max_files: int = None) -> list[str]:
-    """Download CloudFront log .gz files to a local directory."""
+def download_logs(bucket_name: str, destination_dir: str) -> list[str]:
+    """Download all CloudFront log .gz files to a local directory."""
     os.makedirs(destination_dir, exist_ok=True)
     downloaded_files = []
 
@@ -36,17 +37,13 @@ def download_logs(bucket_name: str, destination_dir: str, max_files: int = None)
             s3.download_file(bucket_name, key, local_path)
             downloaded_files.append(local_path)
 
-            if max_files and len(downloaded_files) >= max_files:
-                print(f"✅ Downloaded {len(downloaded_files)} files (max limit reached)")
-                return downloaded_files
-
     print(f"✅ Download complete: {len(downloaded_files)} files")
     return downloaded_files
 
 
 def parse_gz_file_stream(file_path: str, visitor_tracker: defaultdict):
     """Parse a single .gz log file and update visitor tracker."""
-    with gzip.open(file_path, 'rt') as f:  # 'rt' = read text mode
+    with gzip.open(file_path, 'rt') as f:
         for line in f:
             if line.startswith('#'):
                 continue
@@ -64,9 +61,9 @@ def parse_gz_file_stream(file_path: str, visitor_tracker: defaultdict):
             visitor_tracker[date].add(visitor_id)
 
 
-def logs_report(max_files: int = None):
+def logs_report():
     """Main function: download logs, parse, and report unique visitors."""
-    downloaded_files = download_logs(logs_bucket_name, out_path, max_files=max_files)
+    downloaded_files = download_logs(logs_bucket_name, out_path)
     visitor_tracker = defaultdict(set)
 
     print(f"📊 Starting log collation...")
@@ -75,6 +72,22 @@ def logs_report(max_files: int = None):
         parse_gz_file_stream(gz_file, visitor_tracker)
         os.remove(gz_file)  # Clean up
 
-    result = {date: len(visitors) for date, visitors in visitor_tracker.items()}
-    print(f"\n📈 Unique visitors summary:\n{result}")
+    daily_counts = {date: len(visitors) for date, visitors in visitor_tracker.items()}
+
+    sorted_dates = sorted(daily_counts.keys())
+
+    today = datetime.now(timezone.utc).date()
+    range_days = len(sorted_dates)
+    total_visits = sum(daily_counts.values())
+    daily_visits = daily_counts[sorted_dates[-2]] if range_days >= 2 else daily_counts[sorted_dates[-1]]
+
+    result = {
+        "daily-visits": daily_visits,
+        "total-visits": total_visits,
+        "range": range_days,
+        "last-date": sorted_dates[-1] if sorted_dates else None,
+        "generated-at": str(today)
+    }
+
+    print(f"\n📈 Visitor metrics summary:\n{result}")
     return result
