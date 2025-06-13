@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import os
 import boto3
 import gzip
@@ -75,6 +76,7 @@ def logs_report():
 
     sorted_dates = sorted(daily_counts.keys())
 
+    today = datetime.now(timezone.utc).date()
     range_days = len(sorted_dates)
     total_visits = sum(daily_counts.values())
     daily_visits = daily_counts[sorted_dates[-2]] if range_days >= 2 else daily_counts[sorted_dates[-1]]
@@ -82,7 +84,9 @@ def logs_report():
     result = {
         "daily-visits": daily_visits,
         "total-visits": total_visits,
-        "range": range_days
+        "range": range_days,
+        "last-date": sorted_dates[-1] if sorted_dates else None,
+        "generated-at": str(today)
     }
 
     print(f"\n📈 Visitor metrics summary:\n{result}")
