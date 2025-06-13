@@ -71,6 +71,19 @@ def logs_report():
         parse_gz_file_stream(gz_file, visitor_tracker)
         os.remove(gz_file)  # Clean up
 
-    result = {date: len(visitors) for date, visitors in visitor_tracker.items()}
-    print(f"\n📈 Unique visitors summary:\n{result}")
+    daily_counts = {date: len(visitors) for date, visitors in visitor_tracker.items()}
+
+    sorted_dates = sorted(daily_counts.keys())
+
+    range_days = len(sorted_dates)
+    total_visits = sum(daily_counts.values())
+    daily_visits = daily_counts[sorted_dates[-2]] if range_days >= 2 else daily_counts[sorted_dates[-1]]
+
+    result = {
+        "daily-visits": daily_visits,
+        "total-visits": total_visits,
+        "range": range_days
+    }
+
+    print(f"\n📈 Visitor metrics summary:\n{result}")
     return result
