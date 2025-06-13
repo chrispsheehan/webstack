@@ -29,13 +29,23 @@ const certifications = [
 ---
 
 <style>
-  .cert a {
-    text-decoration: none;
-    display: inline-block;
+  .cert {
+    display: flex;
+    overflow-x: auto;      /* Enables horizontal scrolling */
+    white-space: nowrap;   /* Prevents wrapping to new lines */
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+    gap: 1rem;             /* Optional: space between images */
+    padding-bottom: 1rem;  /* Optional: space below images for scrollbar */
   }
 
-  .cert a img {
-    border: none;
+  .cert a {
+    flex: 0 0 auto;        /* Prevents shrinking/growing, keeps items in a row */
+  }
+
+  .cert img {
+    max-width: 120px;      /* Adjust as needed */
+    height: auto;
+    display: block;
   }
 
   @media (min-width: 100px) {
