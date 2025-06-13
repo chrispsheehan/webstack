@@ -29,66 +29,69 @@ const certifications = [
 ---
 
 <style>
-  .cert {
-    display: flex;
-    overflow-x: auto;      /* Enables horizontal scrolling */
-    white-space: nowrap;   /* Prevents wrapping to new lines */
-    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
-    gap: 1rem;             /* Optional: space between images */
-    padding-bottom: 1rem;  /* Optional: space below images for scrollbar */
-  }
+.cert-scroller {
+  overflow: hidden;
+  width: 100%;
+  margin: 2rem 0;
+}
 
-  .cert a {
-    flex: 0 0 auto;        /* Prevents shrinking/growing, keeps items in a row */
-  }
+.cert-track {
+  display: flex;
+  gap: 2rem;
+  animation: scroll-left 30s linear infinite;
+}
 
-  .cert img {
-    max-width: 120px;      /* Adjust as needed */
-    height: auto;
-    display: block;
-  }
+.cert-track a {
+  flex: 0 0 auto;
+}
 
-  @media (min-width: 100px) {
-    .cert {
-      margin-top: 2rem;
-      text-align: center;
-    }
-    .b:hover {
-      background-color: var(--color-background-soft);
-    }
-    .api-message {
-      margin-top: 2rem;
-      padding: 1rem;
-      background-color: var(--color-background-soft);
-      border-left: 5px solid var(--color-accent);
-    }
+.cert-track img {
+  max-height: 100px;
+  height: auto;
+  display: block;
+}
+
+/* Optional hover effect */
+.cert-track img.b:hover {
+  background-color: var(--color-background-soft);
+  border-radius: 0.5rem;
+}
+
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
   }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
 </style>
 
 <section id="about-me">
   <h2>About Me</h2>
   <h3>
-    Hi, I’m Chris — a Senior Platform Engineer focused on making it easier for
-    teams to ship code.
+    Hi, I’m Chris — a Senior Platform Engineer focused on making it easier for teams to ship code.
   </h3>
   <p>
-    I build CI/CD pipelines, manage cloud infrastructure, and create tools that
-    improve developer experience.
+    I build CI/CD pipelines, manage cloud infrastructure, and create tools that improve developer experience.
   </p>
   <p>
-    I’m big on automation, observability, and helping teams move fast without
-    breaking things.
+    I’m big on automation, observability, and helping teams move fast without breaking things.
   </p>
-  <h3>
-    Certs
-  </h3>
-  <div class="cert">
-    {
-      certifications.map((cert) => (
-        <a href={cert.href} target="_blank" rel="noopener noreferrer">
-          <img src={cert.src} alt={cert.alt} class="b" />
-        </a>
-      ))
-    }
+
+  <h3>Certs</h3>
+
+  <div class="cert-scroller">
+    <div class="cert-track">
+      {
+        certifications.concat(certifications).map((cert) => (
+          <a href={cert.href} target="_blank" rel="noopener noreferrer">
+            <img src={cert.src} alt={cert.alt} class="b" />
+          </a>
+        ))
+      }
+    </div>
   </div>
 </section>
+
