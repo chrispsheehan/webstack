@@ -1,6 +1,6 @@
 import os
 import boto3
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 ce = boto3.client("ce")
 
@@ -15,8 +15,9 @@ if not environment_name:
 
 def generate_cost_report():
     metrics = ["BlendedCost", "UnblendedCost"]
-    today = datetime.utcnow().date()
+    today = datetime.now(timezone.utc).date()
     yesterday = today - timedelta(days=1)
+    day_before_yesterday = today - timedelta(days=2)
     month_start = today.replace(day=1)
     first_day_this_month = today.replace(day=1)
     last_day_prev_month = first_day_this_month - timedelta(days=1)
@@ -42,7 +43,7 @@ def generate_cost_report():
     }
 
     daily_resp = ce.get_cost_and_usage(
-        TimePeriod={"Start": str(yesterday), "End": str(today)},
+        TimePeriod={"Start": str(day_before_yesterday), "End": str(yesterday)},
         Granularity="DAILY",
         Metrics=metrics,
         Filter=cost_filter,
@@ -70,7 +71,7 @@ def generate_cost_report():
         Filter=cost_filter,
     )
 
-    return {
+    result = {
         "date": str(yesterday),
         "daily": daily_resp["ResultsByTime"][0],
         "month_to_date": monthly_resp["ResultsByTime"][0],
@@ -80,3 +81,6 @@ def generate_cost_report():
             "data": prev_month_resp["ResultsByTime"][0],
         },
     }
+
+    print(f"\n📈 Cost explorer summary:\n{result}")
+    return result
