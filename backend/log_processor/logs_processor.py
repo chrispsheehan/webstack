@@ -79,6 +79,19 @@ def logs_report():
     today = datetime.now(timezone.utc).date()
     range_days = len(sorted_dates)
     total_visits = sum(daily_counts.values())
+    if not sorted_dates:
+        print("⚠️ No visit data found.")
+        return {
+            "daily-visits": 0,
+            "total-visits": 0,
+            "range": 0,
+            "last-date": str(today),
+            "generated-at": str(today)
+        }
+
+    today = datetime.now(timezone.utc).date()
+    range_days = len(sorted_dates)
+    total_visits = sum(daily_counts.values())
     daily_visits = daily_counts[sorted_dates[-2]] if range_days >= 2 else daily_counts[sorted_dates[-1]]
 
     result = {
