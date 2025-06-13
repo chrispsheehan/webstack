@@ -29,43 +29,54 @@ const certifications = [
 ---
 
 <style>
-.cert-scroller {
-  overflow: hidden;
-  width: 100%;
-  margin: 2rem 0;
-}
-
-.cert-track {
-  display: flex;
-  gap: 2rem;
-  animation: scroll-left 30s linear infinite;
-}
-
-.cert-track a {
-  flex: 0 0 auto;
-}
-
-.cert-track img {
-  max-height: 100px;
-  height: auto;
-  display: block;
-}
-
-/* Optional hover effect */
-.cert-track img.b:hover {
-  background-color: var(--color-background-soft);
-  border-radius: 0.5rem;
-}
-
-@keyframes scroll-left {
-  0% {
-    transform: translateX(0);
+  .cert-scroller {
+    overflow: hidden;
+    width: 100%;
+    margin: 2rem 0;
   }
-  100% {
-    transform: translateX(-50%);
-  }
-}
 
+  .cert-track {
+    display: flex;
+    gap: 2rem;
+    animation: scroll-left 30s linear infinite;
+  }
+
+  .cert-track a {
+    flex: 0 0 auto;
+  }
+
+  .cert-track img {
+    max-height: 100px;
+    height: auto;
+    display: block;
+  }
+
+  /* Optional hover effect */
+  .cert-track img.b:hover {
+    background-color: var(--color-background-soft);
+    border-radius: 0.5rem;
+  }
+
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Disable animation + center when the track fits */
+  @media (min-width: 768px) {
+    .cert-track {
+      animation: none;
+      justify-content: center;
+    }
+
+    .cert-scroller {
+      justify-content: center;
+    }
+  }
 </style>
 
 <section id="about-me">
