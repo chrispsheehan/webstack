@@ -28,6 +28,33 @@ const certifications = [
 ];
 ---
 
+<style>
+  .cert a {
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .cert a img {
+    border: none;
+  }
+
+  @media (min-width: 100px) {
+    .cert {
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .b:hover {
+      background-color: var(--color-background-soft);
+    }
+    .api-message {
+      margin-top: 2rem;
+      padding: 1rem;
+      background-color: var(--color-background-soft);
+      border-left: 5px solid var(--color-accent);
+    }
+  }
+</style>
+
 <section id="about-me">
   <h2>About Me</h2>
   <h3>
@@ -52,21 +79,3 @@ const certifications = [
     }
   </div>
 </section>
-
-<style>
-  @media (min-width: 100px) {
-    .cert {
-      margin-top: 2rem;
-      text-align: center;
-    }
-    .b:hover {
-      background-color: var(--color-background-soft);
-    }
-    .api-message {
-      margin-top: 2rem;
-      padding: 1rem;
-      background-color: var(--color-background-soft);
-      border-left: 5px solid var(--color-accent);
-    }
-  }
-</style>

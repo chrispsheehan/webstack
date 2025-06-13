@@ -1,22 +1,35 @@
 ---
-import RenderData from "./RenderData";
-
-const githubRepo =
-  import.meta.env.PUBLIC_GITHUB_REPO ?? "chrispsheehan/webstack";
+import Visits from "./Visits";
+import CostExplorer from "./CostExplorer";
 ---
 
 <section id="this-site">
   <h2>This Site</h2>
   <p>Built with Astro, deployed to AWS using Terragrunt and Serverless.</p>
-  <!-- <a
-    href={`https://github.com/${githubRepo}/actions/workflows/push_main.yml`}
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    <img
-      src={`https://github.com/${githubRepo}/actions/workflows/push_main.yml/badge.svg?`}
-      alt="Webstack Workflow Status"
-    />
-  </a> -->
-  <RenderData client:load />
+
+  <div class="dashboard-row">
+    <Visits client:load />
+    <CostExplorer client:load />
+  </div>
 </section>
+
+<style>
+  .dashboard-row {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+    align-items: flex-start;
+  }
+
+  .dashboard-row > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  @media (max-width: 700px) {
+    .dashboard-row {
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+  }
+</style>
