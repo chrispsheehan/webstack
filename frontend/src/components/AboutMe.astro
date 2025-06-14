@@ -30,12 +30,13 @@ const certifications = [
 
 <style>
   .cert-scroller {
-    overflow-x: auto;
+    overflow-x: hidden;
     overflow-y: hidden;
     scroll-behavior: smooth;
     width: 100%;
     margin: 2rem 0;
     -webkit-overflow-scrolling: touch;
+    transition: overflow-x 0.3s ease;
   }
 
   .cert-track {
@@ -60,14 +61,14 @@ const certifications = [
     border-radius: 0.5rem;
   }
 
-  .no-scroll {
-    overflow: hidden !important;
-    justify-content: center;
-  }
-
   .cert-track-container {
     display: flex;
     justify-content: flex-start;
+  }
+
+  .no-scroll {
+    overflow: hidden !important;
+    justify-content: center;
   }
 </style>
 
@@ -89,10 +90,10 @@ const certifications = [
   <h3>Certifications</h3>
 
   <div class="cert-scroller" id="certScroller">
-    <div class="cert-track-container" id="certTrackContainer">
+    <div class="cert-track-container">
       <div class="cert-track" id="certTrack">
         {
-          certifications.map(cert => (
+          certifications.map((cert) => (
             <a href={cert.href} target="_blank" rel="noopener noreferrer">
               <img src={cert.src} alt={cert.alt} class="b" />
             </a>
@@ -111,25 +112,32 @@ const certifications = [
     const totalWidth = track.scrollWidth;
     const visibleWidth = scroller.clientWidth;
 
+    // If it fits, don't scroll or animate
     if (totalWidth <= visibleWidth) {
       scroller.classList.add("no-scroll");
-    } else {
-      scroller.scrollLeft = 0;
-
-      const scrollDuration = 3000;
-      const start = performance.now();
-
-      function animateScroll(timestamp) {
-        const elapsed = timestamp - start;
-        const progress = Math.min(elapsed / scrollDuration, 1);
-        scroller.scrollLeft = progress * (totalWidth - visibleWidth);
-
-        if (progress < 1) {
-          requestAnimationFrame(animateScroll);
-        }
-      }
-
-      requestAnimationFrame(animateScroll);
+      return;
     }
+
+    // Initial scroll is disabled
+    scroller.style.overflowX = "hidden";
+
+    // Scroll animation
+    const scrollDuration = 3000;
+    const start = performance.now();
+
+    function animateScroll(timestamp) {
+      const elapsed = timestamp - start;
+      const progress = Math.min(elapsed / scrollDuration, 1);
+      scroller.scrollLeft = progress * (totalWidth - visibleWidth);
+
+      if (progress < 1) {
+        requestAnimationFrame(animateScroll);
+      } else {
+        // Enable manual scroll after auto scroll completes
+        scroller.style.overflowX = "auto";
+      }
+    }
+
+    requestAnimationFrame(animateScroll);
   });
 </script>
