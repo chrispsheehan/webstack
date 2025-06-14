@@ -4,12 +4,21 @@ import Visits from "./Visits";
 ---
 
 <style is:global>
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+
   .site-section-flex {
     display: flex;
     gap: 3rem;
     align-items: flex-start;
     justify-content: space-between;
     width: 100%;
+    box-sizing: border-box;
   }
 
   .site-section-meta {
@@ -24,28 +33,35 @@ import Visits from "./Visits";
     align-items: flex-start;
     flex: 1 1 0;
     min-width: 0;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .dashboard-row > * {
     flex: 1 1 0;
-    min-width: 0;
+    min-width: 200px;
+    box-sizing: border-box;
   }
 
   .dashboard-card {
-    background: var(--color-header-background); /* fallback soft background */
+    background: var(--color-header-background, #f5f7fa);
     border-radius: 1rem;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
     padding: 2rem 1.5rem;
     min-width: 0;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    transition: box-shadow 0.2s, transform 0.2s;
-    border: 1px solid var(--color-header-background); /* subtle border for visibility */
+    transition:
+      box-shadow 0.2s,
+      transform 0.2s;
+    border: 1px solid var(--color-header-background, #e0e4ea);
+    box-sizing: border-box;
   }
 
   .dashboard-card:hover {
-    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px) scale(1.02);
   }
 
@@ -76,18 +92,26 @@ import Visits from "./Visits";
       flex-direction: column;
       gap: 1.5rem;
     }
+    .dashboard-row > * {
+      min-width: 0;
+      width: 100%;
+    }
   }
 </style>
 
 <section id="this-site">
-  <div class="site-section-flex">
-    <div class="site-section-meta">
-      <h2>This Site</h2>
-      <p>Built with Astro, deployed to AWS using Terragrunt and Serverless.</p>
-    </div>
-    <div class="dashboard-row">
-      <Visits client:load />
-      <CostExplorer client:load />
+  <div class="container">
+    <div class="site-section-flex">
+      <div class="site-section-meta">
+        <h2>This Site</h2>
+        <p>
+          Built with Astro, deployed to AWS using Terragrunt and Serverless.
+        </p>
+      </div>
+      <div class="dashboard-row">
+        <Visits client:load />
+        <CostExplorer client:load />
+      </div>
     </div>
   </div>
 </section>

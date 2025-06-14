@@ -21,9 +21,24 @@ export default function Visits() {
       });
   }, []);
 
-  if (loading) return <div className="dashboard-card"><p>Loading visit data...</p></div>;
-  if (error) return <div className="dashboard-card"><p>Error loading data: {error}</p></div>;
-  if (!visits) return <div className="dashboard-card"><p>No visit data available.</p></div>;
+  if (loading)
+    return (
+      <div className="dashboard-card">
+        <p>Loading visit data...</p>
+      </div>
+    );
+  if (error)
+    return (
+      <div className="dashboard-card">
+        <p>Error loading data: {error}</p>
+      </div>
+    );
+  if (!visits)
+    return (
+      <div className="dashboard-card">
+        <p>No visit data available.</p>
+      </div>
+    );
 
   return (
     <div className="dashboard-card visits-summary">

@@ -21,9 +21,24 @@ export default function CostExplorer() {
       });
   }, []);
 
-  if (loading) return <div className="dashboard-card"><p>Loading cost data...</p></div>;
-  if (error) return <div className="dashboard-card"><p>Error loading data: {error}</p></div>;
-  if (!costs) return <div className="dashboard-card"><p>No cost data available.</p></div>;
+  if (loading)
+    return (
+      <div className="dashboard-card">
+        <p>Loading cost data...</p>
+      </div>
+    );
+  if (error)
+    return (
+      <div className="dashboard-card">
+        <p>Error loading data: {error}</p>
+      </div>
+    );
+  if (!costs)
+    return (
+      <div className="dashboard-card">
+        <p>No cost data available.</p>
+      </div>
+    );
 
   const formatUSD = (amount) =>
     new Intl.NumberFormat("en-US", {
