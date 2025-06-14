@@ -30,15 +30,19 @@ const certifications = [
 
 <style>
   .cert-scroller {
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
     width: 100%;
     margin: 2rem 0;
+    -webkit-overflow-scrolling: touch;
   }
 
   .cert-track {
     display: flex;
     gap: 2rem;
-    animation: scroll-left 30s linear infinite;
+    width: max-content;
+    padding: 1rem 0;
   }
 
   .cert-track a {
@@ -51,23 +55,23 @@ const certifications = [
     display: block;
   }
 
-  /* Optional hover effect */
   .cert-track img.b:hover {
     background-color: var(--color-background-soft);
     border-radius: 0.5rem;
   }
 
-  @keyframes scroll-left {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-50%);
-    }
+  .no-scroll {
+    overflow: hidden !important;
+    justify-content: center;
+  }
+
+  .cert-track-container {
+    display: flex;
+    justify-content: flex-start;
   }
 </style>
 
-<section id="about-me">
+<section>
   <h2>About Me</h2>
   <h3>
     Hi, I’m Chris — a Senior Platform Engineer focused on making it easier for
@@ -82,17 +86,50 @@ const certifications = [
     breaking things.
   </p>
 
-  <h3>Certs</h3>
+  <h3>Certifications</h3>
 
-  <div class="cert-scroller">
-    <div class="cert-track">
-      {
-        certifications.concat(certifications).map((cert) => (
-          <a href={cert.href} target="_blank" rel="noopener noreferrer">
-            <img src={cert.src} alt={cert.alt} class="b" />
-          </a>
-        ))
-      }
+  <div class="cert-scroller" id="certScroller">
+    <div class="cert-track-container" id="certTrackContainer">
+      <div class="cert-track" id="certTrack">
+        {
+          certifications.map(cert => (
+            <a href={cert.href} target="_blank" rel="noopener noreferrer">
+              <img src={cert.src} alt={cert.alt} class="b" />
+            </a>
+          ))
+        }
+      </div>
     </div>
   </div>
 </section>
+
+<script type="module">
+  const scroller = document.getElementById("certScroller");
+  const track = document.getElementById("certTrack");
+
+  window.addEventListener("load", () => {
+    const totalWidth = track.scrollWidth;
+    const visibleWidth = scroller.clientWidth;
+
+    if (totalWidth <= visibleWidth) {
+      scroller.classList.add("no-scroll");
+    } else {
+      scroller.scrollLeft = 0;
+
+      const scrollDuration = 3000;
+      const start = performance.now();
+
+      function animateScroll(timestamp) {
+        const elapsed = timestamp - start;
+        const progress = Math.min(elapsed / scrollDuration, 1);
+        scroller.scrollLeft = progress * (totalWidth - visibleWidth);
+
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll);
+        }
+      }
+
+      requestAnimationFrame(animateScroll);
+    }
+  });
+</script>
