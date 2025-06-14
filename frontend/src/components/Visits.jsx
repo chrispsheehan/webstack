@@ -45,10 +45,10 @@ export default function Visits() {
       <h3>👥 Visits</h3>
       <ul>
         <li>
-          <strong>Daily Visits:</strong> {visits["daily-visits"]}
+          <strong>Daily Count:</strong> {visits["daily-visits"]}
         </li>
         <li>
-          <strong>Total Visits (last {visits["range"]} days):</strong>{" "}
+          <strong>Total Count ({visits["range"]} days):</strong>{" "}
           {visits["total-visits"]}
         </li>
       </ul>

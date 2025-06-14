@@ -48,7 +48,7 @@ export default function CostExplorer() {
 
   return (
     <div className="dashboard-card cost-explorer">
-      <h3>💰 Cost Explorer</h3>
+      <h3>💰 Running Cost</h3>
       <ul>
         <li>
           <strong>Current Month Total:</strong>{" "}
