@@ -3,20 +3,7 @@ import CostExplorer from "./CostExplorer";
 import Visits from "./Visits";
 ---
 
-<section id="this-site">
-  <div class="site-section-flex">
-    <div class="site-section-meta">
-      <h2>This Site</h2>
-      <p>Built with Astro, deployed to AWS using Terragrunt and Serverless.</p>
-    </div>
-    <div class="dashboard-row">
-      <Visits client:load />
-      <CostExplorer client:load />
-    </div>
-  </div>
-</section>
-
-<style>
+<style is:global>
   .site-section-flex {
     display: flex;
     gap: 3rem;
@@ -44,6 +31,42 @@ import Visits from "./Visits";
     min-width: 0;
   }
 
+  .dashboard-card {
+    background: var(--color-header-background); /* fallback soft background */
+    border-radius: 1rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    padding: 2rem 1.5rem;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: box-shadow 0.2s, transform 0.2s;
+    border: 1px solid var(--color-header-background); /* subtle border for visibility */
+  }
+
+  .dashboard-card:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .dashboard-card h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+    color: var(--color-heading, #2e3735);
+  }
+
+  .dashboard-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .dashboard-card li {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+
   @media (max-width: 900px) {
     .site-section-flex {
       flex-direction: column;
@@ -55,3 +78,16 @@ import Visits from "./Visits";
     }
   }
 </style>
+
+<section id="this-site">
+  <div class="site-section-flex">
+    <div class="site-section-meta">
+      <h2>This Site</h2>
+      <p>Built with Astro, deployed to AWS using Terragrunt and Serverless.</p>
+    </div>
+    <div class="dashboard-row">
+      <Visits client:load />
+      <CostExplorer client:load />
+    </div>
+  </div>
+</section>

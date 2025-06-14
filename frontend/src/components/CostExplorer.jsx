@@ -21,9 +21,9 @@ export default function CostExplorer() {
       });
   }, []);
 
-  if (loading) return <p>Loading cost data...</p>;
-  if (error) return <p>Error loading data: {error}</p>;
-  if (!costs) return <p>No cost data available.</p>;
+  if (loading) return <div className="dashboard-card"><p>Loading cost data...</p></div>;
+  if (error) return <div className="dashboard-card"><p>Error loading data: {error}</p></div>;
+  if (!costs) return <div className="dashboard-card"><p>No cost data available.</p></div>;
 
   const formatUSD = (amount) =>
     new Intl.NumberFormat("en-US", {
@@ -32,7 +32,7 @@ export default function CostExplorer() {
     }).format(parseFloat(amount));
 
   return (
-    <div className="cost-explorer">
+    <div className="dashboard-card cost-explorer">
       <h3>💰 Cost Explorer</h3>
       <ul>
         <li>
