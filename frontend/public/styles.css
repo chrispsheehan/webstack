@@ -67,7 +67,6 @@ main {
   padding: 24px;
 }
 
-/* Navigation */
 nav {
   display: flex;
   justify-content: space-between;
@@ -84,7 +83,6 @@ nav a {
   margin-left: 20px;
 }
 
-/* Section styling */
 section {
   padding: 24px 24px;
 }
@@ -99,12 +97,9 @@ section {
 
 #this-site {
   background: var(--color-background);
-  /* color: #1c1c1c; */
 }
 
-/* Typography tweaks */
 p {
-  max-width: 70ch;
   margin-bottom: 1.25em;
 }
 

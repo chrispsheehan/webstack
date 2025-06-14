@@ -1,24 +1,42 @@
 ---
-import Visits from "./Visits";
 import CostExplorer from "./CostExplorer";
+import Visits from "./Visits";
 ---
 
 <section id="this-site">
-  <h2>This Site</h2>
-  <p>Built with Astro, deployed to AWS using Terragrunt and Serverless.</p>
-
-  <div class="dashboard-row">
-    <Visits client:load />
-    <CostExplorer client:load />
+  <div class="site-section-flex">
+    <div class="site-section-meta">
+      <h2>This Site</h2>
+      <p>Built with Astro, deployed to AWS using Terragrunt and Serverless.</p>
+    </div>
+    <div class="dashboard-row">
+      <Visits client:load />
+      <CostExplorer client:load />
+    </div>
   </div>
 </section>
 
 <style>
+  .site-section-flex {
+    display: flex;
+    gap: 3rem;
+    align-items: flex-start;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .site-section-meta {
+    min-width: 220px;
+    max-width: 320px;
+    flex: 0 0 auto;
+  }
+
   .dashboard-row {
     display: flex;
     gap: 2rem;
-    margin-top: 2rem;
     align-items: flex-start;
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .dashboard-row > * {
@@ -26,7 +44,11 @@ import CostExplorer from "./CostExplorer";
     min-width: 0;
   }
 
-  @media (max-width: 700px) {
+  @media (max-width: 900px) {
+    .site-section-flex {
+      flex-direction: column;
+      gap: 2rem;
+    }
     .dashboard-row {
       flex-direction: column;
       gap: 1.5rem;
