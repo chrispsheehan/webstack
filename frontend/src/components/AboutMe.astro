@@ -30,121 +30,85 @@ const certifications = [
 
 <style>
   .cert-row-wrapper {
-    position: relative;
     width: 100%;
     margin: 2rem 0;
     display: flex;
     justify-content: center;
   }
 
-  .cert-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: #1976d2;
-    border: none;
-    border-radius: 50%;
-    width: 2.6rem;
-    height: 2.6rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    opacity: 1;
-    z-index: 2;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    transition: opacity 0.2s, background 0.2s;
-    padding: 0;
-    outline: none;
-    border: 2px solid #fff;
-  }
-  .cert-arrow[hidden] {
-    opacity: 0;
-    pointer-events: none;
-  }
-  .cert-arrow.left {
-    left: 0;
-    /* small offset for mobile */
-    margin-left: 0.2rem;
-  }
-  .cert-arrow.right {
-    right: 0;
-    margin-right: 0.2rem;
-  }
-  .cert-arrow:active, .cert-arrow:focus {
-    background: #1250a6;
-  }
-  .cert-arrow .arrow-chev {
-    display: block;
-    width: 1.2rem;
-    height: 1.2rem;
-    border: solid #fff;
-    border-width: 0 0.3rem 0.3rem 0;
-    padding: 0.2rem;
-    border-radius: 2px;
-    transition: border-color 0.2s;
-  }
-  .cert-arrow.left .arrow-chev {
-    transform: rotate(135deg);
-  }
-  .cert-arrow.right .arrow-chev {
-    transform: rotate(-45deg);
-  }
-
   .cert-scroller {
-    overflow-x: hidden;
+    overflow-x: auto;
     overflow-y: hidden;
     scroll-behavior: smooth;
     width: 100%;
-    max-width: 900px;
+    max-width: 1100px;
     -webkit-overflow-scrolling: touch;
-    transition: overflow-x 0.3s ease;
     cursor: grab;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-link) var(--color-background);
+    background: var(--color-background);
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    padding-bottom: 0.5rem;
+  }
+
+  .cert-scroller::-webkit-scrollbar {
+    height: 8px;
+    background: var(--color-background);
+    border-radius: 4px;
+  }
+  .cert-scroller::-webkit-scrollbar-thumb {
+    background: var(--color-link);
+    border-radius: 4px;
+  }
+  .cert-scroller::-webkit-scrollbar-thumb:hover {
+    background: var(--color-heading);
   }
 
   .cert-track {
     display: flex;
     gap: 2rem;
-    width: max-content;
+    width: 100%;
     padding: 1rem 0;
+    justify-content: space-evenly; /* Evenly space items across the bar */
+    align-items: center;
   }
 
   .cert-track a {
-    flex: 0 0 auto;
+    flex: 1 1 0;
+    display: flex;
+    justify-content: center;
   }
 
   .cert-track img {
-    max-height: 100px;
-    height: auto;
+    max-height: 180px; /* Bigger images */
+    width: auto;
     display: block;
     border-radius: 0.5rem;
-    background: #fff;
+    background: var(--color-background);
     box-shadow: 0 2px 8px rgba(0,0,0,0.06);
     transition: box-shadow 0.2s, transform 0.2s;
+    margin: 0 auto;
   }
   .cert-track img.b:hover {
     box-shadow: 0 4px 16px rgba(0,0,0,0.12);
     transform: scale(1.05);
   }
-  .no-scroll {
-    overflow: hidden !important;
-    justify-content: center;
-    cursor: default;
-  }
 
-  @media (max-width: 600px) {
-    .cert-track img {
-      max-height: 60px;
+  @media (max-width: 900px) {
+    .cert-scroller {
+      max-width: 100vw;
     }
+    .cert-track img {
+      max-height: 120px;
+    }
+  }
+  @media (max-width: 600px) {
     .cert-row-wrapper {
       margin: 1rem 0;
     }
-    .cert-arrow {
-      width: 2rem;
-      height: 2rem;
-    }
-    .cert-scroller {
-      max-width: 100vw;
+    .cert-track img {
+      max-height: 90px;
     }
   }
 </style>
@@ -167,11 +131,8 @@ const certifications = [
   <h3>Certifications</h3>
 
   <div class="cert-row-wrapper">
-    <button class="cert-arrow left" id="certLeft" aria-label="Scroll left" hidden>
-      <span class="arrow-chev"></span>
-    </button>
-    <div class="cert-scroller" id="certScroller">
-      <div class="cert-track" id="certTrack">
+    <div class="cert-scroller" tabindex="0">
+      <div class="cert-track">
         {
           certifications.map((cert) => (
             <a href={cert.href} target="_blank" rel="noopener noreferrer">
@@ -181,68 +142,5 @@ const certifications = [
         }
       </div>
     </div>
-    <button class="cert-arrow right" id="certRight" aria-label="Scroll right" hidden>
-      <span class="arrow-chev"></span>
-    </button>
   </div>
 </section>
-
-<script type="module">
-  const scroller = document.getElementById("certScroller");
-  const track = document.getElementById("certTrack");
-  const leftBtn = document.getElementById("certLeft");
-  const rightBtn = document.getElementById("certRight");
-
-  function updateArrows() {
-    // Only show arrows if scrolling is possible
-    const canScroll = track.scrollWidth > scroller.clientWidth + 5;
-    if (!canScroll) {
-      leftBtn.hidden = true;
-      rightBtn.hidden = true;
-      scroller.classList.add("no-scroll");
-      return;
-    }
-    scroller.classList.remove("no-scroll");
-    leftBtn.hidden = scroller.scrollLeft <= 5;
-    rightBtn.hidden = scroller.scrollLeft + scroller.clientWidth >= track.scrollWidth - 5;
-  }
-
-  function scrollByOffset(offset) {
-    scroller.scrollBy({ left: offset, behavior: "smooth" });
-  }
-
-  leftBtn.addEventListener("click", () => scrollByOffset(-200));
-  rightBtn.addEventListener("click", () => scrollByOffset(200));
-  scroller.addEventListener("scroll", updateArrows);
-  window.addEventListener("resize", updateArrows);
-
-  // Drag-to-scroll for desktop users
-  let isDown = false;
-  let startX;
-  let scrollLeft;
-  scroller.addEventListener('mousedown', (e) => {
-    if (track.scrollWidth <= scroller.clientWidth) return;
-    isDown = true;
-    scroller.classList.add('active');
-    startX = e.pageX - scroller.offsetLeft;
-    scrollLeft = scroller.scrollLeft;
-  });
-  scroller.addEventListener('mouseleave', () => {
-    isDown = false;
-    scroller.classList.remove('active');
-  });
-  scroller.addEventListener('mouseup', () => {
-    isDown = false;
-    scroller.classList.remove('active');
-  });
-  scroller.addEventListener('mousemove', (e) => {
-    if(!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - scroller.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    scroller.scrollLeft = scrollLeft - walk;
-  });
-
-  // On load, check if scroll is needed and show arrows if so
-  window.addEventListener("load", updateArrows);
-</script>
