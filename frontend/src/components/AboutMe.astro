@@ -37,6 +37,7 @@ const certifications = [
     margin: 2rem 0;
     -webkit-overflow-scrolling: touch;
     transition: overflow-x 0.3s ease;
+    cursor: grab;
   }
 
   .cert-track {
@@ -69,6 +70,7 @@ const certifications = [
   .no-scroll {
     overflow: hidden !important;
     justify-content: center;
+    cursor: default;
   }
 </style>
 
@@ -135,9 +137,38 @@ const certifications = [
       } else {
         // Enable manual scroll after auto scroll completes
         scroller.style.overflowX = "auto";
+        scroller.style.cursor = "grab";
       }
     }
 
     requestAnimationFrame(animateScroll);
+  });
+
+  // Optional: allow drag-to-scroll for desktop users
+  let isDown = false;
+  let startX;
+  let scrollLeft;
+
+  scroller.addEventListener('mousedown', (e) => {
+    if (scroller.classList.contains("no-scroll")) return;
+    isDown = true;
+    scroller.classList.add('active');
+    startX = e.pageX - scroller.offsetLeft;
+    scrollLeft = scroller.scrollLeft;
+  });
+  scroller.addEventListener('mouseleave', () => {
+    isDown = false;
+    scroller.classList.remove('active');
+  });
+  scroller.addEventListener('mouseup', () => {
+    isDown = false;
+    scroller.classList.remove('active');
+  });
+  scroller.addEventListener('mousemove', (e) => {
+    if(!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - scroller.offsetLeft;
+    const walk = (x - startX) * 1.5; //scroll-fast
+    scroller.scrollLeft = scrollLeft - walk;
   });
 </script>
