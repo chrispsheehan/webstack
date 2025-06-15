@@ -129,7 +129,7 @@ jobs:
 
       - uses: cli/cli-action@v2
 
-      - name: Trigger prod-deploy.yml workflow
+      - name: Trigger prod deploy workflow
         run: |
-          gh workflow run prod-deploy.yml --ref main -F environment=prod -F version=${{ needs.get-next-tag.outputs.tag }}
+          gh workflow run deploy.yml --ref main -F environment=prod -F version=${{ needs.get-next-tag.outputs.tag }}
 
