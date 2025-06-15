@@ -1,10 +1,11 @@
 name: Release Prod
 
 on:
-  release:
-    types: [published]
-
-  workflow_dispatch:
+    workflow_run:
+        workflows: ["Release"]
+        types:
+          - completed
+    workflow_dispatch:
 
 jobs:
   on_release:
@@ -18,10 +19,10 @@ jobs:
           VERSION="${{ github.event.release.tag_name || github.ref_name }}"
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-  prod:
-    uses: ./.github/workflows/deploy.yml
-    needs: on_release
-    secrets: inherit
-    with:
-      environment: dev
-      version: ${{ needs.on_release.outputs.version }}
+#   prod:
+#     uses: ./.github/workflows/deploy.yml
+#     needs: on_release
+#     secrets: inherit
+#     with:
+#       environment: dev
+#       version: ${{ needs.on_release.outputs.version }}
