@@ -1,11 +1,11 @@
 name: Release Prod
 
 on:
-    workflow_run:
-        workflows: ["Release"]
-        types:
-          - completed
-    workflow_dispatch:
+  workflow_run:
+    workflows: ["Release"]
+    types:
+      - completed
+  workflow_dispatch:
 
 jobs:
   on_release:
@@ -13,16 +13,23 @@ jobs:
     outputs:
       version: ${{ steps.set_version.outputs.version }}
     steps:
-      - name: Set version output
+      - name: Get version from workflow_dispatch or latest tag
         id: set_version
         run: |
-          VERSION="${{ github.event.release.tag_name || github.ref_name }}"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "${{ github.event.inputs.version }}" ]]; then
+            VERSION="${{ github.event.inputs.version }}"
+            echo "Using selected version: $VERSION"
+          else
+            git fetch --tags
+            VERSION=$(git describe --tags "$(git rev-list --tags --max-count=1)")
+            echo "Detected latest tag: $VERSION"
+          fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
-#   prod:
-#     uses: ./.github/workflows/deploy.yml
-#     needs: on_release
-#     secrets: inherit
-#     with:
-#       environment: dev
-#       version: ${{ needs.on_release.outputs.version }}
+  prod:
+    uses: ./.github/workflows/deploy.yml
+    needs: on_release
+    secrets: inherit
+    with:
+      environment: dev
+      version: ${{ needs.on_release.outputs.version }}
