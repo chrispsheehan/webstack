@@ -13,16 +13,16 @@ jobs:
     outputs:
       version: ${{ steps.set_version.outputs.version }}
     steps:
-      - name: Get version from workflow_dispatch or latest tag
+      - name: Get version from selected ref or latest tag
         id: set_version
         run: |
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && -n "${{ github.event.inputs.version }}" ]]; then
-            VERSION="${{ github.event.inputs.version }}"
-            echo "Using selected version: $VERSION"
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION="${{ github.ref_name }}"
+            echo "Using manually selected ref: $VERSION"
           else
             git fetch --tags
             VERSION=$(git describe --tags "$(git rev-list --tags --max-count=1)")
-            echo "Detected latest tag: $VERSION"
+            echo "Detected latest tag from workflow_run: $VERSION"
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
