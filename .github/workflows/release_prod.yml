@@ -1,0 +1,27 @@
+name: Release Prod
+
+on:
+  release:
+    types: [published]
+
+  workflow_dispatch:
+
+jobs:
+  on_release:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.set_version.outputs.version }}
+    steps:
+      - name: Set version output
+        id: set_version
+        run: |
+          VERSION="${{ github.event.release.tag_name || github.ref_name }}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+  prod:
+    uses: ./.github/workflows/deploy.yml
+    needs: on_release
+    secrets: inherit
+    with:
+      environment: dev
+      version: ${{ needs.on_release.outputs.version }}
