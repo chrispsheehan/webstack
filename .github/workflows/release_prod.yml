@@ -17,6 +17,11 @@ jobs:
     outputs:
       version: ${{ steps.set_version.outputs.version }}
     steps:
+      - name: Checkout with full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+  
       - name: Get version from selected ref or latest tag
         id: set_version
         run: |
