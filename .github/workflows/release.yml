@@ -117,3 +117,19 @@ jobs:
     with:
       environment: ci
       version: ${{ needs.get-next-tag.outputs.tag }}
+
+  trigger-prod-deploy:
+    needs:
+      - get-next-tag
+      - release
+      - build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: cli/cli-action@v2
+
+      - name: Trigger prod deploy workflow
+        run: |
+          gh workflow run deploy.yml --ref main -F environment=prod -F version=${{ needs.get-next-tag.outputs.tag }}
+
