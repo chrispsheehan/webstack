@@ -40,5 +40,5 @@ jobs:
     needs: on_release
     secrets: inherit
     with:
-      environment: dev
+      environment: prod
       version: ${{ needs.on_release.outputs.version }}
