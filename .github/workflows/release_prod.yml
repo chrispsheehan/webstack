@@ -7,6 +7,10 @@ on:
       - completed
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: write
+
 jobs:
   on_release:
     runs-on: ubuntu-latest
