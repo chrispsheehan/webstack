@@ -86,12 +86,24 @@ jobs:
           echo "$COMMITS" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+  build:
+    needs:
+      - get-next-tag
+    uses: ./.github/workflows/build.yml
+    permissions:
+      id-token: write
+      contents: write
+    with:
+      environment: ci
+      version: ${{ needs.get-next-tag.outputs.tag }}
+
   release:
     runs-on: ubuntu-latest
     needs:
       - get-next-tag
       - create-tag
       - get-commits
+      - build
     if: ${{ needs.get-next-tag.outputs.has-next-version == 'true' }}
     permissions:
       contents: write
@@ -105,29 +117,3 @@ jobs:
             ${{ needs.get-commits.outputs.commits }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build:
-    needs:
-      - get-next-tag
-      - release
-    uses: ./.github/workflows/build.yml
-    permissions:
-      id-token: write
-      contents: write
-    with:
-      environment: ci
-      version: ${{ needs.get-next-tag.outputs.tag }}
-
-  trigger-prod-deploy:
-    needs:
-      - get-next-tag
-      - release
-      - build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Trigger prod deploy workflow
-        run: |
-          gh workflow run deploy.yml --ref main -F environment=prod -F version=${{ needs.get-next-tag.outputs.tag }}
-
