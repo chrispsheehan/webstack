@@ -22,7 +22,7 @@ env:
 jobs:
   oidc:
     environment:
-      name: dev # specify environment - seen at /settings/environments/ in UI
+      name: ${{inputs.environment}} # specify environment - seen at /settings/environments/ in UI
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
