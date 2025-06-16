@@ -51,13 +51,13 @@ export default function CostExplorer() {
       <h3>💰 Running Cost</h3>
       <ul>
         <li>
-          <strong>Current Month Total:</strong>{" "}
+          <strong>Current Month:</strong>{" "}
           {costs["current-month-total"]
             ? formatUSD(costs["current-month-total"])
             : "N/A"}
         </li>
         <li>
-          <strong>Last Month Total:</strong>{" "}
+          <strong>Last Month:</strong>{" "}
           {costs["last-month-total"]
             ? formatUSD(costs["last-month-total"])
             : "N/A"}
