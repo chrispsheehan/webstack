@@ -35,4 +35,4 @@ brew install node
 npm install -g prettier
 ```
 
-![Infrastructure](docs/infra.drawio.png)
+![Infrastructure](docs/infra.png)
