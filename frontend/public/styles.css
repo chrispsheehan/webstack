@@ -113,3 +113,21 @@ a {
 a:hover {
   color: var(--vt-c-text-1);
 }
+
+@media (max-width: 600px) {
+  main,
+  section {
+    padding: 12px;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 16px;
+  }
+
+  nav a {
+    margin-left: 0;
+  }
+}
