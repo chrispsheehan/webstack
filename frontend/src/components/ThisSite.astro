@@ -107,6 +107,16 @@ import Visits from "./Visits";
         <p>
           Built with Astro, deployed to AWS using Terragrunt and Serverless.
         </p>
+        <a
+          href={`https://github.com/chrispsheehan/webstack/actions/workflows/release_prod.yml`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            src={`https://github.com/chrispsheehan/webstack/actions/workflows/release_prod.yml/badge.svg?`}
+            alt="Webstack Workflow Status"
+          />
+  </a>
       </div>
       <div class="dashboard-row">
         <Visits client:load />
