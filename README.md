@@ -35,4 +35,12 @@ brew install node
 npm install -g prettier
 ```
 
+## scripts
+
+- `just seed` : locally populate `frontend/public/data` with `data.json` files
+
+- `just start` : open hot loaded website
+
+## infrastructure
+
 ![Infrastructure](docs/infra.png)
