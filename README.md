@@ -37,9 +37,13 @@ npm install -g prettier
 
 ## scripts
 
-- `just seed` : locally populate `frontend/public/data` with `data.json` files
+- `just setup-repo` : apply github repo state as per terraform code.
 
-- `just start` : open hot loaded website
+- `just seed` : locally populate `frontend/public/data` with `data.json` files.
+
+- `just start` : open hot loaded website.
+
+- `just temp-init` : allow current branch to deploy from `dev` github envirionment.
 
 ## infrastructure
 
