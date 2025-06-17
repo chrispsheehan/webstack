@@ -38,6 +38,14 @@ const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "localhost";
 </html>
 
 <style>
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 32px;
+    background: var(--color-header-background);
+  }
+
   .button {
     padding: 12px 24px;
     color: var(--color-btn-text);
@@ -47,5 +55,6 @@ const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "localhost";
     font-weight: bold;
     border: none;
     cursor: pointer;
+    margin: 0;
   }
 </style>
