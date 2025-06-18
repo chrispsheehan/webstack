@@ -1,22 +1,23 @@
 :root {
+  /* Color Palette */
   --vt-c: #2e3735;
   --vt-c-soft: #a5c4b8;
   --vt-c-logo: #a2d5ac;
   --vt-c-text-1: #e0f3cc;
   --vt-c-text-2: #f2fce6;
 
+  /* Theme Colors */
   --color-background: var(--vt-c);
   --color-background-soft: var(--vt-c-soft);
   --color-heading: var(--vt-c-text-1);
-  --color-btn-text: var(--vt-c);
   --color-text: var(--vt-c-text-2);
+  --color-btn-text: var(--vt-c);
   --color-link: var(--vt-c-logo);
-
   --color-header-background: #26312f;
   --color-footer-background: #1a201e;
 
+  /* Spacing & Typography */
   --section-gap: 160px;
-
   --font-body: "Inter", sans-serif;
   --font-heading: "Montserrat", sans-serif;
 }
@@ -31,7 +32,9 @@ body {
   background: var(--color-background);
   color: var(--color-text);
   line-height: 1.6;
-  font-size: 16px;
+  font-size: 1rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Body layout */
@@ -41,26 +44,15 @@ body {
 }
 
 /* Headings */
-h1 {
+h1, h2, h3 {
   font-family: var(--font-heading);
   color: var(--color-heading);
   margin-bottom: 0.5em;
-  font-size: 2.5rem; /* Largest */
 }
 
-h2 {
-  font-family: var(--font-heading);
-  color: var(--color-heading);
-  margin-bottom: 0.5em;
-  font-size: 2rem; /* Medium */
-}
-
-h3 {
-  font-family: var(--font-heading);
-  color: var(--color-heading);
-  margin-bottom: 0.5em;
-  font-size: 1.5rem; /* Smallest */
-}
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
 
 main {
   flex: 1;
@@ -71,6 +63,7 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
   padding: 20px 32px;
   background: var(--color-header-background);
   color: var(--color-text);
@@ -80,21 +73,14 @@ nav {
 nav a {
   color: var(--color-link);
   text-decoration: none;
-  margin-left: 20px;
 }
 
 section {
-  padding: 24px 24px;
+  padding: 24px;
 }
 
-#hero {
-  background: var(--color-background);
-}
-
-#about-me {
-  background: var(--color-background);
-}
-
+#hero,
+#about-me,
 #this-site {
   background: var(--color-background);
 }
@@ -114,6 +100,11 @@ a:hover {
   color: var(--vt-c-text-1);
 }
 
+a:focus {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+
 @media (max-width: 600px) {
   main,
   section {
@@ -125,9 +116,5 @@ a:hover {
     align-items: flex-start;
     gap: 8px;
     padding: 16px;
-  }
-
-  nav a {
-    margin-left: 0;
   }
 }
