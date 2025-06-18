@@ -1,74 +1,103 @@
+---
+const { baseDomain } = Astro.props;
+---
+
 <header>
-    <nav>
-      <div class="nav-links" id="nav-links">
-        <a href="#about-me" class="button">About Me</a>
-        <a href="#this-site" class="button">This Site</a>
-      </div>
-      <button class="burger" id="burger" onclick="document.getElementById('nav-links').classList.toggle('show')">
-        ☰
-      </button>
-    </nav>
-  </header>
-  
-  <style>
-    nav {
-      display: flex;
-      justify-content: flex-end;
-      align-items: center;
-      padding: 20px 32px;
-      background: var(--color-header-background);
-      position: relative;
-    }
-  
+  <nav>
+    <div class="nav-left">
+      <span class="logo">{baseDomain}</span>
+    </div>
+
+    <div class="nav-links" id="nav-links">
+      <a href="#about-me" class="button">About Me</a>
+      <a href="#this-site" class="button">This Site</a>
+    </div>
+
+    <button
+      class="burger"
+      id="burger"
+      onclick="
+        const links = document.getElementById('nav-links');
+        const burger = document.getElementById('burger');
+        links.classList.toggle('show');
+        burger.classList.toggle('show');
+      "
+    ></button>
+  </nav>
+</header>
+
+<style>
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 32px;
+    background: var(--color-header-background);
+    position: relative;
+  }
+
+  .nav-left .logo {
+    color: var(--color-link);
+    font-weight: bold;
+    font-size: 1.25rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 12px;
+  }
+
+  .button {
+    padding: 12px 24px;
+    color: var(--color-btn-text);
+    background: var(--color-link);
+    text-decoration: none;
+    border-radius: 6px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+  }
+
+  .burger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1100;
+    font-size: 24px;
+    color: var(--color-link);
+  }
+
+  .burger::before {
+    content: "☰";
+  }
+
+  .burger.show::before {
+    content: "✕";
+  }
+
+  @media (max-width: 600px) {
     .nav-links {
-      display: flex;
-      gap: 12px;
-    }
-  
-    .button {
-      padding: 12px 24px;
-      color: var(--color-btn-text);
-      background: var(--color-link);
-      text-decoration: none;
-      border-radius: 6px;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-    }
-  
-    .burger {
       display: none;
-      font-size: 24px;
-      background: none;
-      color: var(--color-link);
-      border: none;
-      cursor: pointer;
+      flex-direction: column;
+      background: var(--color-header-background);
+      padding: 8px 0;
       position: absolute;
-      right: 32px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 1100;
+      top: 64px;
+      right: 20px;
+      z-index: 1000;
     }
-  
-    @media (max-width: 600px) {
-      .nav-links {
-        display: none;
-        flex-direction: column;
-        background: var(--color-header-background);
-        padding: 8px 0;
-        position: absolute;
-        top: 64px;
-        right: 20px;
-        z-index: 1000;
-      }
-  
-      .nav-links.show {
-        display: flex;
-      }
-  
-      .burger {
-        display: block;
-      }
+
+    .nav-links.show {
+      display: flex;
     }
-  </style>
-  
+
+    .burger {
+      display: block;
+    }
+  }
+</style>

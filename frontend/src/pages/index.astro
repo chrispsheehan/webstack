@@ -17,14 +17,14 @@ const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "localhost";
     <link rel="icon" type="image/png" href="/face.png" />
   </head>
   <body>
-    <Header />
+    <Header baseDomain={baseDomain}/>
 
     <main>
       <section id="hero">
         <h1>👋 Welcome to my site!</h1>
       </section>
 
-      <AboutMe baseDomain={baseDomain} />
+      <AboutMe />
 
       <ThisSite />
     </main>
