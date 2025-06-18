@@ -1,4 +1,5 @@
 ---
+import Header from "../layouts/Header.astro";
 import Footer from "../layouts/Footer.astro";
 import ThisSite from "../layouts/ThisSite.astro";
 import AboutMe from "../layouts/AboutMe.astro";
@@ -16,12 +17,7 @@ const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "localhost";
     <link rel="icon" type="image/png" href="/face.png" />
   </head>
   <body>
-    <header>
-      <nav>
-        <a href="#about-me" class="button">About Me</a>
-        <a href="#this-site" class="button">This Site</a>
-      </nav>
-    </header>
+    <Header />
 
     <main>
       <section id="hero">
@@ -36,25 +32,3 @@ const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "localhost";
     <Footer baseDomain={baseDomain} />
   </body>
 </html>
-
-<style>
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 32px;
-    background: var(--color-header-background);
-  }
-
-  .button {
-    padding: 12px 24px;
-    color: var(--color-btn-text);
-    background: var(--color-link);
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    margin: 0;
-  }
-</style>
