@@ -1,29 +1,74 @@
 <header>
     <nav>
+      <div class="nav-links" id="nav-links">
         <a href="#about-me" class="button">About Me</a>
         <a href="#this-site" class="button">This Site</a>
+      </div>
+      <button class="burger" id="burger" onclick="document.getElementById('nav-links').classList.toggle('show')">
+        ☰
+      </button>
     </nav>
-</header>
-
-<style>
+  </header>
+  
+  <style>
     nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 20px 32px;
-        background: var(--color-header-background);
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: 20px 32px;
+      background: var(--color-header-background);
+      position: relative;
     }
-
+  
+    .nav-links {
+      display: flex;
+      gap: 12px;
+    }
+  
     .button {
-        padding: 12px 24px;
-        color: var(--color-btn-text);
-        background: var(--color-link);
-        text-decoration: none;
-        border-radius: 6px;
-        font-weight: bold;
-        border: none;
-        cursor: pointer;
-        margin: 0;
+      padding: 12px 24px;
+      color: var(--color-btn-text);
+      background: var(--color-link);
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
     }
-</style>
+  
+    .burger {
+      display: none;
+      font-size: 24px;
+      background: none;
+      color: var(--color-link);
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      right: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1100;
+    }
+  
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        background: var(--color-header-background);
+        padding: 8px 0;
+        position: absolute;
+        top: 64px;
+        right: 20px;
+        z-index: 1000;
+      }
+  
+      .nav-links.show {
+        display: flex;
+      }
+  
+      .burger {
+        display: block;
+      }
+    }
+  </style>
   
