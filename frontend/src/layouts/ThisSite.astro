@@ -12,33 +12,20 @@ import Visits from "../components/Visits";
     box-sizing: border-box;
   }
 
-  .site-section-flex {
-    display: flex;
-    gap: 3rem;
-    align-items: flex-start;
-    justify-content: space-between;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
   .site-section-meta {
-    min-width: 220px;
-    max-width: 320px;
-    flex: 0 0 auto;
+    margin-bottom: 2.5rem;
   }
 
   .dashboard-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 2rem;
-    flex: 1 1 0;
-    min-width: 0;
     width: 100%;
     box-sizing: border-box;
   }
 
   .dashboard-card {
-    background: white;
+    background: rgb(194, 12, 12);
     border-radius: 1rem;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
     padding: 1.5rem;
@@ -98,11 +85,6 @@ import Visits from "../components/Visits";
   }
 
   @media (max-width: 900px) {
-    .site-section-flex {
-      flex-direction: column;
-      gap: 2rem;
-    }
-
     .dashboard-row {
       grid-template-columns: 1fr;
       gap: 1.5rem;
@@ -112,27 +94,26 @@ import Visits from "../components/Visits";
 
 <section id="this-site">
   <div class="container">
-    <div class="site-section-flex">
-      <div class="site-section-meta">
-        <h2>This Site</h2>
-        <p>
-          Built with Astro, deployed to AWS using Terragrunt and Serverless.
-        </p>
-        <a
-          href={`https://github.com/chrispsheehan/webstack/actions/workflows/release_prod.yml`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            src={`https://github.com/chrispsheehan/webstack/actions/workflows/release_prod.yml/badge.svg?`}
-            alt="Webstack Workflow Status"
-          />
-        </a>
-      </div>
-      <div class="dashboard-row">
-        <Visits client:load />
-        <CostExplorer client:load />
-      </div>
+    <div class="site-section-meta">
+      <h2>This Site</h2>
+      <p>
+        Built with Astro, deployed to AWS using Terragrunt and Serverless.
+      </p>
+      <a
+        href={`https://github.com/chrispsheehan/webstack/actions/workflows/release_prod.yml`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        <img
+          src={`https://github.com/chrispsheehan/webstack/actions/workflows/release_prod.yml/badge.svg?`}
+          alt="Webstack Workflow Status"
+        />
+      </a>
+    </div>
+
+    <div class="dashboard-row">
+      <Visits client:load />
+      <CostExplorer client:load />
     </div>
   </div>
 </section>
