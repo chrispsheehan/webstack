@@ -16,12 +16,43 @@ import Visits from "../components/Visits";
     margin-bottom: 2.5rem;
   }
 
-  .dashboard-row {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  .dashboard-wrapper {
+    display: flex;
     gap: 2rem;
-    width: 100%;
-    box-sizing: border-box;
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+
+  .github-icon-button {
+    display: block;
+    background: var(--color-header-background);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--color-heading);
+    transition:
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+    height: fit-content;
+    flex: 0 0 auto;
+  }
+
+  .github-icon-button:hover {
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px) scale(1.05);
+  }
+
+  .github-icon-button img {
+    height: 40px;
+    width: 40px;
+    display: block;
+  }
+
+  .dashboard-row {
+    display: flex;
+    flex: 1;
+    gap: 2rem;
+    flex-wrap: wrap;
+    min-width: 0;
   }
 
   .dashboard-card {
@@ -29,6 +60,7 @@ import Visits from "../components/Visits";
     border-radius: 1rem;
     padding: 1.5rem;
     width: 100%;
+    max-width: 340px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -78,12 +110,19 @@ import Visits from "../components/Visits";
   }
 
   @media (max-width: 900px) {
+    .dashboard-wrapper {
+      flex-direction: column;
+    }
+
     .dashboard-row {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
+      flex-direction: column;
+    }
+
+    .dashboard-card {
+      max-width: 100%;
     }
   }
-</style >
+</style>
 
 <section id="this-site">
   <div class="container">
@@ -93,20 +132,33 @@ import Visits from "../components/Visits";
         Built with Astro, deployed to AWS using Terragrunt and Serverless.
       </p>
       <a
-        href={`https://github.com/chrispsheehan/webstack/actions/workflows/release_prod.yml`}
+        href="https://github.com/chrispsheehan/webstack/actions/workflows/release_prod.yml"
         target="_blank"
         rel="noopener noreferrer"
       >
         <img
-          src={`https://github.com/chrispsheehan/webstack/actions/workflows/release_prod.yml/badge.svg?`}
+          src="https://github.com/chrispsheehan/webstack/actions/workflows/release_prod.yml/badge.svg"
           alt="Webstack Workflow Status"
         />
       </a>
     </div>
 
-    <div class="dashboard-row">
-      <Visits client:load />
-      <CostExplorer client:load />
+    <div class="dashboard-wrapper">
+      <!-- GitHub Icon -->
+      <a
+        href="https://github.com/chrispsheehan/webstack"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="github-icon-button"
+      >
+        <img src="/assets/social/github.png" alt="GitHub" />
+      </a>
+
+      <!-- Cards -->
+      <div class="dashboard-row">
+        <Visits client:load />
+        <CostExplorer client:load />
+      </div>
     </div>
   </div>
 </section>
