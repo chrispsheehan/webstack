@@ -25,18 +25,19 @@ import Visits from "../components/Visits";
   }
 
   .dashboard-card {
-    background: var(red);
+    background: var(--color-header-background);
     border-radius: 1rem;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
     padding: 1.5rem;
     width: 100%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
     transition:
       box-shadow 0.2s ease,
       transform 0.2s ease;
-    border: 1px solid #e0e4ea;
+    border: 1px solid var(--color-heading);
   }
 
   .dashboard-card:hover {
@@ -54,6 +55,7 @@ import Visits from "../components/Visits";
     list-style: none;
     padding: 0;
     margin: 0;
+    width: 100%;
   }
 
   .dashboard-card li {
@@ -61,22 +63,27 @@ import Visits from "../components/Visits";
     font-size: 1.1rem;
     display: flex;
     justify-content: space-between;
+    width: 100%;
   }
 
   .dashboard-card strong {
     font-weight: 600;
-    margin-left: auto;
     color: var(--color-text);
   }
 
-  .dashboard-card small,
+  .dashboard-card small {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-text);
+  }
+
   @media (max-width: 900px) {
     .dashboard-row {
       grid-template-columns: 1fr;
       gap: 1.5rem;
     }
   }
-</style>
+</style >
 
 <section id="this-site">
   <div class="container">
