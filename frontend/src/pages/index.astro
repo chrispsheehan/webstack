@@ -3,6 +3,7 @@ import Header from "../layouts/Header.astro";
 import Footer from "../layouts/Footer.astro";
 import ThisSite from "../layouts/ThisSite.astro";
 import AboutMe from "../layouts/AboutMe.astro";
+import Certifications from "../layouts/Certifications.astro";
 
 const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "chrispsheehan.com";
 ---
@@ -25,6 +26,8 @@ const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "chrispsheehan.com";
       </section>
 
       <AboutMe />
+
+      <Certifications />
 
       <ThisSite />
     </main>
