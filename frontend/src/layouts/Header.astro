@@ -8,96 +8,140 @@ const { baseDomain } = Astro.props;
       <span class="logo">{baseDomain}</span>
     </div>
 
+    <!-- Top-right nav buttons (desktop) -->
     <div class="nav-links" id="nav-links">
       <a href="#about-me" class="button">About Me</a>
       <a href="#this-site" class="button">This Site</a>
     </div>
 
+    <!-- Mobile fullscreen menu -->
+    <div class="mobile-overlay" id="mobile-overlay">
+      <a href="#about-me" class="overlay-button" onclick="hideMenu()">About Me</a>
+      <a href="#this-site" class="overlay-button" onclick="hideMenu()">This Site</a>
+    </div>
+
+    <!-- Burger icon -->
     <button
       class="burger"
       id="burger"
-      onclick="
-        const links = document.getElementById('nav-links');
-        const burger = document.getElementById('burger');
-        links.classList.toggle('show');
-        burger.classList.toggle('show');
-      "
+      aria-label="Toggle menu"
+      onclick="toggleMenu()"
     ></button>
   </nav>
-</header>
 
-<style>
-  nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 32px;
-    background: var(--color-header-background);
-    position: relative;
-  }
-
-  .nav-left .logo {
-    color: var(--color-link);
-    font-weight: bold;
-    font-size: 1.25rem;
-  }
-
-  .nav-links {
-    display: flex;
-    gap: 12px;
-  }
-
-  .button {
-    padding: 12px 24px;
-    color: var(--color-btn-text);
-    background: var(--color-link);
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-  }
-
-  .burger {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    position: absolute;
-    right: 32px;
-    top: 50%;
-    transform: translateY(-50%);
-    z-index: 1100;
-    font-size: 24px;
-    color: var(--color-link);
-  }
-
-  .burger::before {
-    content: "☰";
-  }
-
-  .burger.show::before {
-    content: "✕";
-  }
-
-  @media (max-width: 600px) {
-    .nav-links {
-      display: none;
-      flex-direction: column;
-      background: var(--color-header-background);
-      padding: 8px 0;
-      position: absolute;
-      top: 64px;
-      right: 20px;
-      z-index: 1000;
+  <script type="module" client:load>
+    function toggleMenu() {
+      const overlay = document.getElementById('mobile-overlay');
+      const burger = document.getElementById('burger');
+      overlay.classList.toggle('show');
+      burger.classList.toggle('show');
     }
 
-    .nav-links.show {
+    function hideMenu() {
+      document.getElementById('mobile-overlay').classList.remove('show');
+      document.getElementById('burger').classList.remove('show');
+    }
+
+    window.toggleMenu = toggleMenu;
+    window.hideMenu = hideMenu;
+  </script>
+
+  <style>
+    :root {
+      --color-hover: #3e4945; /* your desired overlay bg color */
+    }
+
+    nav {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 32px;
+      background: var(--color-header-background);
+      position: relative;
+      z-index: 100;
+    }
+
+    .nav-left .logo {
+      color: var(--color-link);
+      font-weight: bold;
+      font-size: 1.25rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .button {
+      padding: 12px 24px;
+      color: var(--color-btn-text);
+      background: var(--color-link);
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
     }
 
     .burger {
-      display: block;
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      right: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1100;
+      font-size: 24px;
+      color: var(--color-link);
     }
-  }
-</style>
+
+    .burger::before {
+      content: "☰";
+    }
+
+    .burger.show::before {
+      content: "✕";
+    }
+
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--color-hover); /* ⬅️ overlay background color */
+      z-index: 1000;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .mobile-overlay.show {
+      display: flex;
+    }
+
+    .overlay-button {
+      padding: 16px 32px;
+      font-size: 1.5rem;
+      background: var(--color-link);
+      color: var(--color-btn-text);
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    @media (max-width: 600px) {
+      .burger {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</header>
