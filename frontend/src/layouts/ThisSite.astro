@@ -25,7 +25,7 @@ import Visits from "../components/Visits";
   }
 
   .dashboard-card {
-    background: var(--color-background)
+    background: var(red);
     border-radius: 1rem;
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
     padding: 1.5rem;
@@ -47,7 +47,7 @@ import Visits from "../components/Visits";
   .dashboard-card h3 {
     margin: 0 0 1rem;
     font-size: 1.3rem;
-    color: #2e3735;
+    color: var(--color-text);
   }
 
   .dashboard-card ul {
@@ -66,24 +66,10 @@ import Visits from "../components/Visits";
   .dashboard-card strong {
     font-weight: 600;
     margin-left: auto;
-    color: #333;
+    color: var(--color-text);
   }
 
   .dashboard-card small,
-  .dashboard-card .updated {
-    margin-top: 1rem;
-    font-size: 0.875rem;
-    color: #731010;
-  }
-
-  .dashboard-card .error {
-    color: #c00;
-  }
-
-  .dashboard-card .muted {
-    color: #b00f0f;
-  }
-
   @media (max-width: 900px) {
     .dashboard-row {
       grid-template-columns: 1fr;
