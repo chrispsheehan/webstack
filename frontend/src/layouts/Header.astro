@@ -29,26 +29,14 @@ const { baseDomain } = Astro.props;
     ></button>
   </nav>
 
-  <script type="module" client:load>
-    function toggleMenu() {
-      const overlay = document.getElementById('mobile-overlay');
-      const burger = document.getElementById('burger');
-      overlay.classList.toggle('show');
-      burger.classList.toggle('show');
-    }
-
-    function hideMenu() {
-      document.getElementById('mobile-overlay').classList.remove('show');
-      document.getElementById('burger').classList.remove('show');
-    }
-
-    window.toggleMenu = toggleMenu;
-    window.hideMenu = hideMenu;
+  <script type="module" >
+    import '/scripts/mobileMenu.js';
   </script>
+
 
   <style>
     :root {
-      --color-hover: #3e4945; /* your desired overlay bg color */
+      --color-hover: var(--color-background)
     }
 
     nav {
