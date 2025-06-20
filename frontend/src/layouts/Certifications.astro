@@ -5,7 +5,7 @@ import Certifications from "../components/Certifications";
 <style is:global>
 .cert-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   justify-content: center;
 }
 
@@ -27,12 +27,14 @@ import Certifications from "../components/Certifications";
 }
 
 .cert-img-wrapper {
+  width: 150px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
   position: relative;
-  width: 100%;
-  aspect-ratio: 16 / 9;
   overflow: hidden;
   border-radius: 1rem;
   background: var(--color-header-background, #f9f9f9);
+  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .cert-img-wrapper img {
@@ -51,6 +53,7 @@ import Certifications from "../components/Certifications";
     justify-content: center;
     max-width: 960px;
     width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
   }
 }
 
