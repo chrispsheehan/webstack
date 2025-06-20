@@ -1,6 +1,8 @@
 ---
 import CostExplorer from "../components/CostExplorer";
 import Visits from "../components/Visits";
+
+const { githubRepo } = Astro.props;
 ---
 
 <style is:global>
@@ -106,12 +108,12 @@ import Visits from "../components/Visits";
   <div class="container">
     <div class="site-section-meta">
       <a
-        href="https://github.com/chrispsheehan/webstack/actions/workflows/release_prod.yml"
+        href=`https://github.com/${githubRepo}/actions/workflows/release_prod.yml`
         target="_blank"
         rel="noopener noreferrer"
       >
         <img
-          src="https://github.com/chrispsheehan/webstack/actions/workflows/release_prod.yml/badge.svg"
+          src=`https://github.com/${githubRepo}/actions/workflows/release_prod.yml/badge.svg`
           alt="Webstack Workflow Status"
         />
       </a>

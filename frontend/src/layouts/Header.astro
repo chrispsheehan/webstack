@@ -1,5 +1,6 @@
 ---
 const { baseDomain } = Astro.props;
+const { githubRepo } = Astro.props;
 ---
 
 <header>
@@ -14,7 +15,7 @@ const { baseDomain } = Astro.props;
       <a href="#this-site" class="button">This Site</a>
       <a href="#certifications" class="button">Certifications</a>
       <a
-        href="https://github.com/chrispsheehan/webstack"
+        href=`https://github.com/${githubRepo}`
         target="_blank"
         rel="noopener noreferrer"
         class="button github-text-icon-button"
@@ -36,7 +37,7 @@ const { baseDomain } = Astro.props;
         >Certifications</a
       >
       <a
-        href="https://github.com/chrispsheehan/webstack"
+        href=`https://github.com/${githubRepo}`
         target="_blank"
         rel="noopener noreferrer"
         class="overlay-icon-button"

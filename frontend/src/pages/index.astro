@@ -6,6 +6,7 @@ import AboutMe from "../layouts/AboutMe.astro";
 import Certifications from "../layouts/Certifications.astro";
 
 const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "chrispsheehan.com";
+const githubRepo = import.meta.env.GITHUB_REPOSITORY ?? "chrispsheehan/webstack";
 ---
 
 <!doctype html>
@@ -18,7 +19,7 @@ const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "chrispsheehan.com";
     <link rel="icon" type="image/png" href="/face.png" />
   </head>
   <body>
-    <Header baseDomain={baseDomain} />
+    <Header baseDomain={baseDomain} githubRepo={githubRepo} />
 
     <main>
       <section id="hero">
@@ -29,7 +30,7 @@ const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "chrispsheehan.com";
 
       <Certifications />
 
-      <ThisSite />
+      <ThisSite githubRepo={githubRepo}/>
     </main>
 
     <Footer baseDomain={baseDomain} />
