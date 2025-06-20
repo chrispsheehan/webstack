@@ -3,40 +3,60 @@ import Certifications from "../components/Certifications";
 ---
 
 <style is:global>
+.cert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  justify-content: center;
+}
+
+.cert-grid > a {
+  display: block;
+  max-width: 220px;
+  width: 100%;
+  text-align: center;
+  margin: 0 auto;
+}
+
+.cert-grid > a:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+.cert-img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: var(--color-header-background, #f9f9f9);
+}
+
+.cert-img-wrapper img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+@media (max-width: 700px) {
   .cert-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    max-width: 960px;
+    width: 100%;
   }
+}
 
-  /* Force 2-per-row grid on medium screens */
-  @media (max-width: 700px) {
-    .cert-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
-
-    .cert-grid {
-      max-width: 960px;
-      width: 100%;
-    }
-
-    .cert-img-wrapper {
-      padding-top: 20%;
-    }
+@media (max-width: 400px) {
+  .cert-grid > a {
+    flex: 1 1 100%;
+    max-width: 100px;
   }
+}
 
-  /* On tiny screens, stack them and center single items */
-  @media (max-width: 400px) {
-    .cert-grid > a {
-      flex: 1 1 100%;
-      max-width: 220px;
-    }
-
-    .cert-img-wrapper {
-      padding-top: 56.25%;
-    }
-  }
 </style>
 
 <section>
