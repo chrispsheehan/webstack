@@ -20,24 +20,24 @@ const { githubRepo } = Astro.props;
 
   .dashboard-wrapper {
     display: flex;
+    flex-direction: column;
     gap: 2rem;
-    flex-wrap: wrap;
-    align-items: flex-start;
   }
+
   .dashboard-row {
     display: flex;
-    flex: 1;
-    gap: 2rem;
     flex-wrap: wrap;
-    min-width: 0;
+    gap: 2rem;
+    width: 100%;
   }
 
   .dashboard-card {
     background: var(--color-header-background);
     border-radius: 1rem;
     padding: 1.5rem;
-    width: 100%;
-    max-width: 340px;
+    flex: 1 1 0;
+    min-width: 300px;
+    max-width: 100%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -97,7 +97,7 @@ const { githubRepo } = Astro.props;
     }
 
     .dashboard-card {
-      max-width: 100%;
+      width: 100%;
     }
   }
 </style>
@@ -108,19 +108,18 @@ const { githubRepo } = Astro.props;
   <div class="container">
     <div class="site-section-meta">
       <a
-        href=`https://github.com/${githubRepo}/actions/workflows/release_prod.yml`
+        href={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml`}
         target="_blank"
         rel="noopener noreferrer"
       >
         <img
-          src=`https://github.com/${githubRepo}/actions/workflows/release_prod.yml/badge.svg`
+          src={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml/badge.svg`}
           alt="Webstack Workflow Status"
         />
       </a>
     </div>
 
     <div class="dashboard-wrapper">
-      <!-- Cards -->
       <div class="dashboard-row">
         <Visits client:load />
         <CostExplorer client:load />
