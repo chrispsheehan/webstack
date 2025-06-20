@@ -26,9 +26,15 @@ const { baseDomain } = Astro.props;
 
     <!-- Mobile fullscreen menu -->
     <div class="mobile-overlay" id="mobile-overlay">
-      <a href="#about-me" class="overlay-button" onclick="hideMenu()">About Me</a>
-      <a href="#this-site" class="overlay-button" onclick="hideMenu()">This Site</a>
-      <a href="#certifications" class="overlay-button" onclick="hideMenu()">Certifications</a>
+      <a href="#about-me" class="overlay-button" onclick="hideMenu()"
+        >About Me</a
+      >
+      <a href="#this-site" class="overlay-button" onclick="hideMenu()"
+        >This Site</a
+      >
+      <a href="#certifications" class="overlay-button" onclick="hideMenu()"
+        >Certifications</a
+      >
       <a
         href="https://github.com/chrispsheehan/webstack"
         target="_blank"
@@ -45,12 +51,11 @@ const { baseDomain } = Astro.props;
       class="burger"
       id="burger"
       aria-label="Toggle menu"
-      onclick="toggleMenu()"
-    ></button>
+      onclick="toggleMenu()"></button>
   </nav>
 
   <script type="module">
-    import '/scripts/mobileMenu.js';
+    import "/scripts/mobileMenu.js";
   </script>
 
   <style>

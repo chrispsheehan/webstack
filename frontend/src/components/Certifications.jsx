@@ -44,18 +44,18 @@ export default function Certifications() {
 
   return (
     <div className="cert-grid">
-    {certs.map((cert, index) => (
+      {certs.map((cert, index) => (
         <a
-            key={index}
-            href={cert.href}
-            target="_blank"
-            rel="noopener noreferrer"
+          key={index}
+          href={cert.href}
+          target="_blank"
+          rel="noopener noreferrer"
         >
-        <div className="cert-img-wrapper">
+          <div className="cert-img-wrapper">
             <img src={cert.src} alt={cert.alt} />
-        </div>
+          </div>
         </a>
-    ))}
+      ))}
     </div>
   );
 }
