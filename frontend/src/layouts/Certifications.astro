@@ -15,11 +15,15 @@ import Certifications from "../components/Certifications";
   width: 100%;
   text-align: center;
   margin: 0 auto;
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
 }
 
-.cert-grid > a:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+.cert-grid > a:hover .cert-img-wrapper {
+  background: var(--color-link);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+  transform: translateY(-2px) scale(1.02);
 }
 
 .cert-img-wrapper {
