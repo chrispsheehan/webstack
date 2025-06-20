@@ -4,6 +4,7 @@
   --color-hover: #a5c4b8;
   --color-heading: #e0f3cc;
   --color-text: #f2fce6;
+  --color-btn-text: var(--color-background);
   --color-link: #a2d5ac;
   --color-header-background: #26312f;
   --color-footer-background: #1a201e;
