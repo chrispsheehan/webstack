@@ -11,5 +11,5 @@ variable "default_branch" {
 variable "is_public" {
   description = "Repo is public (true) or private (false)"
   type        = bool
-  default     = false
+  default     = true
 }

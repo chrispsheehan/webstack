@@ -99,7 +99,7 @@ jobs:
     timeout-minutes: 2
     steps:
       - uses: actions/checkout@v4
-      - uses: extractions/setup-just@v2
+      - uses: extractions/setup-just@v3
       - name: Run frontend build
         run: just frontend-build
 
@@ -111,6 +111,6 @@ jobs:
     timeout-minutes: 2
     steps:
       - uses: actions/checkout@v4
-      - uses: extractions/setup-just@v2
+      - uses: extractions/setup-just@v3
       - name: Run backend build
         run: just backend-build
