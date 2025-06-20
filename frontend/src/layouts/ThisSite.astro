@@ -22,31 +22,6 @@ import Visits from "../components/Visits";
     flex-wrap: wrap;
     align-items: flex-start;
   }
-
-  .github-icon-button {
-    display: block;
-    background: var(--color-header-background);
-    padding: 1rem;
-    border-radius: 0.75rem;
-    border: 1px solid var(--color-heading);
-    transition:
-      box-shadow 0.2s ease,
-      transform 0.2s ease;
-    height: fit-content;
-    flex: 0 0 auto;
-  }
-
-  .github-icon-button:hover {
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-    transform: translateY(-2px) scale(1.05);
-  }
-
-  .github-icon-button img {
-    height: 40px;
-    width: 40px;
-    display: block;
-  }
-
   .dashboard-row {
     display: flex;
     flex: 1;
@@ -144,16 +119,6 @@ import Visits from "../components/Visits";
     </div>
 
     <div class="dashboard-wrapper">
-      <!-- GitHub Icon -->
-      <a
-        href="https://github.com/chrispsheehan/webstack"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="github-icon-button"
-      >
-        <img src="/assets/social/github.png" alt="GitHub" />
-      </a>
-
       <!-- Cards -->
       <div class="dashboard-row">
         <Visits client:load />
