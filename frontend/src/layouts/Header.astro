@@ -17,8 +17,9 @@ const { baseDomain } = Astro.props;
         href="https://github.com/chrispsheehan/webstack"
         target="_blank"
         rel="noopener noreferrer"
-        class="icon-button"
+        class="button github-text-icon-button"
       >
+        <span>GitHub</span>
         <img src="/assets/social/github.png" alt="GitHub" />
       </a>
     </div>
@@ -79,6 +80,9 @@ const { baseDomain } = Astro.props;
     }
 
     .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
       padding: 12px 24px;
       color: var(--color-btn-text);
       background: var(--color-link);
@@ -87,6 +91,12 @@ const { baseDomain } = Astro.props;
       font-weight: bold;
       border: none;
       cursor: pointer;
+      height: 48px;
+    }
+
+    .github-text-icon-button img {
+      width: 24px;
+      height: 24px;
     }
 
     .icon-button {
@@ -106,7 +116,7 @@ const { baseDomain } = Astro.props;
       width: 100%;
       height: 100%;
       object-fit: contain;
-      padding: 8px; /* Optional: gives breathing room inside the button */
+      padding: 8px;
       box-sizing: border-box;
     }
 
