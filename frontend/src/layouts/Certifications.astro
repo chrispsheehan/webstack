@@ -16,15 +16,21 @@ import Certifications from "../components/Certifications";
   text-align: center;
   margin: 0 auto;
   transition:
-    box-shadow 0.2s ease,
     transform 0.2s ease;
 }
 
 .cert-grid > a:hover .cert-img-wrapper {
   background: var(--color-link);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
   transform: translateY(-2px) scale(1.02);
 }
+
+.cert-grid > a:focus,
+.cert-grid > a:active {
+  outline: none;
+  box-shadow: none;
+  background: none;
+}
+
 
 .cert-img-wrapper {
   width: 150px;
