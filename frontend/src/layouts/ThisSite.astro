@@ -15,8 +15,17 @@ const { githubRepo } = Astro.props;
   }
 
   .site-section-meta {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
     margin-bottom: 2.5rem;
   }
+
+  .site-section-meta img {
+    transform: scale(2);
+    transform-origin: left center;
+  }
+
 
   .dashboard-wrapper {
     display: flex;
