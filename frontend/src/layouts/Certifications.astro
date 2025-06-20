@@ -29,73 +29,38 @@ const certifications = [
 ---
 
 <style>
-  .cert-section {
-    margin: 2rem 0;
-  }
-
-  .cert-container {
-    width: 100%;
-    padding: 0 2rem; /* Adjust this if your site uses different horizontal spacing */
-  }
-
-  .cert-container h2 {
-    text-align: left;
-    font-size: 1.75rem;
-    margin-bottom: 1rem;
-  }
-
   .cert-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 2rem;
   }
 
-  .cert-grid a {
-    display: block;
-    flex: 0 1 200px;
-    max-width: 220px;
-    text-align: center;
-  }
+  /* Force 2-per-row grid on medium screens */
+  @media (max-width: 700px) {
+    .cert-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
 
-  .cert-img-wrapper {
-    position: relative;
-    width: 100%;
-    padding-top: 75%; /* 4:3 aspect ratio */
-    background: var(--color-header-background);
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
-    overflow: hidden;
-  }
+    .cert-grid > a {
+      flex: 1 1 45%;
+      max-width: 220px;
+    }
 
-  .cert-img-wrapper img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    transition: transform 0.2s, box-shadow 0.2s;
-  }
-
-  .cert-img-wrapper img:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
-    background: var(--color-hover);
-  }
-
-  /* Responsive Aspect Ratio Tweak */
-  @media (max-width: 900px) {
     .cert-img-wrapper {
-      padding-top: 66.6%; /* 3:2 */
+      padding-top: 60%;
     }
   }
 
-  @media (max-width: 600px) {
-    .cert-container {
-      padding: 0 1rem;
+  /* On tiny screens, stack them and center single items */
+  @media (max-width: 400px) {
+    .cert-grid > a {
+      flex: 1 1 100%;
+      max-width: 220px;
     }
+
     .cert-img-wrapper {
-      padding-top: 56.25%; /* 16:9 */
+      padding-top: 56.25%;
     }
   }
 </style>
