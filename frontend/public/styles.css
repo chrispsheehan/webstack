@@ -9,7 +9,7 @@
   --color-footer-background: #1a201e;
 
   /* Spacing & Typography */
-  --section-gap: 160px;
+  --section-gap: 80px;
   --font-body: "Inter", sans-serif;
   --font-heading: "Montserrat", sans-serif;
 }
@@ -68,7 +68,10 @@ nav a {
 }
 
 section {
-  padding: 24px;
+  padding-left: 32px;
+  padding-right: 32px;
+  padding-top: 0;
+  padding-bottom: var(--section-gap);
 }
 
 #hero,

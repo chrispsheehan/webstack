@@ -13,6 +13,14 @@ const { baseDomain } = Astro.props;
       <a href="#about-me" class="button">About Me</a>
       <a href="#this-site" class="button">This Site</a>
       <a href="#certifications" class="button">Certifications</a>
+      <a
+        href="https://github.com/chrispsheehan/webstack"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="icon-button"
+      >
+        <img src="/assets/social/github.png" alt="GitHub" />
+      </a>
     </div>
 
     <!-- Mobile fullscreen menu -->
@@ -20,6 +28,15 @@ const { baseDomain } = Astro.props;
       <a href="#about-me" class="overlay-button" onclick="hideMenu()">About Me</a>
       <a href="#this-site" class="overlay-button" onclick="hideMenu()">This Site</a>
       <a href="#certifications" class="overlay-button" onclick="hideMenu()">Certifications</a>
+      <a
+        href="https://github.com/chrispsheehan/webstack"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="overlay-icon-button"
+        onclick="hideMenu()"
+      >
+        <img src="/assets/social/github.png" alt="GitHub" />
+      </a>
     </div>
 
     <!-- Burger icon -->
@@ -31,14 +48,13 @@ const { baseDomain } = Astro.props;
     ></button>
   </nav>
 
-  <script type="module" >
+  <script type="module">
     import '/scripts/mobileMenu.js';
   </script>
 
-
   <style>
     :root {
-      --color-hover: var(--color-background)
+      --color-hover: var(--color-background);
     }
 
     nav {
@@ -73,6 +89,31 @@ const { baseDomain } = Astro.props;
       cursor: pointer;
     }
 
+    .icon-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      width: 48px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      border-radius: 6px;
+      transition: background 0.3s;
+    }
+
+    .icon-button img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 8px; /* Optional: gives breathing room inside the button */
+      box-sizing: border-box;
+    }
+
+    .icon-button:hover {
+      background: var(--color-hover);
+    }
+
     .burger {
       display: none;
       background: none;
@@ -102,7 +143,7 @@ const { baseDomain } = Astro.props;
       left: 0;
       width: 100%;
       height: 100%;
-      background: var(--color-hover); /* ⬅️ overlay background color */
+      background: var(--color-hover);
       z-index: 1000;
       flex-direction: column;
       justify-content: center;
@@ -122,6 +163,23 @@ const { baseDomain } = Astro.props;
       text-decoration: none;
       border-radius: 8px;
       font-weight: bold;
+    }
+
+    .overlay-icon-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100px;
+      width: 100px;
+      border-radius: 8px;
+    }
+
+    .overlay-icon-button img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 6px;
+      box-sizing: border-box;
     }
 
     @media (max-width: 600px) {
