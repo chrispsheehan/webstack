@@ -11,6 +11,8 @@ locals {
     "extractions/setup-just@v*",
     "extractions/setup-crate@v1",
     "softprops/action-gh-release@v2",
-    "thenativeweb/get-next-version@2.6.3"
+    "thenativeweb/get-next-version@2.6.3",
+    "extractions/setup-just@v3",
+    "extractions/setup-crate@v1"
   ]
 }
