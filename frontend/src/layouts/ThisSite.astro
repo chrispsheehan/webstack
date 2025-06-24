@@ -9,39 +9,41 @@ const { githubRepo } = Astro.props;
   <h2>This Site</h2>
   <p>Built with Astro, deployed to AWS using Terragrunt and Serverless.</p>
   <div class="container">
-    <div class="site-section-meta">
-      <!-- Pipeline Badge -->
-      <a
-        href={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml`}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          class="pipeline-badge"
-          src={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml/badge.svg`}
-          alt="Webstack Workflow Status"
-        />
-      </a>
+    <div class="meta-and-dashboard">
+      <!-- Left Column: Badge + Button -->
+      <div class="site-section-meta">
+        <a
+          href={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            class="pipeline-badge"
+            src={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml/badge.svg`}
+            alt="Webstack Workflow Status"
+          />
+        </a>
 
-      <!-- GitHub Repo Button -->
-      <a
-        href={`https://github.com/${githubRepo}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="github-repo-button"
-      >
-        <img
-          src="/assets/social/github.png"
-          alt="GitHub"
-        />
-        <span>View Repo</span>
-      </a>
-    </div>
+        <a
+          href={`https://github.com/${githubRepo}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="github-repo-button"
+        >
+          <img
+            src="/assets/social/github.png"
+            alt="GitHub"
+          />
+          <span>View Repo</span>
+        </a>
+      </div>
 
-    <div class="dashboard-wrapper">
-      <div class="dashboard-row">
-        <Visits client:load />
-        <CostExplorer client:load />
+      <!-- Right Column: Cards -->
+      <div class="dashboard-wrapper">
+        <div class="dashboard-row">
+          <Visits client:load />
+          <CostExplorer client:load />
+        </div>
       </div>
     </div>
   </div>
@@ -49,25 +51,31 @@ const { githubRepo } = Astro.props;
 
 <style is:global>
   .container {
-    max-width: 1100px;
-    margin: 0 auto;
     width: 100%;
     padding: 0 1rem;
     box-sizing: border-box;
   }
 
+  .meta-and-dashboard {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
   .site-section-meta {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     gap: 1rem;
-    margin-bottom: 2.5rem;
+    flex: 0 0 auto;
+    min-width: 180px;
   }
 
   .pipeline-badge {
     height: 24px;
-    max-height: 100%;
     object-fit: contain;
   }
 
@@ -83,7 +91,6 @@ const { githubRepo } = Astro.props;
     text-decoration: none;
     white-space: nowrap;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    z-index: 1;
   }
 
   .github-repo-button img {
@@ -97,6 +104,8 @@ const { githubRepo } = Astro.props;
     display: flex;
     flex-direction: column;
     gap: 2rem;
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .dashboard-row {
@@ -163,8 +172,12 @@ const { githubRepo } = Astro.props;
   }
 
   @media (max-width: 900px) {
-    .dashboard-wrapper {
+    .meta-and-dashboard {
       flex-direction: column;
+    }
+
+    .dashboard-wrapper {
+      width: 100%;
     }
 
     .dashboard-row {
@@ -176,9 +189,8 @@ const { githubRepo } = Astro.props;
     }
 
     .site-section-meta {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 1rem;
+      width: 100%;
+      max-width: 100%;
     }
   }
 </style>
