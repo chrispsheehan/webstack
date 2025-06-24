@@ -8,7 +8,9 @@ locals {
     "dorny/paths-filter@v3",
     "raven-actions/actionlint@v2",
     "autero1/action-terragrunt@v1.3.2",
-    "extractions/setup-just@v3",
-    "extractions/setup-crate@v1"
+    "extractions/setup-just@v*",
+    "extractions/setup-crate@v1",
+    "softprops/action-gh-release@v2",
+    "thenativeweb/get-next-version@2.6.3"
   ]
 }
