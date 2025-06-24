@@ -25,64 +25,11 @@ const siteVersion = import.meta.env.PUBLIC_SITE_VERSION || "1.0.0";
     color: #888;
     margin-top: 0.25rem;
   }
-
-  .social-links {
-    display: flex;
-    gap: 12px;
-  }
-
-  .social-icon {
-    width: 24px;
-    height: 24px;
-    fill: var(--color-link);
-  }
 </style>
 
 <footer>
   <div class="footer-container">
     <p>&copy; {year} {baseDomain}</p>
     <p class="footer-version">v{siteVersion}</p>
-    <div class="social-links">
-      <a
-        href="https://github.com/chrispsheehan"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img src="/assets/social/github.png" alt="GitHub" class="social-icon" />
-      </a>
-      <a
-        href="https://www.linkedin.com/in/chrispsheehan"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="/assets/social/linkedin.png"
-          alt="LinkedIn"
-          class="social-icon"
-        />
-      </a>
-      <a
-        href="https://registry.terraform.io/namespaces/chrispsheehan"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="/assets/social/terraform.png"
-          alt="Terraform"
-          class="social-icon"
-        />
-      </a>
-      <a
-        href="https://www.credly.com/users/chris-sheehan.b081233e"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          src="/assets/social/credly.png"
-          alt="Terraform"
-          class="social-icon"
-        />
-      </a>
-    </div>
   </div>
 </footer>
