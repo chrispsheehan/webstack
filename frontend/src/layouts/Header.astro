@@ -1,6 +1,6 @@
 ---
-const { baseDomain } = Astro.props;
-const { githubRepo } = Astro.props;
+const { baseDomain, githubRepo } = Astro.props;
+const githubOwner = githubRepo.split("/")[0];
 ---
 
 <header>
@@ -15,7 +15,7 @@ const { githubRepo } = Astro.props;
       <a href="#this-site" class="button">This Site</a>
       <a href="#certifications" class="button">Certifications</a>
       <a
-        href=`https://github.com/${githubRepo}`
+        href=`https://github.com/${githubOwner}`
         target="_blank"
         rel="noopener noreferrer"
         class="button github-text-icon-button"
