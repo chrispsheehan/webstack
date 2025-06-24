@@ -6,7 +6,8 @@ import AboutMe from "../layouts/AboutMe.astro";
 import Certifications from "../layouts/Certifications.astro";
 
 const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "chrispsheehan.com";
-const githubRepo = import.meta.env.GITHUB_REPOSITORY ?? "chrispsheehan/webstack";
+const githubRepo =
+  import.meta.env.GITHUB_REPOSITORY ?? "chrispsheehan/webstack";
 ---
 
 <!doctype html>
@@ -30,7 +31,7 @@ const githubRepo = import.meta.env.GITHUB_REPOSITORY ?? "chrispsheehan/webstack"
 
       <Certifications />
 
-      <ThisSite githubRepo={githubRepo}/>
+      <ThisSite githubRepo={githubRepo} />
     </main>
 
     <Footer baseDomain={baseDomain} />
