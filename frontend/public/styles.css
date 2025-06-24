@@ -1,13 +1,14 @@
 :root {
   /* Theme Colors */
-  --color-background: #2e3735;
-  --color-hover: #a5c4b8;
-  --color-heading: #e0f3cc;
-  --color-text: #f2fce6;
-  --color-btn-text: var(--color-background);
-  --color-link: #a2d5ac;
-  --color-header-background: #26312f;
-  --color-footer-background: #26312f;
+  --color-background: #2a3633;
+  --color-header-background: #202a28;
+  --color-footer-background: #202a28;
+
+  --color-text: #f7fdf9;
+  --color-heading: #b4eb9c;
+  --color-link: #3e8f71;
+  --color-hover: #60b994;
+  --color-btn-text: #2a3633;
 
   /* Spacing & Typography */
   --section-gap: 30px;
