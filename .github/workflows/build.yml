@@ -64,7 +64,7 @@ jobs:
         with:
           ref: ${{ inputs.version }}
 
-      - uses: extractions/setup-just@v2
+      - uses: extractions/setup-just@v3
 
       - name: Build Lambdas
         shell: bash

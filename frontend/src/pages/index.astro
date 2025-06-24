@@ -1,9 +1,13 @@
 ---
-import Footer from "../components/Footer.astro";
-import ThisSite from "../components/ThisSite.astro";
-import AboutMe from "../components/AboutMe.astro";
+import Header from "../layouts/Header.astro";
+import Footer from "../layouts/Footer.astro";
+import ThisSite from "../layouts/ThisSite.astro";
+import AboutMe from "../layouts/AboutMe.astro";
+import Certifications from "../layouts/Certifications.astro";
 
-const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "localhost";
+const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "chrispsheehan.com";
+const githubRepo =
+  import.meta.env.GITHUB_REPOSITORY ?? "chrispsheehan/webstack";
 ---
 
 <!doctype html>
@@ -16,36 +20,20 @@ const baseDomain = import.meta.env.PUBLIC_BASE_DOMAIN ?? "localhost";
     <link rel="icon" type="image/png" href="/face.png" />
   </head>
   <body>
-    <header>
-      <nav>
-        <a href="#about-me" class="button">About Me</a>
-        <a href="#this-site" class="button">This Site</a>
-      </nav>
-    </header>
+    <Header baseDomain={baseDomain} githubRepo={githubRepo} />
 
     <main>
       <section id="hero">
-        <h1>👋 Welcome to my site!</h1>
+        <h1>👋 Welcome!</h1>
       </section>
 
-      <AboutMe baseDomain={baseDomain} />
+      <AboutMe />
 
-      <ThisSite />
+      <Certifications />
+
+      <ThisSite githubRepo={githubRepo} />
     </main>
 
     <Footer baseDomain={baseDomain} />
   </body>
 </html>
-
-<style>
-  .button {
-    padding: 12px 24px;
-    color: var(--color-btn-text);
-    background: var(--color-link);
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-  }
-</style>

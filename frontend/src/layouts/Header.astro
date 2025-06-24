@@ -1,0 +1,236 @@
+---
+const { baseDomain, githubRepo } = Astro.props;
+const githubOwner = githubRepo.split("/")[0];
+---
+
+<header>
+  <nav>
+    <div class="nav-left">
+      <span class="logo">{baseDomain}</span>
+    </div>
+
+    <!-- Top-right nav buttons (desktop) -->
+    <div class="nav-links" id="nav-links">
+      <a href="#about-me" class="button hide-on-desktop">About Me</a>
+      <a href="#certifications" class="button hide-on-desktop">Certifications</a
+      >
+      <a href="#this-site" class="button hide-on-desktop">This Site</a>
+      <a
+        href={`https://github.com/${githubOwner}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="button github-text-icon-button"
+      >
+        <span>GitHub</span>
+        <img src="/assets/social/github.png" alt="GitHub" />
+      </a>
+      <a
+        href="https://www.linkedin.com/in/chrispsheehan"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="button"
+      >
+        <span>LinkedIn</span>
+        <img
+          src="/assets/social/linkedin.png"
+          alt="LinkedIn"
+          style="width: 24px; height: 24px;"
+        />
+      </a>
+    </div>
+
+    <!-- Mobile fullscreen menu -->
+    <div class="mobile-overlay" id="mobile-overlay">
+      <a href="#about-me" class="overlay-button" onclick="hideMenu()"
+        >About Me</a
+      >
+      <a href="#certifications" class="overlay-button" onclick="hideMenu()"
+        >Certifications</a
+      >
+      <a href="#this-site" class="overlay-button" onclick="hideMenu()"
+        >This Site</a
+      >
+      <a
+        href={`https://github.com/${githubRepo}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="overlay-icon-button"
+        onclick="hideMenu()"
+      >
+        <img src="/assets/social/github.png" alt="GitHub" />
+      </a>
+      <a
+        href="https://www.linkedin.com/in/chrispsheehan"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="overlay-icon-button"
+        onclick="hideMenu()"
+      >
+        <img src="/assets/social/linkedin.png" alt="LinkedIn" />
+      </a>
+    </div>
+
+    <!-- Burger icon -->
+    <button
+      class="burger"
+      id="burger"
+      aria-label="Toggle menu"
+      onclick="toggleMenu()"></button>
+  </nav>
+
+  <script type="module">
+    import "/scripts/mobileMenu.js";
+  </script>
+
+  <style>
+    :root {
+      --color-hover: var(--color-background);
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 32px;
+      background: var(--color-background-dark);
+      position: relative;
+      z-index: 100;
+    }
+
+    .nav-left .logo {
+      color: var(--color-link);
+      font-weight: bold;
+      font-size: 1.25rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      color: var(--color-heading);
+      background: var(--color-background);
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      height: 20px;
+    }
+
+    .github-text-icon-button img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .icon-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      width: 48px;
+      background: transparent;
+      border: none;
+      padding: 0;
+      border-radius: 6px;
+      transition: background 0.3s;
+    }
+
+    .icon-button img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 8px;
+      box-sizing: border-box;
+    }
+
+    .burger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      position: absolute;
+      right: 32px;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 1100;
+      font-size: 24px;
+      color: var(--color-link);
+    }
+
+    .burger::before {
+      content: "☰";
+    }
+
+    .burger.show::before {
+      content: "✕";
+    }
+
+    .mobile-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1000;
+      background: var(--color-hover);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .mobile-overlay.show {
+      display: flex;
+    }
+
+    .overlay-button {
+      padding: 16px 32px;
+      font-size: 1.5rem;
+      background: var(--color-link);
+      color: var(--color-heading);
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    .overlay-icon-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100px;
+      width: 100px;
+      border-radius: 8px;
+    }
+
+    .overlay-icon-button img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 6px;
+      box-sizing: border-box;
+    }
+
+    @media (max-width: 1000px) {
+      .burger {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+      }
+    }
+
+    @media (min-width: 1000px) {
+      .hide-on-desktop {
+        display: none !important;
+      }
+    }
+  </style>
+</header>

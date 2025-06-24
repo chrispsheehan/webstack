@@ -1,0 +1,207 @@
+---
+import CostExplorer from "../components/CostExplorer";
+import Visits from "../components/Visits";
+
+const { githubRepo } = Astro.props;
+---
+
+<section id="this-site">
+  <h2>This Site</h2>
+  <p>
+    Astro-powered and deployed with Terragrunt and GitHub Actions. A fast,
+    serverless site that's inexpensive to run.
+  </p>
+  <div class="container">
+    <div class="meta-and-dashboard">
+      <!-- Left Column: Badge + Button -->
+      <div class="site-section-meta">
+        <a
+          href={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            class="pipeline-badge"
+            src={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml/badge.svg`}
+            alt="Webstack Workflow Status"
+          />
+        </a>
+
+        <a
+          href={`https://github.com/${githubRepo}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="github-repo-button"
+        >
+          <img src="/assets/social/github.png" alt="GitHub" />
+          <span>Source Code</span>
+        </a>
+
+        <a
+          href={`https://registry.terraform.io/modules/chrispsheehan/github-oidc-role/aws/latest`}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="github-repo-button"
+        >
+          <img src="/assets/social/terraform.png" alt="GitHub" />
+          <span>OIDC Module</span>
+        </a>
+      </div>
+
+      <!-- Right Column: Cards -->
+      <div class="dashboard-wrapper">
+        <div class="dashboard-row">
+          <Visits client:load />
+          <CostExplorer client:load />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style is:global>
+  .container {
+    width: 100%;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+
+  .meta-and-dashboard {
+    display: flex;
+    align-items: flex-start;
+    gap: 2rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+
+  .site-section-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    flex: 0 0 auto;
+    min-width: 180px;
+  }
+
+  .pipeline-badge {
+    height: 24px;
+    object-fit: contain;
+  }
+
+  .github-repo-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: var(--color-background-dark);
+    color: var(--color-text);
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    border: none;
+  }
+
+  .github-repo-button img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    display: inline-block;
+  }
+
+  .dashboard-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  .dashboard-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    width: 100%;
+  }
+
+  .dashboard-card {
+    background: var(--color-background-dark);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    flex: 1 1 0;
+    height: 150px;
+    min-width: 300px;
+    max-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    transition:
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+    border: none;
+  }
+
+  .dashboard-card:hover {
+    background: var(--color-link);
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .dashboard-card h3 {
+    margin: 0 0 1rem;
+    font-size: 1.3rem;
+    color: var(--color-text);
+  }
+
+  .dashboard-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+
+  .dashboard-card li {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .dashboard-card strong {
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .dashboard-card small {
+    margin-top: 1rem;
+    font-size: 0.875rem;
+    color: var(--color-text);
+  }
+
+  @media (max-width: 1000px) {
+    .meta-and-dashboard {
+      flex-direction: column;
+    }
+
+    .dashboard-wrapper {
+      width: 100%;
+    }
+
+    .dashboard-row {
+      flex-direction: column;
+    }
+
+    .dashboard-card {
+      width: 100%;
+    }
+
+    .site-section-meta {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+</style>

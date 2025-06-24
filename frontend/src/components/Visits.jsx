@@ -42,7 +42,7 @@ export default function Visits() {
 
   return (
     <div className="dashboard-card visits-summary">
-      <h3>👥 Visits</h3>
+      <h3>👥 Logged Visits</h3>
       <ul>
         <li>
           <strong>Daily:</strong> {visits["daily-visits"]}

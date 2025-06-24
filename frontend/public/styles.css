@@ -1,22 +1,14 @@
 :root {
-  --vt-c: #2e3735;
-  --vt-c-soft: #a5c4b8;
-  --vt-c-logo: #a2d5ac;
-  --vt-c-text-1: #e0f3cc;
-  --vt-c-text-2: #f2fce6;
+  /* Theme Colors */
+  --color-background: #2a3633;
+  --color-background-dark: #202a28;
+  --color-text: #f7fdf9;
+  --color-heading: #b4eb9c;
+  --color-link: #3e8f71;
+  --color-hover: #60b994;
 
-  --color-background: var(--vt-c);
-  --color-background-soft: var(--vt-c-soft);
-  --color-heading: var(--vt-c-text-1);
-  --color-btn-text: var(--vt-c);
-  --color-text: var(--vt-c-text-2);
-  --color-link: var(--vt-c-logo);
-
-  --color-header-background: #26312f;
-  --color-footer-background: #1a201e;
-
-  --section-gap: 160px;
-
+  /* Spacing & Typography */
+  --section-gap: 30px;
   --font-body: "Inter", sans-serif;
   --font-heading: "Montserrat", sans-serif;
 }
@@ -31,7 +23,9 @@ body {
   background: var(--color-background);
   color: var(--color-text);
   line-height: 1.6;
-  font-size: 16px;
+  font-size: 1rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Body layout */
@@ -41,25 +35,22 @@ body {
 }
 
 /* Headings */
-h1 {
-  font-family: var(--font-heading);
-  color: var(--color-heading);
-  margin-bottom: 0.5em;
-  font-size: 2.5rem; /* Largest */
-}
-
-h2 {
-  font-family: var(--font-heading);
-  color: var(--color-heading);
-  margin-bottom: 0.5em;
-  font-size: 2rem; /* Medium */
-}
-
+h1,
+h2,
 h3 {
   font-family: var(--font-heading);
   color: var(--color-heading);
   margin-bottom: 0.5em;
-  font-size: 1.5rem; /* Smallest */
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+h2 {
+  font-size: 2rem;
+}
+h3 {
+  font-size: 1.5rem;
 }
 
 main {
@@ -71,8 +62,9 @@ nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 20px;
   padding: 20px 32px;
-  background: var(--color-header-background);
+  background: var(--color-background-dark);
   color: var(--color-text);
   font-size: 18px;
 }
@@ -80,21 +72,17 @@ nav {
 nav a {
   color: var(--color-link);
   text-decoration: none;
-  margin-left: 20px;
 }
 
 section {
-  padding: 24px 24px;
+  padding-left: 32px;
+  padding-right: 32px;
+  padding-top: 0;
+  padding-bottom: var(--section-gap);
 }
 
-#hero {
-  background: var(--color-background);
-}
-
-#about-me {
-  background: var(--color-background);
-}
-
+#hero,
+#about-me,
 #this-site {
   background: var(--color-background);
 }
@@ -112,4 +100,23 @@ a {
 
 a:hover {
   color: var(--vt-c-text-1);
+}
+
+a:focus {
+  outline: 2px solid var(--color-link);
+  outline-offset: 2px;
+}
+
+@media (max-width: 1000px) {
+  main,
+  section {
+    padding: 12px;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 16px;
+  }
 }
