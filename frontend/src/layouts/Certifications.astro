@@ -3,80 +3,81 @@ import Certifications from "../components/Certifications";
 ---
 
 <style is:global>
-.cert-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  justify-content: center;
-  gap: 2rem;
-}
-
-.cert-grid > a {
-  display: block;
-  max-width: 220px;
-  width: 100%;
-  text-align: center;
-  margin: 0 auto;
-  transition:
-    transform 0.2s ease;
-}
-
-.cert-grid > a:hover .cert-img-wrapper {
-  background: var(--color-link);
-  transform: translateY(-2px) scale(1.02);
-}
-
-.cert-grid > a:focus,
-.cert-grid > a:active {
-  outline: none;
-  box-shadow: none;
-  background: none;
-}
-
-
-.cert-img-wrapper {
-  width: 150px;
-  aspect-ratio: 1 / 1;
-  margin: 0 auto;
-  position: relative;
-  overflow: hidden;
-  border-radius: 1rem;
-  background: var(--color-header-background, #f9f9f9);
-  transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
-}
-
-.cert-img-wrapper img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-@media (max-width: 700px) {
   .cert-grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     justify-content: center;
-    max-width: 960px;
-    width: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    gap: 2rem;
   }
-}
 
-@media (max-width: 400px) {
   .cert-grid > a {
-    flex: 1 1 100%; */
-    max-width: 100px;
+    display: block;
+    max-width: 220px;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    transition: transform 0.2s ease;
   }
-}
 
+  .cert-grid > a:hover .cert-img-wrapper {
+    background: var(--color-link);
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .cert-grid > a:focus,
+  .cert-grid > a:active {
+    outline: none;
+    box-shadow: none;
+    background: none;
+  }
+
+  .cert-img-wrapper {
+    width: 150px;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    background: var(--color-header-background);
+    transition:
+      background 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .cert-img-wrapper img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  @media (max-width: 700px) {
+    .cert-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      max-width: 960px;
+      width: 100%;
+      grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    }
+  }
+
+  @media (max-width: 400px) {
+    .cert-grid > a {
+      flex: 1 1 100%;
+      max-width: 100px;
+    }
+  }
 </style>
 
 <section id="certifications">
   <h2>Certifications</h2>
   <h3>
-    A collection of certifications I've earned in cloud, DevOps, and software engineering.
+    A collection of certifications I've earned in cloud, DevOps, and software
+    engineering.
   </h3>
   <p>Each representing a step in my technical journey.</p>
   <Certifications client:load />
