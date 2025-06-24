@@ -11,9 +11,9 @@ const githubOwner = githubRepo.split("/")[0];
 
     <!-- Top-right nav buttons (desktop) -->
     <div class="nav-links" id="nav-links">
-      <a href="#about-me" class="button">About Me</a>
-      <a href="#certifications" class="button">Certifications</a>
-      <a href="#this-site" class="button">This Site</a>
+      <a href="#about-me" class="button hide-on-desktop">About Me</a>
+      <a href="#certifications" class="button hide-on-desktop">Certifications</a>
+      <a href="#this-site" class="button hide-on-desktop">This Site</a>
       <a
         href=`https://github.com/${githubOwner}`
         target="_blank"
@@ -30,11 +30,11 @@ const githubOwner = githubRepo.split("/")[0];
       <a href="#about-me" class="overlay-button" onclick="hideMenu()"
         >About Me</a
       >
-      <a href="#this-site" class="overlay-button" onclick="hideMenu()"
-        >This Site</a
-      >
       <a href="#certifications" class="overlay-button" onclick="hideMenu()"
         >Certifications</a
+      >
+      <a href="#this-site" class="overlay-button" onclick="hideMenu()"
+        >This Site</a
       >
       <a
         href=`https://github.com/${githubRepo}`
@@ -205,6 +205,12 @@ const githubOwner = githubRepo.split("/")[0];
 
       .nav-links {
         display: none;
+      }
+    }
+
+    @media (min-width: 1000px) {
+      .hide-on-desktop {
+        display: none !important;
       }
     }
   </style>
