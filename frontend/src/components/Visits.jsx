@@ -41,17 +41,23 @@ export default function Visits() {
     );
 
   return (
-    <div className="dashboard-card visits-summary">
-      <h3>👥 Logged Visits</h3>
-      <ul>
-        <li>
-          <strong>Daily:</strong> {visits["daily-visits"]}
-        </li>
-        <li>
-          <strong>Total ({visits["range"]} days):</strong>{" "}
-          {visits["total-visits"]}
-        </li>
-      </ul>
-    </div>
-  );
+    <a
+      href="/data/log-processor/data.json"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ textDecoration: "none", color: "inherit", flex: 1 }}
+    >
+      <div className="dashboard-card visits-summary" style={{ cursor: "pointer" }}>
+        <h3>👥 Logged Visits</h3>
+        <ul>
+          <li>
+            <strong>Daily:</strong> {visits["daily-visits"]}
+          </li>
+          <li>
+            <strong>Total ({visits["range"]} days):</strong> {visits["total-visits"]}
+          </li>
+        </ul>
+      </div>
+    </a>
+    );    
 }

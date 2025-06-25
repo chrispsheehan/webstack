@@ -47,22 +47,29 @@ export default function CostExplorer() {
     }).format(parseFloat(amount));
 
   return (
-    <div className="dashboard-card cost-explorer">
-      <h3>💰 AWS Running Costs</h3>
-      <ul>
-        <li>
-          <strong>Current Month:</strong>{" "}
-          {costs["current-month-total"]
-            ? formatUSD(costs["current-month-total"])
-            : "N/A"}
-        </li>
-        <li>
-          <strong>Last Month:</strong>{" "}
-          {costs["last-month-total"]
-            ? formatUSD(costs["last-month-total"])
-            : "N/A"}
-        </li>
-      </ul>
-    </div>
-  );
+    <a
+      href="/data/cost-explorer/data.json"
+      target="_blank"
+      rel="noopener noreferrer"
+      style={{ textDecoration: "none", color: "inherit", flex: 1 }}
+    >
+      <div className="dashboard-card cost-explorer" style={{ cursor: "pointer" }}>
+        <h3>💰 AWS Running Costs</h3>
+        <ul>
+          <li>
+            <strong>Current Month:</strong>{" "}
+            {costs["current-month-total"]
+              ? formatUSD(costs["current-month-total"])
+              : "N/A"}
+          </li>
+          <li>
+            <strong>Last Month:</strong>{" "}
+            {costs["last-month-total"]
+              ? formatUSD(costs["last-month-total"])
+              : "N/A"}
+          </li>
+        </ul>
+      </div>
+    </a>
+  );    
 }
