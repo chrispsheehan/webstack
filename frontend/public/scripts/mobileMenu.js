@@ -11,7 +11,6 @@ export function toggleMenu() {
   document.documentElement.classList.toggle("no-scroll", isOpen);
 }
 
-
 export function hideMenu() {
   document.getElementById("mobile-overlay")?.classList.remove("show");
   document.getElementById("burger")?.classList.remove("show");
@@ -19,7 +18,6 @@ export function hideMenu() {
   document.body.classList.remove("no-scroll");
   document.documentElement.classList.remove("no-scroll");
 }
-
 
 window.toggleMenu = toggleMenu;
 window.hideMenu = hideMenu;
