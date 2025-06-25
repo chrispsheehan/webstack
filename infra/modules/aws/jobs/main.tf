@@ -84,7 +84,7 @@ resource "aws_lambda_function" "log_processor" {
   s3_key    = local.lambda_log_processor_key
 
   memory_size = 256
-  timeout     = 180
+  timeout     = 300
 
   environment {
     variables = {
