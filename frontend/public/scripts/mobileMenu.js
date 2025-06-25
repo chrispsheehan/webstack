@@ -8,6 +8,7 @@ export function toggleMenu() {
 export function hideMenu() {
   document.getElementById("mobile-overlay")?.classList.remove("show");
   document.getElementById("burger")?.classList.remove("show");
+  document.body.classList.toggle("no-scroll");
 }
 
 window.toggleMenu = toggleMenu;
