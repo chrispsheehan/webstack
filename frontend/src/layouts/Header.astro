@@ -186,6 +186,14 @@ const githubOwner = githubRepo.split("/")[0];
       gap: 24px;
     }
 
+    body.no-scroll,
+    html.no-scroll {
+      overflow: hidden !important;
+      height: 100%;
+      touch-action: none;
+      overscroll-behavior: none;
+    }
+
     .mobile-overlay.show {
       display: flex;
     }
