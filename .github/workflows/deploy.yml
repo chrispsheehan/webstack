@@ -29,7 +29,7 @@ jobs:
         with:
           ref: ${{ inputs.version }}
 
-      - uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+      - uses: chrispsheehan/terragrunt-aws-oidc-action@0.3.0
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }} # taken from /settings/environments/ 'Environment variables'
           tg_directory: infra/live/${{inputs.environment}}/aws/oidc
@@ -58,7 +58,7 @@ jobs:
           just_action: check-version
 
       - name: Deploy jobs
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.3.0
         id: jobs_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
@@ -105,7 +105,7 @@ jobs:
           just_action: get-initial-deploy-var
 
       - name: Deploy web infrastructure
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.3.0
         id: terragrunt_action
         env:
           TF_VAR_initial_deploy: ${{ steps.get-init-deployment.outputs.just_outputs }}
