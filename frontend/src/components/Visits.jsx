@@ -47,17 +47,21 @@ export default function Visits() {
       rel="noopener noreferrer"
       style={{ textDecoration: "none", color: "inherit", flex: 1 }}
     >
-      <div className="dashboard-card visits-summary" style={{ cursor: "pointer" }}>
+      <div
+        className="dashboard-card visits-summary"
+        style={{ cursor: "pointer" }}
+      >
         <h3>👥 Logged Visits</h3>
         <ul>
           <li>
             <strong>Daily:</strong> {visits["daily-visits"]}
           </li>
           <li>
-            <strong>Total ({visits["range"]} days):</strong> {visits["total-visits"]}
+            <strong>Total ({visits["range"]} days):</strong>{" "}
+            {visits["total-visits"]}
           </li>
         </ul>
       </div>
     </a>
-    );    
+  );
 }
