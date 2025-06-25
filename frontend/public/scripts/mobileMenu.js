@@ -3,12 +3,12 @@ export function toggleMenu() {
   const burger = document.getElementById("burger");
   overlay?.classList.toggle("show");
   burger?.classList.toggle("show");
+  document.body.classList.toggle("no-scroll");
 }
 
 export function hideMenu() {
   document.getElementById("mobile-overlay")?.classList.remove("show");
   document.getElementById("burger")?.classList.remove("show");
-  document.body.classList.toggle("no-scroll");
 }
 
 window.toggleMenu = toggleMenu;
