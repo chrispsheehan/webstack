@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Destroy frontend
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.3.0
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/website
@@ -45,7 +45,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Destroy backend
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.3.0
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/jobs
@@ -62,7 +62,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Destroy code
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.3.0
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
           tg_directory: infra/live/${{inputs.environment}}/aws/code

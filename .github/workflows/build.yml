@@ -40,7 +40,7 @@ jobs:
           ref: ${{ inputs.version }}
 
       - name: Deploy code buckets
-        uses: chrispsheehan/terragrunt-aws-oidc-action@0.2.0
+        uses: chrispsheehan/terragrunt-aws-oidc-action@0.3.0
         id: code_action
         with:
           aws_oidc_role_arn: ${{ vars.AWS_OIDC_ROLE_ARN }}
