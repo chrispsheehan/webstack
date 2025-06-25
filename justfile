@@ -27,7 +27,7 @@ lambda-invoke:
     OUTPUT_FILE=output.json
     PAYLOAD="{}"
     rm -f $OUTPUT_FILE
-    RESPONSE=$(aws lambda invoke --function-name $LAMBDA_NAME --region $AWS_REGION --payload "$PAYLOAD" $OUTPUT_FILE)
+    RESPONSE=$(aws lambda invoke --cli-read-timeout 300 --function-name $LAMBDA_NAME --region $AWS_REGION --payload "$PAYLOAD" $OUTPUT_FILE)
     LAMBDA_RETURN_CODE=$(jq -r '.StatusCode' <<< "$RESPONSE")
     if [ "$LAMBDA_RETURN_CODE" -eq 200 ]; then
         echo "Lambda function invoked successfully."
