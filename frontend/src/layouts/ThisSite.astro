@@ -65,13 +65,14 @@ const { githubRepo } = Astro.props;
     flex-wrap: wrap;
     gap: 2rem;
     width: 100%;
+    justify-content: center;
   }
 
   .dashboard-card {
     background: var(--color-background-dark);
     border-radius: 1rem;
     padding: 1.5rem;
-    width: 400px; /* 👈 fixed width */
+    min-width: 300px; /* 👈 fixed width */
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -201,10 +202,6 @@ const { githubRepo } = Astro.props;
 
     .dashboard-row {
       flex-direction: column;
-    }
-
-    .dashboard-card {
-      width: 100%;
     }
   }
 </style>
