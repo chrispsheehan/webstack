@@ -12,48 +12,30 @@ const { githubRepo } = Astro.props;
     serverless site that's inexpensive to run.
   </p>
   <div class="container">
-    <div class="meta-and-dashboard">
-      <!-- Left Column: Badge + Button -->
-      <div class="site-section-meta">
-        <a
-          href={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            class="pipeline-badge"
-            src={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml/badge.svg`}
-            alt="Webstack Workflow Status"
-          />
-        </a>
-
-        <a
-          href={`https://github.com/${githubRepo}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="github-repo-button"
-        >
-          <img src="/assets/social/github.png" alt="GitHub" />
-          <span>Source Code</span>
-        </a>
-
-        <a
-          href={`https://registry.terraform.io/modules/chrispsheehan/github-oidc-role/aws/latest`}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="github-repo-button"
-        >
-          <img src="/assets/social/terraform.png" alt="GitHub" />
-          <span>OIDC Module</span>
-        </a>
-      </div>
-
-      <!-- Right Column: Cards -->
-      <div class="dashboard-wrapper">
-        <div class="dashboard-row">
-          <Visits client:load />
-          <CostExplorer client:load />
+    <div class="dashboard-wrapper">
+      <div class="dashboard-row">
+        <div class="dashboard-card github-card">
+          <a
+            href={`https://github.com/${githubRepo}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="github-card-link"
+          >
+            <div class="github-card-content">
+              <img
+                class="pipeline-badge"
+                src={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml/badge.svg`}
+                alt="Webstack Workflow Status"
+              />
+              <div class="github-repo-button">
+                <img src="/assets/social/github.png" alt="GitHub" />
+                <span>Source Code</span>
+              </div>
+            </div>
+          </a>
         </div>
+        <Visits client:load />
+        <CostExplorer client:load />
       </div>
     </div>
   </div>
@@ -64,50 +46,6 @@ const { githubRepo } = Astro.props;
     width: 100%;
     padding: 0 1rem;
     box-sizing: border-box;
-  }
-
-  .meta-and-dashboard {
-    display: flex;
-    align-items: flex-start;
-    gap: 2rem;
-    margin-bottom: 2.5rem;
-    flex-wrap: wrap;
-    width: 100%;
-  }
-
-  .site-section-meta {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-    flex: 0 0 auto;
-    min-width: 180px;
-  }
-
-  .pipeline-badge {
-    height: 24px;
-    object-fit: contain;
-  }
-
-  .github-repo-button {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    border-radius: 6px;
-    background: var(--color-background-dark);
-    color: var(--color-text);
-    font-weight: 600;
-    text-decoration: none;
-    white-space: nowrap;
-    border: none;
-  }
-
-  .github-repo-button img {
-    width: 20px;
-    height: 20px;
-    object-fit: contain;
-    display: inline-block;
   }
 
   .dashboard-wrapper {
@@ -123,16 +61,16 @@ const { githubRepo } = Astro.props;
     flex-wrap: wrap;
     gap: 2rem;
     width: 100%;
+    justify-content: center;
   }
 
   .dashboard-card {
     background: var(--color-background-dark);
     border-radius: 1rem;
     padding: 1.5rem;
-    flex: 1 1 0;
-    height: 150px;
+    max-width: 400px;
     min-width: 300px;
-    max-width: 100%;
+    width: 100%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -150,6 +88,59 @@ const { githubRepo } = Astro.props;
     transform: translateY(-2px) scale(1.02);
   }
 
+  .pipeline-badge {
+    height: 24px;
+    object-fit: contain;
+    margin-bottom: 1rem;
+  }
+
+  .github-repo-button img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    display: inline-block;
+  }
+
+  .github-card {
+    border: none;
+    justify-content: center;
+    max-width: 300px;
+    min-width: 250px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .github-card-link {
+    border: none;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .github-card-content {
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .github-repo-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background: var(--color-background);
+    color: var(--color-text);
+    font-weight: 600;
+    white-space: nowrap;
+    font-size: 1rem;
+    transition: background 0.2s ease;
+  }
+
   .dashboard-card h3 {
     margin: 0 0 1rem;
     font-size: 1.3rem;
@@ -164,11 +155,12 @@ const { githubRepo } = Astro.props;
   }
 
   .dashboard-card li {
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
   }
 
   .dashboard-card strong {
@@ -182,15 +174,13 @@ const { githubRepo } = Astro.props;
     color: var(--color-text);
   }
 
-  a:focus {
-    outline: none;
+  @media (min-width: 1001px) {
+    .dashboard-row {
+      gap: 5rem;
+    }
   }
 
   @media (max-width: 1000px) {
-    .meta-and-dashboard {
-      flex-direction: column;
-    }
-
     .dashboard-wrapper {
       width: 100%;
     }
@@ -200,12 +190,15 @@ const { githubRepo } = Astro.props;
     }
 
     .dashboard-card {
+      margin-left: auto;
+      margin-right: auto;
       width: 100%;
     }
 
-    .site-section-meta {
+    .github-card {
+      margin-left: auto;
+      margin-right: auto;
       width: 100%;
-      max-width: 100%;
     }
   }
 </style>
