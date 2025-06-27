@@ -47,10 +47,7 @@ export default function Visits() {
       rel="noopener noreferrer"
       style={{ textDecoration: "none", color: "inherit", flex: 1 }}
     >
-      <div
-        className="dashboard-card"
-        style={{ cursor: "pointer" }}
-      >
+      <div className="dashboard-card" style={{ cursor: "pointer" }}>
         <h3>👥 Logged Visits</h3>
         <ul>
           <li>
