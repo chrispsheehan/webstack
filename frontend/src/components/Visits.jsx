@@ -48,7 +48,7 @@ export default function Visits() {
       style={{ textDecoration: "none", color: "inherit", flex: 1 }}
     >
       <div
-        className="dashboard-card visits-summary"
+        className="visits-summary"
         style={{ cursor: "pointer" }}
       >
         <h3>👥 Logged Visits</h3>

@@ -34,8 +34,12 @@ const { githubRepo } = Astro.props;
             </div>
           </a>
         </div>
-        <Visits client:load />
-        <CostExplorer client:load />
+        <div class="dashboard-card">
+          <Visits client:load />
+        </div>
+        <div class="dashboard-card">
+          <CostExplorer client:load />
+        </div>
       </div>
     </div>
   </div>
@@ -123,6 +127,7 @@ const { githubRepo } = Astro.props;
   }
 
   .github-card-link {
+    border: none;
     text-decoration: none;
     color: inherit;
     display: block;
@@ -131,6 +136,7 @@ const { githubRepo } = Astro.props;
   }
 
   .github-card-content {
+    border: none;
     display: flex;
     flex-direction: column;
     align-items: center;
