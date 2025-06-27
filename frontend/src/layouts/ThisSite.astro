@@ -68,8 +68,9 @@ const { githubRepo } = Astro.props;
     background: var(--color-background-dark);
     border-radius: 1rem;
     padding: 1.5rem;
+    max-width: 400px;
     min-width: 300px;
-    max-width: 350px;
+    width: 100%;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -103,6 +104,8 @@ const { githubRepo } = Astro.props;
   .github-card {
     border: none;
     justify-content: center;
+    max-width: 300px;
+    min-width: 250px;
     align-items: center;
     text-align: center;
   }
@@ -187,7 +190,12 @@ const { githubRepo } = Astro.props;
     }
 
     .dashboard-card {
-      max-width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
+    }
+
+    .github-card {
       margin-left: auto;
       margin-right: auto;
       width: 100%;
