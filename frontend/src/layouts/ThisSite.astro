@@ -14,32 +14,26 @@ const { githubRepo } = Astro.props;
   <div class="container">
     <div class="dashboard-wrapper">
       <div class="dashboard-row">
-
-        <!-- GitHub Card -->
-        <div class="dashboard-card">
-          <a
-            href={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml`}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <img
-              class="pipeline-badge"
-              src={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml/badge.svg`}
-              alt="Webstack Workflow Status"
-            />
-          </a>
-
+        <div class="dashboard-card github-card">
           <a
             href={`https://github.com/${githubRepo}`}
             target="_blank"
             rel="noopener noreferrer"
-            class="github-repo-button"
+            class="github-card-link"
           >
-            <img src="/assets/social/github.png" alt="GitHub" />
-            <span>Source Code</span>
+            <div class="github-card-content">
+              <img
+                class="pipeline-badge"
+                src={`https://github.com/${githubRepo}/actions/workflows/release_prod.yml/badge.svg`}
+                alt="Webstack Workflow Status"
+              />
+              <div class="github-repo-button">
+                <img src="/assets/social/github.png" alt="GitHub" />
+                <span>Source Code</span>
+              </div>
+            </div>
           </a>
         </div>
-
         <Visits client:load />
         <CostExplorer client:load />
       </div>
@@ -119,6 +113,41 @@ const { githubRepo } = Astro.props;
     height: 28px;
     object-fit: contain;
     display: inline-block;
+  }
+
+  .github-card {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .github-card-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .github-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .github-repo-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    background: var(--color-background);
+    color: var(--color-text);
+    font-weight: 600;
+    white-space: nowrap;
+    font-size: 1rem;
+    transition: background 0.2s ease;
   }
 
   .dashboard-card h3 {
