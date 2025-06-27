@@ -36,16 +36,6 @@ const { githubRepo } = Astro.props;
           <img src="/assets/social/github.png" alt="GitHub" />
           <span>Source Code</span>
         </a>
-
-        <a
-          href={`https://registry.terraform.io/modules/chrispsheehan/github-oidc-role/aws/latest`}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="github-repo-button"
-        >
-          <img src="/assets/social/terraform.png" alt="GitHub" />
-          <span>OIDC Module</span>
-        </a>
       </div>
 
       <!-- Right Column: Cards -->
@@ -92,20 +82,21 @@ const { githubRepo } = Astro.props;
   .github-repo-button {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    border-radius: 6px;
+    gap: 12px;
+    padding: 12px 20px;
+    border-radius: 8px;
     background: var(--color-background-dark);
     color: var(--color-text);
     font-weight: 600;
     text-decoration: none;
     white-space: nowrap;
+    font-size: 1rem;
     border: none;
   }
 
   .github-repo-button img {
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
     object-fit: contain;
     display: inline-block;
   }
