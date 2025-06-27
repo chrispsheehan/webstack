@@ -34,12 +34,8 @@ const { githubRepo } = Astro.props;
             </div>
           </a>
         </div>
-        <div class="dashboard-card">
-          <Visits client:load />
-        </div>
-        <div class="dashboard-card">
-          <CostExplorer client:load />
-        </div>
+`       <Visits client:load />
+        <CostExplorer client:load />`
       </div>
     </div>
   </div>
@@ -72,7 +68,8 @@ const { githubRepo } = Astro.props;
     background: var(--color-background-dark);
     border-radius: 1rem;
     padding: 1.5rem;
-    min-width: 300px; /* 👈 fixed width */
+    min-width: 300px;
+    max-width: 350px;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -171,11 +168,12 @@ const { githubRepo } = Astro.props;
   }
 
   .dashboard-card li {
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 100%;
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
   }
 
   .dashboard-card strong {
@@ -202,6 +200,13 @@ const { githubRepo } = Astro.props;
 
     .dashboard-row {
       flex-direction: column;
+    }
+
+    .dashboard-card {
+      max-width: 200px;
+      margin-left: auto;
+      margin-right: auto;
+      width: 100%;
     }
   }
 </style>

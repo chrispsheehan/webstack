@@ -54,7 +54,7 @@ export default function CostExplorer() {
       style={{ textDecoration: "none", color: "inherit", flex: 1 }}
     >
       <div
-        className="cost-explorer"
+        className="dashboard-card"
         style={{ cursor: "pointer" }}
       >
         <h3>💰 AWS Running Costs</h3>
