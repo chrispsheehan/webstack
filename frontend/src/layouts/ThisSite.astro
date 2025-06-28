@@ -84,7 +84,6 @@ const { githubRepo } = Astro.props;
 
   .dashboard-card:hover {
     background: var(--color-link);
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
     transform: translateY(-2px) scale(1.02);
   }
 
@@ -172,6 +171,15 @@ const { githubRepo } = Astro.props;
     margin-top: 1rem;
     font-size: 0.875rem;
     color: var(--color-text);
+  }
+
+  .github-card-link:focus {
+    outline: none;
+    border: none;
+  }
+
+  .dashboard-card *:focus {
+    outline: none;
   }
 
   @media (min-width: 1001px) {
