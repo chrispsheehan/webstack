@@ -1,7 +1,10 @@
 ---
 const { baseDomain } = Astro.props;
 const year = new Date().getFullYear();
-const siteVersion = import.meta.env.PUBLIC_SITE_VERSION || "1.0.0";
+const siteVersion = (import.meta.env.PUBLIC_SITE_VERSION || "1.0.0").slice(
+  0,
+  8,
+);
 ---
 
 <style>
@@ -30,6 +33,6 @@ const siteVersion = import.meta.env.PUBLIC_SITE_VERSION || "1.0.0";
 <footer>
   <div class="footer-container">
     <p>&copy; {year} {baseDomain}</p>
-    <p class="footer-version">v{siteVersion}</p>
+    <p class="footer-version">{siteVersion}</p>
   </div>
 </footer>
