@@ -189,16 +189,13 @@ const { githubRepo } = Astro.props;
       flex-direction: column;
     }
 
-    .dashboard-card {
-      margin-left: auto;
-      margin-right: auto;
-      width: 100%;
-    }
-
+    .dashboard-card,
     .github-card {
       margin-left: auto;
       margin-right: auto;
       width: 100%;
+      min-width: unset;
+      max-width: unset;
     }
   }
 </style>
