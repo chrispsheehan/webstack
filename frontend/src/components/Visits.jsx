@@ -45,20 +45,19 @@ export default function Visits() {
       href="/data/log-processor/data.json"
       target="_blank"
       rel="noopener noreferrer"
-      style={{ textDecoration: "none", color: "inherit", flex: 1 }}
+      className="dashboard-card"
+      style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}
     >
-      <div className="dashboard-card" style={{ cursor: "pointer" }}>
-        <h3>👥 Logged Visits</h3>
-        <ul>
-          <li>
-            <strong>Daily:</strong> {visits["daily-visits"]}
-          </li>
-          <li>
-            <strong>Total ({visits["range"]} days):</strong>{" "}
-            {visits["total-visits"]}
-          </li>
-        </ul>
-      </div>
+      <h3>👥 Logged Visits</h3>
+      <ul>
+        <li>
+          <strong>Daily:</strong> {visits["daily-visits"]}
+        </li>
+        <li>
+          <strong>Total ({visits["range"]} days):</strong>{" "}
+          {visits["total-visits"]}
+        </li>
+      </ul>
     </a>
   );
 }
