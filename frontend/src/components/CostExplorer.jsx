@@ -62,13 +62,13 @@ export default function CostExplorer() {
           <strong>Current Month:</strong>{" "}
           {costs["current-month-total"]
             ? formatUSD(costs["current-month-total"])
-            : "N/A"}
+            : "$0.01"}
         </li>
         <li>
           <strong>Last Month:</strong>{" "}
           {costs["last-month-total"]
             ? formatUSD(costs["last-month-total"])
-            : "N/A"}
+            : "$0.01"}
         </li>
       </ul>
     </a>
