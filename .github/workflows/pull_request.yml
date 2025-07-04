@@ -103,6 +103,7 @@ jobs:
         run: |
           for dir in ${{ steps.get_dirs.outputs.tg_dirs }}; do
             echo "Running CLI in $dir"
+            pushd "$dir"
             terragrunt init -backend=false -chdir="$dir"
           done
 
