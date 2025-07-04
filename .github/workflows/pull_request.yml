@@ -93,9 +93,18 @@ jobs:
         run: chmod +x ./terragrunt-get-dirs.sh
 
       - name: Get terragrunt directories
+        id: get_dirs
         run: |
           TERRAGRUNT_DIRS=$(./terragrunt-get-dirs.sh)
           echo "Dirs to check: $TERRAGRUNT_DIRS"
+          echo "tg_dirs=$(echo $TERRAGRUNT_DIRS)" >> $GITHUB_OUTPUT
+
+      - name: Run init in each Terragrunt directory
+        run: |
+          for dir in ${{ steps.get_dirs.outputs.tg_dirs }}; do
+            echo "Running CLI in $dir"
+            terragrunt init -backend=false -chdir="$dir"
+          done
 
   format-frontend:
     needs: check
