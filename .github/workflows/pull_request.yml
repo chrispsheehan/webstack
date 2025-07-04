@@ -89,6 +89,9 @@ jobs:
         with:
           terragrunt_version: 0.45.10
 
+      - name: List files for debugging
+        run: ls -alh
+
       - name: Get terragrunt directories
         run: |
           TERRAGRUNT_DIRS=$(./get_terragrunt_dirs.sh)
