@@ -76,6 +76,24 @@ jobs:
         run: terragrunt hclfmt --terragrunt-check
         working-directory: infra
 
+  check-terragrunt-lock:
+    # needs: format-terragrunt
+    runs-on: ubuntu-latest
+    # if: ${{ needs.check.outputs.terragrunt == 'true' }}
+    name: Run terragrunt formatting checks
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+      - uses: autero1/action-terragrunt@v1.3.2
+        with:
+          terragrunt_version: 0.45.10
+
+      - name: Get terragrunt directories
+        run: |
+          TERRAGRUNT_DIRS=$(./get_terragrunt_dirs.sh)
+          echo "Dirs to check: $TERRAGRUNT_DIRS"
+
   format-frontend:
     needs: check
     runs-on: ubuntu-latest
