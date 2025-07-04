@@ -89,6 +89,9 @@ jobs:
         with:
           terragrunt_version: 0.45.10
 
+      - name: Make script executable
+        run: chmod +x ./terragrunt-get-dirs.sh
+
       - name: Get terragrunt directories
         run: |
           TERRAGRUNT_DIRS=$(./terragrunt-get-dirs.sh)
