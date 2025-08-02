@@ -10,6 +10,11 @@
     "alt": "CKAD Certified Kubernetes Application Developer"
   },
   {
+    "href": "https://www.credly.com/badges/3071199d-ad75-49e4-b4d2-4d66441ea1e0/public_url",
+    "src": "/assets/certs/hashicorp-certified-terraform-authoring-and-operations-professional.png",
+    "alt": "HashiCorp Certified: Terraform Authoring and Operations Professional"
+  },
+  {
     "href": "https://www.credly.com/badges/1a613823-2c00-406d-8ce6-be87ac840106/public_url",
     "src": "/assets/certs/hashicorp-certified-terraform-associate-003.png",
     "alt": "HashiCorp Certified: Terraform Associate"
