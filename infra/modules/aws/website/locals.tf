@@ -9,7 +9,7 @@ locals {
   cloudfront_wildcard_arn = "arn:aws:cloudfront::${var.aws_account_id}:distribution/*"
   cloudfront_iam_values   = var.initial_deploy ? [local.cloudfront_wildcard_arn] : [try(aws_cloudfront_distribution.this.arn, local.cloudfront_wildcard_arn)]
 
-  function_runtime           = "cloudfront-js-1.0"
+  function_runtime = "cloudfront-js-1.0"
   append_index_html_code = templatefile(
     "${path.module}/code/append-index-to-paths.js.tpl",
     {
