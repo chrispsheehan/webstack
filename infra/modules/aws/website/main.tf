@@ -61,6 +61,14 @@ resource "aws_cloudfront_origin_access_control" "oac" {
   signing_protocol                  = "sigv4"
 }
 
+resource "aws_cloudfront_function" "append_index_html" {
+  name    = local.function_append_index_html
+  runtime = local.function_runtime
+  publish = true
+
+  code = local.append_index_html_code
+}
+
 resource "aws_cloudfront_distribution" "this" {
   provider   = aws.domain_aws_region
   depends_on = [aws_s3_bucket.website_logs]
@@ -89,14 +97,6 @@ resource "aws_cloudfront_distribution" "this" {
     origin_access_control_id = aws_cloudfront_origin_access_control.oac.id
   }
 
-  custom_error_response {
-    //needs to be better
-    error_caching_min_ttl = 10
-    error_code            = 403
-    response_code         = 200
-    response_page_path    = "/${local.root_file}"
-  }
-
   viewer_certificate {
     acm_certificate_arn = aws_acm_certificate.web_cert.arn
     ssl_support_method  = "sni-only"
@@ -109,10 +109,29 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
+  custom_error_response {
+    error_code            = 403
+    response_code         = 404
+    response_page_path    = "/${var.deploy_version}/404.html"
+    error_caching_min_ttl = 0
+  }
+
+  custom_error_response {
+    error_code            = 404
+    response_code         = 404
+    response_page_path    = "/${var.deploy_version}/404.html"
+    error_caching_min_ttl = 0
+  }
+
   ordered_cache_behavior {
     path_pattern           = "/data/*"
     target_origin_id       = aws_s3_bucket.state_results.bucket_regional_domain_name
     viewer_protocol_policy = "redirect-to-https"
+
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.append_index_html.arn
+    }
 
     allowed_methods = ["GET", "HEAD"]
     cached_methods  = ["GET", "HEAD"]
