@@ -109,6 +109,20 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
+  custom_error_response {
+    error_code            = 403
+    response_code         = 404
+    response_page_path    = "/${var.deploy_version}/404.html"
+    error_caching_min_ttl = 0
+  }
+
+  custom_error_response {
+    error_code            = 404
+    response_code         = 404
+    response_page_path    = "/${var.deploy_version}/404.html"
+    error_caching_min_ttl = 0
+  }
+
   ordered_cache_behavior {
     path_pattern           = "/data/*"
     target_origin_id       = aws_s3_bucket.state_results.bucket_regional_domain_name
