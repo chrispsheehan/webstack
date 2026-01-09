@@ -236,7 +236,6 @@ frontend-build:
     echo "📦 Building frontend..."
     npm install --prefix frontend
     npm run build --prefix frontend
-    cp {{justfile_directory()}}/frontend/dist/404.html {{justfile_directory()}}/frontend/dist/404.html
 
 
 backend-upload:
