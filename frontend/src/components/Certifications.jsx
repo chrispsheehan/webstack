@@ -1,23 +1,5 @@
 import React, { useEffect, useState } from "react";
 
-const envBadgeIds = (import.meta.env.PUBLIC_CREDLY_BADGE_IDS || "")
-  .split(",")
-  .map((id) => id.trim())
-  .filter(Boolean);
-
-function withEnvBadgeIds(certs) {
-  if (!envBadgeIds.length) return certs;
-
-  let idx = 0;
-  return certs.map((cert) => {
-    if (!cert.shareBadgeId) return cert;
-    const envId = envBadgeIds[idx];
-    idx += 1;
-    if (!envId) return cert;
-    return { ...cert, shareBadgeId: envId };
-  });
-}
-
 export default function Certifications() {
   const [certs, setCerts] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -30,7 +12,7 @@ export default function Certifications() {
         return res.json();
       })
       .then((data) => {
-        setCerts(withEnvBadgeIds(data));
+        setCerts(data);
         setLoading(false);
       })
       .catch((err) => {
