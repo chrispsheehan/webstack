@@ -65,7 +65,7 @@ const { githubRepo } = Astro.props;
   }
 
   .dashboard-card {
-    background: var(--color-background-dark);
+    background: var(--color-surface);
     border-radius: 1rem;
     padding: 1.5rem;
     max-width: 400px;
@@ -79,13 +79,15 @@ const { githubRepo } = Astro.props;
     align-items: flex-start;
     text-align: left;
     transition:
+      background 0.2s ease,
       box-shadow 0.2s ease,
       transform 0.2s ease;
-    border: none;
+    border: 1px solid var(--color-border-soft);
   }
 
   .dashboard-card:hover {
-    background: var(--color-link);
+    background: var(--color-surface-2);
+    box-shadow: var(--shadow-card-hover);
     transform: translateY(-2px) scale(1.02);
   }
 
@@ -138,7 +140,7 @@ const { githubRepo } = Astro.props;
     gap: 12px;
     padding: 12px 20px;
     border-radius: 8px;
-    background: var(--color-background);
+    background: var(--color-background-dark);
     color: var(--color-text);
     font-weight: 600;
     white-space: nowrap;
@@ -180,7 +182,7 @@ const { githubRepo } = Astro.props;
   }
 
   .github-card-link:focus-visible {
-    outline: 2px solid var(--color-accent, #00bcd4);
+    outline: 2px solid var(--color-accent);
     outline-offset: 4px;
     border-radius: 1rem;
   }

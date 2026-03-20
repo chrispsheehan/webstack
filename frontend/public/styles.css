@@ -1,11 +1,24 @@
 :root {
   /* Theme Colors */
-  --color-background: #2a3633;
-  --color-background-dark: #202a28;
-  --color-text: #f7fdf9;
-  --color-heading: #b4eb9c;
-  --color-link: #3e8f71;
-  --color-hover: #60b994;
+  --color-background: #1f312b;
+  --color-background-dark: #16241f;
+  --color-surface: #2a4038;
+  --color-surface-2: #335147;
+  --color-text: #edf8f2;
+  --color-heading: #b9efab;
+  --color-link: #7dd7b0;
+  --color-hover: #9be8c8;
+  --color-accent: #00bcd4;
+
+  /* UI Tokens */
+  --color-border-soft: rgba(185, 239, 171, 0.22);
+  --color-border-strong: rgba(185, 239, 171, 0.35);
+  --color-cert-card: #d7efe3;
+  --color-cert-card-hover: #c7e7d8;
+  --color-cert-embed-bg: #dceee6;
+  --color-cert-card-border: rgba(22, 36, 31, 0.16);
+  --shadow-card-hover: 0 8px 18px rgba(0, 0, 0, 0.2);
+  --shadow-cert-hover: 0 8px 18px rgba(0, 0, 0, 0.16);
 
   /* Spacing & Typography */
   --section-gap: 30px;
@@ -99,11 +112,11 @@ a {
 }
 
 a:hover {
-  color: var(--vt-c-text-1);
+  color: var(--color-hover);
 }
 
 a:focus {
-  outline: 2px solid var(--color-link);
+  outline: 2px solid var(--color-hover);
   outline-offset: 2px;
 }
 

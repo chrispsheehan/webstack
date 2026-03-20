@@ -18,10 +18,24 @@ import Certifications from "../components/Certifications";
     margin: 0 auto;
     padding: 0.5rem;
     border-radius: 1rem;
-    background: var(--color-heading);
+    background: var(--color-cert-card);
+    border: 1px solid var(--color-cert-card-border);
     transition:
       transform 0.2s ease,
-      background 0.2s ease;
+      background 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .cert-grid > a.cert-card--embed {
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .cert-grid > a.cert-card--embed:hover {
+    background: transparent;
+    box-shadow: none;
   }
 
   .cert-grid > a:hover .cert-img-wrapper {
@@ -33,14 +47,14 @@ import Certifications from "../components/Certifications";
   }
 
   .cert-grid > a:hover {
-    background: var(--color-link);
+    background: var(--color-cert-card-hover);
+    box-shadow: var(--shadow-cert-hover);
   }
 
   .cert-grid > a:focus,
   .cert-grid > a:active {
-    outline: none;
-    box-shadow: none;
-    background: none;
+    outline: 2px solid var(--color-hover);
+    outline-offset: 2px;
   }
 
   .cert-img-wrapper {
@@ -58,12 +72,19 @@ import Certifications from "../components/Certifications";
   }
 
   .cert-embed-wrapper {
-    width: 150px;
-    min-height: 270px;
+    width: 180px;
+    min-height: 260px;
     margin: 0 auto;
-    border-radius: 1rem;
-    background: transparent;
+    border-radius: 0.75rem;
+    background: var(--color-cert-embed-bg);
+    overflow: hidden;
     transition: transform 0.2s ease;
+  }
+
+  .cert-embed-wrapper iframe {
+    border: 0;
+    display: block;
+    margin: 0 auto;
   }
 
   .cert-img-wrapper img {

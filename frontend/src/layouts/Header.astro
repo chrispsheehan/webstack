@@ -105,10 +105,6 @@ const githubOwner = githubRepo.split("/")[0];
   </script>
 
   <style>
-    :root {
-      --color-hover: var(--color-background);
-    }
-
     nav {
       display: flex;
       justify-content: space-between;
@@ -120,7 +116,7 @@ const githubOwner = githubRepo.split("/")[0];
     }
 
     .nav-left .logo {
-      color: var(--color-link);
+      color: var(--color-heading);
       font-weight: bold;
       font-size: 1.25rem;
     }
@@ -135,14 +131,24 @@ const githubOwner = githubRepo.split("/")[0];
       align-items: center;
       gap: 8px;
       padding: 12px 24px;
-      color: var(--color-heading);
-      background: var(--color-background);
+      color: var(--color-text);
+      background: var(--color-surface);
       text-decoration: none;
       border-radius: 6px;
       font-weight: bold;
-      border: none;
+      border: 1px solid var(--color-border-strong);
       cursor: pointer;
       height: 20px;
+      transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .button:hover {
+      background: var(--color-surface-2);
+      color: var(--color-heading);
+      transform: translateY(-1px);
     }
 
     .github-text-icon-button img {
@@ -201,7 +207,7 @@ const githubOwner = githubRepo.split("/")[0];
       width: 100%;
       height: 100%;
       z-index: 1000;
-      background: var(--color-hover);
+      background: var(--color-background-dark);
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -223,11 +229,17 @@ const githubOwner = githubRepo.split("/")[0];
     .overlay-button {
       padding: 16px 32px;
       font-size: 1.5rem;
-      background: var(--color-link);
-      color: var(--color-heading);
+      background: var(--color-surface);
+      color: var(--color-text);
       text-decoration: none;
       border-radius: 8px;
       font-weight: bold;
+      border: 1px solid var(--color-border-strong);
+    }
+
+    .overlay-button:hover {
+      background: var(--color-surface-2);
+      color: var(--color-heading);
     }
 
     .overlay-icon-button {
