@@ -25,7 +25,7 @@ export default function Certifications() {
     if (!certs?.some((cert) => cert.shareBadgeId)) return;
 
     const existingScript = document.querySelector(
-      "script[data-credly-embed-script='true']"
+      "script[data-credly-embed-script='true']",
     );
     if (existingScript) return;
 
@@ -74,7 +74,9 @@ export default function Certifications() {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className={cert.shareBadgeId ? "cert-card cert-card--embed" : "cert-card"}
+            className={
+              cert.shareBadgeId ? "cert-card cert-card--embed" : "cert-card"
+            }
             aria-label={cert.alt}
             title={cert.alt}
           >
