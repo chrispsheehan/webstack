@@ -34,7 +34,7 @@ const githubOwner = githubRepo.split("/")[0];
         <img
           src="/assets/social/linkedin.png"
           alt="LinkedIn"
-          style="width: 24px; height: 24px;"
+          class="nav-social-icon"
         />
       </a>
       <a
@@ -47,56 +47,78 @@ const githubOwner = githubRepo.split("/")[0];
         <img
           src="/assets/social/terraform.png"
           alt="Terraform"
-          style="width: 24px; height: 24px;"
+          class="nav-social-icon"
         />
       </a>
     </div>
 
-    <!-- Mobile fullscreen menu -->
-    <div class="mobile-overlay" id="mobile-overlay">
-      <a href="#about-me" class="overlay-button" onclick="hideMenu()"
-        >About Me</a
-      >
-      <a href="#certifications" class="overlay-button" onclick="hideMenu()"
-        >Certifications</a
-      >
-      <a href="#this-site" class="overlay-button" onclick="hideMenu()"
-        >This Site</a
-      >
-      <a
-        href={`https://github.com/${githubRepo}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="overlay-icon-button"
-        onclick="hideMenu()"
-      >
-        <img src="/assets/social/github.png" alt="GitHub" />
-      </a>
-      <a
-        href="https://www.linkedin.com/in/chrispsheehan"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="overlay-icon-button"
-        onclick="hideMenu()"
-      >
-        <img src="/assets/social/linkedin.png" alt="LinkedIn" />
-      </a>
-      <a
-        href="https://registry.terraform.io/namespaces/chrispsheehan"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="overlay-icon-button"
-        onclick="hideMenu()"
-      >
-        <img src="/assets/social/terraform.png" alt="Terraform" />
-      </a>
+    <!-- Mobile menu -->
+    <div class="mobile-overlay" id="mobile-overlay" aria-hidden="true">
+      <div class="mobile-menu-panel">
+        <div class="mobile-menu-header">
+          <span class="mobile-menu-title">Menu</span>
+          <button
+            class="mobile-close"
+            type="button"
+            aria-label="Close menu"
+            onclick="hideMenu()"></button>
+        </div>
+
+        <div class="mobile-menu-links">
+          <a href="#about-me" class="overlay-button" onclick="hideMenu()"
+            >About Me</a
+          >
+          <a href="#certifications" class="overlay-button" onclick="hideMenu()"
+            >Certifications</a
+          >
+          <a href="#this-site" class="overlay-button" onclick="hideMenu()"
+            >This Site</a
+          >
+        </div>
+
+        <div class="mobile-menu-social">
+          <a
+            href={`https://github.com/${githubRepo}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="overlay-icon-button"
+            onclick="hideMenu()"
+          >
+            <img src="/assets/social/github.png" alt="" aria-hidden="true" />
+            <span>GitHub</span>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/chrispsheehan"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="overlay-icon-button"
+            onclick="hideMenu()"
+          >
+            <img src="/assets/social/linkedin.png" alt="" aria-hidden="true" />
+            <span>LinkedIn</span>
+          </a>
+          <a
+            href="https://registry.terraform.io/namespaces/chrispsheehan"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="overlay-icon-button"
+            onclick="hideMenu()"
+          >
+            <img src="/assets/social/terraform.png" alt="" aria-hidden="true" />
+            <span>Terraform</span>
+          </a>
+        </div>
+      </div>
     </div>
 
     <!-- Burger icon -->
     <button
       class="burger"
       id="burger"
+      type="button"
       aria-label="Toggle menu"
+      aria-controls="mobile-overlay"
+      aria-expanded="false"
       onclick="toggleMenu()"></button>
   </nav>
 
@@ -105,14 +127,12 @@ const githubOwner = githubRepo.split("/")[0];
   </script>
 
   <style>
-    :root {
-      --color-hover: var(--color-background);
-    }
-
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 100%;
+      box-sizing: border-box;
       padding: 20px 32px;
       background: var(--color-background-dark);
       position: relative;
@@ -120,7 +140,7 @@ const githubOwner = githubRepo.split("/")[0];
     }
 
     .nav-left .logo {
-      color: var(--color-link);
+      color: var(--color-heading);
       font-weight: bold;
       font-size: 1.25rem;
     }
@@ -128,6 +148,7 @@ const githubOwner = githubRepo.split("/")[0];
     .nav-links {
       display: flex;
       gap: 12px;
+      align-items: center;
     }
 
     .button {
@@ -135,14 +156,24 @@ const githubOwner = githubRepo.split("/")[0];
       align-items: center;
       gap: 8px;
       padding: 12px 24px;
-      color: var(--color-heading);
-      background: var(--color-background);
+      color: var(--color-text);
+      background: var(--color-surface);
       text-decoration: none;
       border-radius: 6px;
       font-weight: bold;
-      border: none;
+      border: 1px solid var(--color-border-strong);
       cursor: pointer;
-      height: 20px;
+      min-height: 44px;
+      transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .button:hover {
+      background: var(--color-surface-2);
+      color: var(--color-heading);
+      transform: translateY(-1px);
     }
 
     .github-text-icon-button img {
@@ -150,25 +181,9 @@ const githubOwner = githubRepo.split("/")[0];
       height: 24px;
     }
 
-    .icon-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 48px;
-      width: 48px;
-      background: transparent;
-      border: none;
-      padding: 0;
-      border-radius: 6px;
-      transition: background 0.3s;
-    }
-
-    .icon-button img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      padding: 8px;
-      box-sizing: border-box;
+    .nav-social-icon {
+      width: 24px;
+      height: 24px;
     }
 
     .burger {
@@ -189,8 +204,9 @@ const githubOwner = githubRepo.split("/")[0];
       content: "☰";
     }
 
-    .burger.show::before {
-      content: "✕";
+    .burger.show {
+      opacity: 0;
+      pointer-events: none;
     }
 
     .mobile-overlay {
@@ -201,11 +217,12 @@ const githubOwner = githubRepo.split("/")[0];
       width: 100%;
       height: 100%;
       z-index: 1000;
-      background: var(--color-hover);
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      gap: 24px;
+      background: rgba(11, 25, 20, 0.8);
+      backdrop-filter: blur(4px);
+      padding: 16px;
+      box-sizing: border-box;
+      justify-content: flex-end;
+      align-items: stretch;
     }
 
     body.no-scroll,
@@ -220,31 +237,124 @@ const githubOwner = githubRepo.split("/")[0];
       display: flex;
     }
 
-    .overlay-button {
-      padding: 16px 32px;
-      font-size: 1.5rem;
-      background: var(--color-link);
+    .mobile-menu-panel {
+      width: min(520px, 100%);
+      margin: 0 auto;
+      max-height: calc(100dvh - 32px);
+      overflow: auto;
+      border-radius: 1rem;
+      background: var(--color-background-dark);
+      border: 1px solid var(--color-border-strong);
+      padding: 16px;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .mobile-menu-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mobile-menu-title {
       color: var(--color-heading);
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: 0.03em;
+    }
+
+    .mobile-close {
+      border: 1px solid var(--color-border-strong);
+      background: var(--color-surface);
+      color: var(--color-heading);
+      border-radius: 8px;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .mobile-close::before {
+      content: "✕";
+    }
+
+    .mobile-menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .overlay-button {
+      padding: 12px 16px;
+      font-size: 1.1rem;
+      background: var(--color-surface);
+      color: var(--color-text);
       text-decoration: none;
       border-radius: 8px;
       font-weight: bold;
+      border: 1px solid var(--color-border-strong);
+    }
+
+    .overlay-button:hover {
+      background: var(--color-surface-2);
+      color: var(--color-heading);
+    }
+
+    .mobile-menu-social {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
 
     .overlay-icon-button {
       display: flex;
+      flex-direction: row;
       align-items: center;
-      justify-content: center;
-      height: 100px;
-      width: 100px;
+      justify-content: flex-start;
+      min-height: 56px;
+      width: 100%;
       border-radius: 8px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-strong);
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+      text-decoration: none;
+      color: var(--color-text);
+      gap: 10px;
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0 12px;
+      box-sizing: border-box;
+    }
+
+    .overlay-icon-button:hover {
+      background: var(--color-surface-2);
+      transform: translateY(-1px);
     }
 
     .overlay-icon-button img {
-      width: 100%;
-      height: 100%;
+      width: 24px;
+      height: 24px;
+      display: block;
       object-fit: contain;
-      padding: 6px;
-      box-sizing: border-box;
+    }
+
+    @media (max-width: 1250px) and (min-width: 1001px) {
+      .nav-links {
+        gap: 8px;
+      }
+
+      .button {
+        padding: 10px 14px;
+        font-size: 0.92rem;
+      }
     }
 
     @media (max-width: 1000px) {
@@ -255,12 +365,29 @@ const githubOwner = githubRepo.split("/")[0];
       .nav-links {
         display: none;
       }
+
+      nav {
+        padding: 16px;
+      }
+
+      .mobile-menu-panel {
+        padding: 14px;
+      }
     }
 
     @media (min-width: 1000px) {
       .hide-on-desktop {
         display: none !important;
       }
+    }
+
+    .button:focus-visible,
+    .overlay-button:focus-visible,
+    .overlay-icon-button:focus-visible,
+    .burger:focus-visible,
+    .mobile-close:focus-visible {
+      outline: 2px solid var(--color-hover);
+      outline-offset: 2px;
     }
   </style>
 </header>

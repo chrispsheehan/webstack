@@ -44,7 +44,7 @@ const { githubRepo } = Astro.props;
 <style is:global>
   .container {
     width: 100%;
-    padding: 0 1rem;
+    padding: 0;
     box-sizing: border-box;
   }
 
@@ -57,42 +57,43 @@ const { githubRepo } = Astro.props;
   }
 
   .dashboard-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
     width: 100%;
-    justify-content: center;
+    align-items: stretch;
   }
 
   .dashboard-card {
-    background: var(--color-background-dark);
+    background: var(--color-surface);
     border-radius: 1rem;
     padding: 1.5rem;
     max-width: 400px;
-    min-width: 300px;
+    min-width: 280px;
     min-height: 180px;
     width: 100%;
     box-sizing: border-box;
-    display: block;
-    position: relative;
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    position: relative;
     text-align: left;
     transition:
+      background 0.2s ease,
       box-shadow 0.2s ease,
       transform 0.2s ease;
-    border: none;
+    border: 1px solid var(--color-border-soft);
   }
 
   .dashboard-card:hover {
-    background: var(--color-link);
-    transform: translateY(-2px) scale(1.02);
+    background: var(--color-surface-2);
+    box-shadow: var(--shadow-card-hover);
+    transform: translateY(-2px);
   }
 
   .pipeline-badge {
-    height: 24px;
+    height: 28px;
     object-fit: contain;
-    margin-bottom: 1rem;
+    margin: 0;
   }
 
   .github-repo-button img {
@@ -103,25 +104,25 @@ const { githubRepo } = Astro.props;
   }
 
   .github-card {
-    border: none;
     justify-content: center;
-    max-width: 300px;
-    min-width: 250px;
+    max-width: none;
+    min-width: 0;
     align-items: center;
     text-align: center;
   }
 
   .github-card-link {
-    border: none;
     text-decoration: none;
     color: inherit;
     display: block;
-    flex-direction: column;
-    justify-content: center;
-    display: block;
     width: 100%;
     height: 100%;
-    flex: 1;
+  }
+
+  .dashboard-card--data {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
   }
 
   .github-card-content {
@@ -130,6 +131,7 @@ const { githubRepo } = Astro.props;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    justify-content: center;
   }
 
   .github-repo-button {
@@ -138,12 +140,19 @@ const { githubRepo } = Astro.props;
     gap: 12px;
     padding: 12px 20px;
     border-radius: 8px;
-    background: var(--color-background);
+    background: var(--color-background-dark);
     color: var(--color-text);
     font-weight: 600;
     white-space: nowrap;
     font-size: 1rem;
-    transition: background 0.2s ease;
+    transition:
+      background 0.2s ease,
+      transform 0.2s ease;
+  }
+
+  .github-card-link:hover .github-repo-button {
+    background: var(--color-surface-2);
+    transform: translateY(-1px);
   }
 
   .dashboard-card h3 {
@@ -160,17 +169,28 @@ const { githubRepo } = Astro.props;
   }
 
   .dashboard-card li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 1rem;
     width: 100%;
     margin-bottom: 0.5rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .dashboard-card strong {
     font-weight: 600;
-    color: var(--color-text);
+    color: var(--color-heading);
+    min-width: 0;
+  }
+
+  .metric-value {
+    font-weight: 700;
+    color: var(--color-hover);
+    font-variant-numeric: tabular-nums;
+    justify-self: end;
+    text-align: right;
+    white-space: nowrap;
   }
 
   .dashboard-card small {
@@ -180,15 +200,14 @@ const { githubRepo } = Astro.props;
   }
 
   .github-card-link:focus-visible {
-    outline: 2px solid var(--color-accent, #00bcd4);
+    outline: 2px solid var(--color-accent);
     outline-offset: 4px;
     border-radius: 1rem;
   }
 
-  @media (min-width: 1001px) {
-    .dashboard-row {
-      gap: 5rem;
-    }
+  .dashboard-card:focus-within {
+    box-shadow: var(--shadow-card-hover);
+    border-color: var(--color-border-strong);
   }
 
   @media (max-width: 1000px) {
@@ -197,7 +216,7 @@ const { githubRepo } = Astro.props;
     }
 
     .dashboard-row {
-      flex-direction: column;
+      grid-template-columns: 1fr;
     }
 
     .dashboard-card,

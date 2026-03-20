@@ -45,17 +45,17 @@ export default function Visits() {
       href="/data/log-processor/data.json"
       target="_blank"
       rel="noopener noreferrer"
-      className="dashboard-card"
-      style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}
+      className="dashboard-card dashboard-card--data"
     >
       <h3>👥 Logged Visits</h3>
       <ul>
         <li>
-          <strong>Daily:</strong> {visits["daily-visits"]}
+          <strong>Daily:</strong>
+          <span className="metric-value">{visits["daily-visits"]}</span>
         </li>
         <li>
-          <strong>Total ({visits["range"]} days):</strong>{" "}
-          {visits["total-visits"]}
+          <strong>Total ({visits["range"]} days):</strong>
+          <span className="metric-value">{visits["total-visits"]}</span>
         </li>
       </ul>
     </a>

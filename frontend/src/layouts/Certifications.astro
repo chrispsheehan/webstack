@@ -5,7 +5,7 @@ import Certifications from "../components/Certifications";
 <style is:global>
   .cert-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     justify-content: center;
     gap: 2rem;
   }
@@ -13,22 +13,49 @@ import Certifications from "../components/Certifications";
   .cert-grid > a {
     display: block;
     max-width: 220px;
-    width: 100%;
+    width: auto;
     text-align: center;
     margin: 0 auto;
-    transition: transform 0.2s ease;
+    justify-self: center;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    background: var(--color-cert-card);
+    border: 1px solid var(--color-cert-card-border);
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .cert-grid > a.cert-card--embed {
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .cert-grid > a.cert-card--embed:hover {
+    background: transparent;
+    box-shadow: none;
   }
 
   .cert-grid > a:hover .cert-img-wrapper {
-    background: var(--color-link);
-    transform: translateY(-2px) scale(1.02);
+    transform: translateY(-2px);
   }
 
-  .cert-grid > a:focus,
-  .cert-grid > a:active {
-    outline: none;
-    box-shadow: none;
-    background: none;
+  .cert-grid > a:hover .cert-embed-wrapper {
+    transform: translateY(-2px);
+  }
+
+  .cert-grid > a:hover {
+    background: var(--color-cert-card-hover);
+    box-shadow: var(--shadow-cert-hover);
+  }
+
+  .cert-grid > a:focus-visible {
+    outline: 2px solid var(--color-hover);
+    outline-offset: 2px;
   }
 
   .cert-img-wrapper {
@@ -38,11 +65,27 @@ import Certifications from "../components/Certifications";
     position: relative;
     overflow: hidden;
     border-radius: 1rem;
-    background: var(--color-background-dark);
+    background: transparent;
     transition:
       background 0.2s ease,
       box-shadow 0.2s ease,
       transform 0.2s ease;
+  }
+
+  .cert-embed-wrapper {
+    width: 180px;
+    min-height: 260px;
+    margin: 0 auto;
+    border-radius: 0.75rem;
+    background: var(--color-cert-embed-bg);
+    overflow: hidden;
+    transition: transform 0.2s ease;
+  }
+
+  .cert-embed-wrapper iframe {
+    border: 0;
+    display: block;
+    margin: 0 auto;
   }
 
   .cert-img-wrapper img {
@@ -56,12 +99,13 @@ import Certifications from "../components/Certifications";
 
   @media (max-width: 1000px) {
     .cert-grid {
-      display: flex;
-      flex-wrap: wrap;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 180px));
+      gap: 1rem;
       justify-content: center;
-      max-width: 960px;
-      width: 100%;
-      grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+    }
+
+    .cert-grid > a {
+      max-width: 220px;
     }
   }
 </style>
