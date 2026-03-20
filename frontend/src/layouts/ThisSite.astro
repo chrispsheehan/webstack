@@ -44,7 +44,7 @@ const { githubRepo } = Astro.props;
 <style is:global>
   .container {
     width: 100%;
-    padding: 0 1rem;
+    padding: 0;
     box-sizing: border-box;
   }
 
@@ -57,11 +57,11 @@ const { githubRepo } = Astro.props;
   }
 
   .dashboard-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
     width: 100%;
-    justify-content: center;
+    align-items: stretch;
   }
 
   .dashboard-card {
@@ -73,10 +73,9 @@ const { githubRepo } = Astro.props;
     min-height: 180px;
     width: 100%;
     box-sizing: border-box;
-    display: block;
-    position: relative;
+    display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    position: relative;
     text-align: left;
     transition:
       background 0.2s ease,
@@ -92,9 +91,9 @@ const { githubRepo } = Astro.props;
   }
 
   .pipeline-badge {
-    height: 24px;
+    height: 28px;
     object-fit: contain;
-    margin-bottom: 1rem;
+    margin: 0;
   }
 
   .github-repo-button img {
@@ -106,8 +105,8 @@ const { githubRepo } = Astro.props;
 
   .github-card {
     justify-content: center;
-    max-width: 320px;
-    min-width: 280px;
+    max-width: none;
+    min-width: 0;
     align-items: center;
     text-align: center;
   }
@@ -120,12 +119,19 @@ const { githubRepo } = Astro.props;
     height: 100%;
   }
 
+  .dashboard-card--data {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
   .github-card-content {
     border: none;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    justify-content: center;
   }
 
   .github-repo-button {
@@ -163,17 +169,28 @@ const { githubRepo } = Astro.props;
   }
 
   .dashboard-card li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 1rem;
     width: 100%;
     margin-bottom: 0.5rem;
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
 
   .dashboard-card strong {
     font-weight: 600;
-    color: var(--color-text);
+    color: var(--color-heading);
+    min-width: 0;
+  }
+
+  .metric-value {
+    font-weight: 700;
+    color: var(--color-hover);
+    font-variant-numeric: tabular-nums;
+    justify-self: end;
+    text-align: right;
+    white-space: nowrap;
   }
 
   .dashboard-card small {
@@ -193,19 +210,13 @@ const { githubRepo } = Astro.props;
     border-color: var(--color-border-strong);
   }
 
-  @media (min-width: 1001px) {
-    .dashboard-row {
-      gap: 5rem;
-    }
-  }
-
   @media (max-width: 1000px) {
     .dashboard-wrapper {
       width: 100%;
     }
 
     .dashboard-row {
-      flex-direction: column;
+      grid-template-columns: 1fr;
     }
 
     .dashboard-card,
@@ -216,5 +227,6 @@ const { githubRepo } = Astro.props;
       min-width: unset;
       max-width: unset;
     }
+
   }
 </style>

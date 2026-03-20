@@ -53,22 +53,25 @@ export default function CostExplorer() {
       href="/data/cost-explorer/data.json"
       target="_blank"
       rel="noopener noreferrer"
-      className="dashboard-card"
-      style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}
+      className="dashboard-card dashboard-card--data"
     >
       <h3>💰 AWS Running Costs</h3>
       <ul>
         <li>
-          <strong>Current Month:</strong>{" "}
-          {costs["current-month-total"]
-            ? formatUSD(costs["current-month-total"])
-            : "$0.01"}
+          <strong>Current Month:</strong>
+          <span className="metric-value">
+            {costs["current-month-total"]
+              ? formatUSD(costs["current-month-total"])
+              : "$0.01"}
+          </span>
         </li>
         <li>
-          <strong>Last Month:</strong>{" "}
-          {costs["last-month-total"]
-            ? formatUSD(costs["last-month-total"])
-            : "$0.01"}
+          <strong>Last Month:</strong>
+          <span className="metric-value">
+            {costs["last-month-total"]
+              ? formatUSD(costs["last-month-total"])
+              : "$0.01"}
+          </span>
         </li>
       </ul>
     </a>
