@@ -1,24 +1,24 @@
 :root {
   /* Theme Colors */
-  --color-background: #1f312b;
-  --color-background-dark: #16241f;
-  --color-surface: #2a4038;
-  --color-surface-2: #335147;
-  --color-text: #edf8f2;
-  --color-heading: #b9efab;
-  --color-link: #7dd7b0;
-  --color-hover: #9be8c8;
-  --color-accent: #00bcd4;
+  --color-background: #10231c;
+  --color-background-dark: #0b1914;
+  --color-surface: #1a332a;
+  --color-surface-2: #244238;
+  --color-text: #eaf7f0;
+  --color-heading: #b9f2c8;
+  --color-link: #7fd9b3;
+  --color-hover: #a4ebcd;
+  --color-accent: #23bfa0;
 
   /* UI Tokens */
-  --color-border-soft: rgba(185, 239, 171, 0.22);
-  --color-border-strong: rgba(185, 239, 171, 0.35);
-  --color-cert-card: #d7efe3;
-  --color-cert-card-hover: #c7e7d8;
-  --color-cert-embed-bg: #dceee6;
-  --color-cert-card-border: rgba(22, 36, 31, 0.16);
-  --shadow-card-hover: 0 8px 18px rgba(0, 0, 0, 0.2);
-  --shadow-cert-hover: 0 8px 18px rgba(0, 0, 0, 0.16);
+  --color-border-soft: rgba(185, 242, 200, 0.24);
+  --color-border-strong: rgba(185, 242, 200, 0.4);
+  --color-cert-card: #dff5ea;
+  --color-cert-card-hover: #cdefde;
+  --color-cert-embed-bg: #eaf8f1;
+  --color-cert-card-border: #b7d8c8;
+  --shadow-card-hover: 0 8px 18px rgba(0, 0, 0, 0.22);
+  --shadow-cert-hover: 0 8px 18px rgba(0, 0, 0, 0.14);
 
   /* Spacing & Typography */
   --section-gap: 30px;
