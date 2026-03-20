@@ -20,13 +20,21 @@ const siteVersion = (import.meta.env.PUBLIC_SITE_VERSION || "1.0.0").slice(
     justify-content: space-between;
     align-items: center;
     gap: 8px;
-    flex-wrap: nowrap;
-    line-height: 0.5;
+    flex-wrap: wrap;
+    line-height: 1.3;
   }
 
   .footer-version {
     font-size: 14px;
     margin: 0;
+  }
+
+  @media (max-width: 700px) {
+    .footer-container {
+      justify-content: center;
+      text-align: center;
+      gap: 4px 12px;
+    }
   }
 </style>
 

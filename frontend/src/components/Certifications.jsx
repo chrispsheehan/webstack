@@ -93,20 +93,22 @@ export default function Certifications() {
             target="_blank"
             rel="noopener noreferrer"
             className={cert.shareBadgeId ? "cert-card cert-card--embed" : "cert-card"}
+            aria-label={cert.alt}
+            title={cert.alt}
           >
             {cert.shareBadgeId ? (
-            <div className="cert-embed-wrapper" aria-label={cert.alt}>
-              <div
-                data-iframe-width={cert.iframeWidth || 180}
-                data-iframe-height={cert.iframeHeight || 260}
-                data-share-badge-id={cert.shareBadgeId}
-                data-share-badge-host={shareBadgeHost}
-              ></div>
-            </div>
-          ) : (
-            <div className="cert-img-wrapper">
-              <img src={cert.src} alt={cert.alt} />
-            </div>
+              <div className="cert-embed-wrapper" aria-label={cert.alt}>
+                <div
+                  data-iframe-width={cert.iframeWidth || 180}
+                  data-iframe-height={cert.iframeHeight || 260}
+                  data-share-badge-id={cert.shareBadgeId}
+                  data-share-badge-host={shareBadgeHost}
+                ></div>
+              </div>
+            ) : (
+              <div className="cert-img-wrapper">
+                <img src={cert.src} alt={cert.alt} />
+              </div>
             )}
           </a>
         );

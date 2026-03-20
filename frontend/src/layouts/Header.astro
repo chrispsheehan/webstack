@@ -34,7 +34,7 @@ const githubOwner = githubRepo.split("/")[0];
         <img
           src="/assets/social/linkedin.png"
           alt="LinkedIn"
-          style="width: 24px; height: 24px;"
+          class="nav-social-icon"
         />
       </a>
       <a
@@ -47,7 +47,7 @@ const githubOwner = githubRepo.split("/")[0];
         <img
           src="/assets/social/terraform.png"
           alt="Terraform"
-          style="width: 24px; height: 24px;"
+          class="nav-social-icon"
         />
       </a>
     </div>
@@ -109,6 +109,8 @@ const githubOwner = githubRepo.split("/")[0];
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 100%;
+      box-sizing: border-box;
       padding: 20px 32px;
       background: var(--color-background-dark);
       position: relative;
@@ -138,7 +140,7 @@ const githubOwner = githubRepo.split("/")[0];
       font-weight: bold;
       border: 1px solid var(--color-border-strong);
       cursor: pointer;
-      height: 20px;
+      min-height: 44px;
       transition:
         background 0.2s ease,
         color 0.2s ease,
@@ -156,25 +158,9 @@ const githubOwner = githubRepo.split("/")[0];
       height: 24px;
     }
 
-    .icon-button {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 48px;
-      width: 48px;
-      background: transparent;
-      border: none;
-      padding: 0;
-      border-radius: 6px;
-      transition: background 0.3s;
-    }
-
-    .icon-button img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      padding: 8px;
-      box-sizing: border-box;
+    .nav-social-icon {
+      width: 24px;
+      height: 24px;
     }
 
     .burger {
@@ -208,6 +194,8 @@ const githubOwner = githubRepo.split("/")[0];
       height: 100%;
       z-index: 1000;
       background: var(--color-background-dark);
+      padding: 16px;
+      box-sizing: border-box;
       flex-direction: column;
       justify-content: center;
       align-items: center;
@@ -249,6 +237,16 @@ const githubOwner = githubRepo.split("/")[0];
       height: 100px;
       width: 100px;
       border-radius: 8px;
+      background: var(--color-surface);
+      border: 1px solid var(--color-border-strong);
+      transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    .overlay-icon-button:hover {
+      background: var(--color-surface-2);
+      transform: translateY(-1px);
     }
 
     .overlay-icon-button img {
@@ -267,12 +265,24 @@ const githubOwner = githubRepo.split("/")[0];
       .nav-links {
         display: none;
       }
+
+      nav {
+        padding: 16px;
+      }
     }
 
     @media (min-width: 1000px) {
       .hide-on-desktop {
         display: none !important;
       }
+    }
+
+    .button:focus-visible,
+    .overlay-button:focus-visible,
+    .overlay-icon-button:focus-visible,
+    .burger:focus-visible {
+      outline: 2px solid var(--color-hover);
+      outline-offset: 2px;
     }
   </style>
 </header>

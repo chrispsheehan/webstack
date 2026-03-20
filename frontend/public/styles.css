@@ -68,7 +68,11 @@ h3 {
 
 main {
   flex: 1;
-  padding: 24px;
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 24px 32px;
+  box-sizing: border-box;
 }
 
 nav {
@@ -88,8 +92,8 @@ nav a {
 }
 
 section {
-  padding-left: 32px;
-  padding-right: 32px;
+  padding-left: 0;
+  padding-right: 0;
   padding-top: 0;
   padding-bottom: var(--section-gap);
 }
@@ -120,10 +124,41 @@ a:focus {
   outline-offset: 2px;
 }
 
+a:focus-visible {
+  outline: 2px solid var(--color-hover);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @media (max-width: 1000px) {
   main,
   section {
-    padding: 12px;
+    padding: 0;
+  }
+
+  main {
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 2.1rem;
+  }
+
+  h2 {
+    font-size: 1.7rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
   }
 
   nav {

@@ -5,7 +5,7 @@ import Certifications from "../components/Certifications";
 <style is:global>
   .cert-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     justify-content: center;
     gap: 2rem;
   }
@@ -39,11 +39,11 @@ import Certifications from "../components/Certifications";
   }
 
   .cert-grid > a:hover .cert-img-wrapper {
-    transform: translateY(-2px) scale(1.02);
+    transform: translateY(-2px);
   }
 
   .cert-grid > a:hover .cert-embed-wrapper {
-    transform: translateY(-2px) scale(1.02);
+    transform: translateY(-2px);
   }
 
   .cert-grid > a:hover {
@@ -53,6 +53,11 @@ import Certifications from "../components/Certifications";
 
   .cert-grid > a:focus,
   .cert-grid > a:active {
+    outline: 2px solid var(--color-hover);
+    outline-offset: 2px;
+  }
+
+  .cert-grid > a:focus-visible {
     outline: 2px solid var(--color-hover);
     outline-offset: 2px;
   }
@@ -98,12 +103,17 @@ import Certifications from "../components/Certifications";
 
   @media (max-width: 1000px) {
     .cert-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      max-width: 960px;
-      width: 100%;
-      grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1rem;
+    }
+
+    .cert-grid > a {
+      max-width: 100%;
+    }
+
+    .cert-embed-wrapper {
+      width: 170px;
+      min-height: 250px;
     }
   }
 </style>
