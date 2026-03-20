@@ -1,18 +1,36 @@
 import React, { useEffect, useState } from "react";
 
+const envBadgeIds = (import.meta.env.PUBLIC_CREDLY_BADGE_IDS || "")
+  .split(",")
+  .map((id) => id.trim())
+  .filter(Boolean);
+
+function withEnvBadgeIds(certs) {
+  if (!envBadgeIds.length) return certs;
+
+  let idx = 0;
+  return certs.map((cert) => {
+    if (!cert.shareBadgeId) return cert;
+    const envId = envBadgeIds[idx];
+    idx += 1;
+    if (!envId) return cert;
+    return { ...cert, shareBadgeId: envId };
+  });
+}
+
 export default function Certifications() {
   const [certs, setCerts] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("/static/certifications.json")
+    fetch("/static/certifications.json", { cache: "no-store" })
       .then((res) => {
         if (!res.ok) throw new Error("Failed to fetch certifications.");
         return res.json();
       })
       .then((data) => {
-        setCerts(data);
+        setCerts(withEnvBadgeIds(data));
         setLoading(false);
       })
       .catch((err) => {
@@ -20,6 +38,22 @@ export default function Certifications() {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    if (!certs?.some((cert) => cert.shareBadgeId)) return;
+
+    const existingScript = document.querySelector(
+      "script[data-credly-embed-script='true']"
+    );
+    if (existingScript) return;
+
+    const script = document.createElement("script");
+    script.src = "https://cdn.credly.com/assets/utilities/embed.js";
+    script.async = true;
+    script.type = "text/javascript";
+    script.dataset.credlyEmbedScript = "true";
+    document.body.appendChild(script);
+  }, [certs]);
 
   if (loading)
     return (
@@ -44,18 +78,33 @@ export default function Certifications() {
 
   return (
     <div className="cert-grid">
-      {certs.map((cert, index) => (
-        <a
-          key={index}
-          href={cert.href}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <div className="cert-img-wrapper">
-            <img src={cert.src} alt={cert.alt} />
-          </div>
-        </a>
-      ))}
+      {certs.map((cert, index) => {
+        const shareBadgeHost = cert.shareBadgeHost || "https://www.credly.com";
+        const href =
+          cert.href ||
+          (cert.shareBadgeId
+            ? `${shareBadgeHost}/badges/${cert.shareBadgeId}/public_url`
+            : undefined);
+
+        return (
+          <a key={index} href={href} target="_blank" rel="noopener noreferrer">
+            {cert.shareBadgeId ? (
+            <div className="cert-embed-wrapper" aria-label={cert.alt}>
+              <div
+                data-iframe-width={cert.iframeWidth || 150}
+                data-iframe-height={cert.iframeHeight || 270}
+                data-share-badge-id={cert.shareBadgeId}
+                data-share-badge-host={shareBadgeHost}
+              ></div>
+            </div>
+          ) : (
+            <div className="cert-img-wrapper">
+              <img src={cert.src} alt={cert.alt} />
+            </div>
+            )}
+          </a>
+        );
+      })}
     </div>
   );
 }

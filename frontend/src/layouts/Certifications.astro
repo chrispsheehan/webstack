@@ -16,12 +16,24 @@ import Certifications from "../components/Certifications";
     width: 100%;
     text-align: center;
     margin: 0 auto;
-    transition: transform 0.2s ease;
+    padding: 0.5rem;
+    border-radius: 1rem;
+    background: var(--color-heading);
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease;
   }
 
   .cert-grid > a:hover .cert-img-wrapper {
-    background: var(--color-link);
     transform: translateY(-2px) scale(1.02);
+  }
+
+  .cert-grid > a:hover .cert-embed-wrapper {
+    transform: translateY(-2px) scale(1.02);
+  }
+
+  .cert-grid > a:hover {
+    background: var(--color-link);
   }
 
   .cert-grid > a:focus,
@@ -38,11 +50,20 @@ import Certifications from "../components/Certifications";
     position: relative;
     overflow: hidden;
     border-radius: 1rem;
-    background: var(--color-background-dark);
+    background: transparent;
     transition:
       background 0.2s ease,
       box-shadow 0.2s ease,
       transform 0.2s ease;
+  }
+
+  .cert-embed-wrapper {
+    width: 150px;
+    min-height: 270px;
+    margin: 0 auto;
+    border-radius: 1rem;
+    background: transparent;
+    transition: transform 0.2s ease;
   }
 
   .cert-img-wrapper img {
